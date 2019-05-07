@@ -85,5 +85,7 @@ while current!="exit":
         current=instructions()
     if current=="credits":
         current=creds()
+
+print("Chris is a fuckign virgin thot")
     
 quit()
