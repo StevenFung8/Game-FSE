@@ -14,7 +14,7 @@ while running:
     
 
 '''
-
+print("Applications for MasseyHacks organizers have opened!")
 from pygame import *
 from math import *
 size=width,height=800,600
