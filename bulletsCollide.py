@@ -33,6 +33,7 @@ while running:
     if x>=580:
         x-=1
 display.flip()
+print("Chris is fuckign gay")
 quit()
 
         
