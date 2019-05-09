@@ -18,11 +18,26 @@ class enemyType:
         self.health=health
         self.filename="FSE-Assets/Enemies/"+name+".png"
 
-infantry=enemyType('infantry',1.5,200)
+infantry=enemyType('infantry',1.5,100)
 transport=enemyType('transport',1.7,400)
 motorcycle=enemyType('motorcycle',2,250)
 lightTank=enemyType('lightTank',1,700)
 heavyTank=enemyType('heavyTank',0.7,1000)
+
+class towerType:
+
+    def __init__(self,name,damage,control):
+        self.name=name
+        self.damage=damage
+        self.control=control
+        self.filename="FSE-Assets/Defenses/"+name+".png"
+
+antiTank=towerType('antiTank',150,False)
+bunker=towerType('bunker',50,False)
+fortress=towerType('fortress',250,False)
+heavyGun=towerType('heavyGun',350,False)
+heavyMG=towerType('heavyMG',20,False)
+soldier=towerType('soldier',25,False)
 
 def moveEnemy(enemy):
     global frame
@@ -42,19 +57,15 @@ def drawScene(screen,enemyList,enemy):
         screen.blit(enemyList[int(frame)],(i[0],i[1]))
     display.flip()
 
-tank1=image.load(heavyTank.filename)
-pics=[]
-tank2=transform.rotate(tank1,-90)
-tank3=transform.rotate(tank1,90)
-tank4=transform.rotate(tank1,180)
-
-pics.append(tank1)
-pics.append(tank2)
-pics.append(tank3)
-pics.append(tank4)
-
-enemy=[[40,190,heavyTank]]
+enemy=[[40,190,infantry]]
 frame=0
+
+for i in enemy:
+    pics=[]
+    img=image.load(i[2].filename)
+    img2=transform.rotate(img,-90)
+    pics.append(img)
+    pics.append(img2)
 
 myclock=time.Clock()
 running=True
