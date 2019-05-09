@@ -24,27 +24,22 @@ motorcycle=enemyType('motorcycle',2,250)
 lightTank=enemyType('lightTank',1,700)
 heavyTank=enemyType('heavyTank',0.7,1000)
 
-print(lightTank.filename)
-
 def moveEnemy(enemy):
     global frame
-    xSpeed=0
-    ySpeed=0
-    if enemy[0]<220:
-        xSpeed=2
-        enemy[0]+=xSpeed
-    if enemy[0]>=220 and enemy[1]<420:
-        ySpeed=2
-        enemy[1]+=ySpeed
-        frame=1
-    if enemy[1]>=420:
-        xSpeed=1
-        enemy[0]+=2
-        frame=0
+    for i in enemy:
+        if i[0]<220:
+            i[0]+=i[2].speed
+        if i[0]>=220 and i[1]<420:
+            i[1]+=i[2].speed
+            frame=1
+        if i[1]>=420:
+            i[0]+=i[2].speed
+            frame=0
 
 def drawScene(screen,enemyList,enemy):
     screen.blit(map1,(0,0))
-    screen.blit(enemyList[int(frame)],(enemy[0],enemy[1]))
+    for i in enemy:
+        screen.blit(enemyList[int(frame)],(i[0],i[1]))
     display.flip()
 
 tank1=image.load(heavyTank.filename)
@@ -58,7 +53,7 @@ pics.append(tank2)
 pics.append(tank3)
 pics.append(tank4)
 
-enemy=[40,190]
+enemy=[[40,190,heavyTank]]
 frame=0
 
 myclock=time.Clock()
