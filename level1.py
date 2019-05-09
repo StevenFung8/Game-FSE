@@ -64,6 +64,7 @@ while running:
             running=False
     moveEnemy(enemy)
     drawScene(screen,pics,enemy)
+print("Chris ur fuckign gay")
 
     myclock.tick(60)
 
