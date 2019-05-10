@@ -1,50 +1,62 @@
 from pygame import *
 from math import *
 from random import *
-from datetime import datetime
-init()
+screen=display.set_mode((1050,750))
+RED=(255,0,0)   
+GREEN=(0,255,0)
+BLACK=(0,0,0)
+pathCol=(128,128,128,255)
+pathCol2=(129,128,124,255)
 
-map1=image.load("Maps/map1.jpg")
-enemy1=image.load("Enemies/soldier2.png")
-enemy2=image.load("Enemies/motorcycle.png")
-enemy3=image.load("Enemies/transport.png")
-deadEnemy=image.load("Enemies/deadGerman.png")
-wreck=image.load("Enemies/wreckage.png")
+map1=image.load("FSE-Assets/Maps/map1.jpg")
 
-RED=(255,0,0)
+def moveEnemy(enemy):
+    global frame
+    xSpeed=0
+    ySpeed=0
+    if enemy[0]<220:
+        xSpeed=2
+        enemy[0]+=xSpeed
+    if enemy[0]>=220 and enemy[1]<420:
+        ySpeed=2
+        enemy[1]+=ySpeed
+        frame=1
+    if enemy[1]>=420:
+        xSpeed=1
+        enemy[0]+=2
+        frame=0
 
-def enemies():
-    enemyList=[]
-    for i in range(8):
-        enemyList.append(enemy2)
-    for i in range(20):
-        enemyList.append(enemy1)
-    for i in range(5):
-        enemyList.append(enemy3)
-    for i in enemyList:
-        screen.blit(i,(40,245))
+def drawScene(screen,enemyList,enemy):
+    screen.blit(map1,(0,0))
+    screen.blit(enemyList[int(frame)],(enemy[0],enemy[1]))
+    display.flip()
 
-def drawScene():
-    running=True
-    quitButton=Rect(950,25,50,50)
-    while running:
-        for evnt in event.get():
-            if evnt.type==QUIT:
-                running=False
-                
-        mx,my=mouse.get_pos()
-        mb=mouse.get_pressed()
-        screen.blit(map1,(0,0))
-        draw.rect(screen,RED,quitButton,3)
-        
-        display.flip()
-    
-size=width,height=1050,750
-screen=display.set_mode(size)
+tank1=image.load("FSE-Assets/Enemies/heavyTank.png")
+pics=[]
+tank2=transform.rotate(tank1,-90)
+tank3=transform.rotate(tank1,90)
+tank4=transform.rotate(tank1,180)
 
+pics.append(tank1)
+pics.append(tank2)
+pics.append(tank3)
+pics.append(tank4)
+
+enemy=[40,190]
+frame=0
+
+myclock=time.Clock()
 running=True
+while running:
+    for evt in event.get():
+        if evt.type==QUIT:
+            running=False
+    moveEnemy(enemy)
+    drawScene(screen,pics,enemy)
+    mx,my=mouse.get_pos()
+    print(mx,my)
 
-drawScene()
-enemies()
+    myclock.tick(60)
 
+    display.flip()
 quit()
