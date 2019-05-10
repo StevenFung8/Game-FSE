@@ -14,7 +14,7 @@ while running:
     
 
 '''
-print("Applications for MasseyHacks organizers have opened!")
+
 from pygame import *
 from math import *
 size=width,height=800,600
@@ -36,7 +36,7 @@ def drawScene(screen,badGuys,goodX,goodY):
     for guys in badGuys:
         draw.circle(screen,RED,(guys[0],guys[1]),20)
     draw.circle(screen,GREEN,(mx,my),20)
-    display.flip()
+    display.flip()9
 
 def moveEnemies(badGuys,goodX,goodY):
     for guy in badGuys:
