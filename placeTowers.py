@@ -8,6 +8,7 @@ BLUE=(0,0,255)
 BLACK=(0,0,0)
 WHITE=(255,255,255)
 tower="no tower"
+mx,my=mouse.get_pos()
 
 heavyGunRect=Rect(100,100,50,50)
 draw.rect(screen,GREEN,heavyGunRect,1)
@@ -17,14 +18,15 @@ screen.blit(heavyGun,(100,100))
 
 
 def placeTower(t):
+    
     if t!="no tower":
         defenseImage=image.load("FSE-Assets/Defenses/"+t+".png")
         defenseImage=transform.scale(defenseImage,(100,100))
-        screen.set_clip()
         if mb[0]==1:
-            screen.blit(defenseImage,(mx,my))
+            screen.blit(defenseImage,(mx-50,my-50))
+                
         
-        #IM STILL FIGURING THIS OUT SO CHILL
+        
     
     
 running=True
