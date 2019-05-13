@@ -9,6 +9,8 @@ pathCol=(128,128,128,255)
 pathCol2=(129,128,124,255)
 
 map1=image.load("FSE-Assets/Maps/map1.jpg")
+hudimg=image.load("FSE-Assets/hud.jpg")
+hud=transform.scale(hudimg,(500,75))
 
 class enemyType:
 
@@ -26,18 +28,18 @@ heavyTank=enemyType('heavyTank',0.7,1000)
 
 class towerType:
 
-    def __init__(self,name,damage,control):
+    def __init__(self,name,damage,price):
         self.name=name
         self.damage=damage
-        self.control=control
+        self.price=price
         self.filename="FSE-Assets/Defenses/"+name+".png"
 
-antiTank=towerType('antiTank',150,False)
-bunker=towerType('bunker',50,False)
-fortress=towerType('fortress',250,False)
-heavyGun=towerType('heavyGun',350,False)
-heavyMG=towerType('heavyMG',20,False)
-soldier=towerType('soldier',25,False)
+antiTank=towerType('antiTank',150,800)
+bunker=towerType('bunker',50,1000)
+fortress=towerType('fortress',250,1250)
+heavyGun=towerType('heavyGun',350,1500)
+heavyMG=towerType('heavyMG',20,500)
+soldier=towerType('soldier',25,250)
 
 def moveEnemy(enemy):
     global frame
@@ -53,11 +55,12 @@ def moveEnemy(enemy):
 
 def drawScene(screen,enemyList,enemy):
     screen.blit(map1,(0,0))
+    screen.blit(hud,(550,20))
     for i in enemy:
         screen.blit(enemyList[int(frame)],(i[0],i[1]))
     display.flip()
 
-enemy=[[40,190,infantry]]
+enemy=[[40,190,lightTank]]
 frame=0
 
 for i in enemy:
@@ -75,7 +78,6 @@ while running:
             running=False
     moveEnemy(enemy)
     drawScene(screen,pics,enemy)
-print("Chris ur fuckign gay")
 
     myclock.tick(60)
 
