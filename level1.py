@@ -56,9 +56,6 @@ def moveEnemy(enemy):
 def drawScene(screen,enemyList,enemy):
     screen.blit(map1,(0,0))
     screen.blit(hud,(550,20))
-    for i in enemy:
-        screen.blit(enemyList[int(frame)],(i[0],i[1]))
-    display.flip()
 
 enemy=[[40,190,lightTank]]
 frame=0
