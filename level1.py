@@ -1,6 +1,7 @@
 from pygame import *
 from math import *
 from random import *
+
 screen=display.set_mode((1050,750))
 RED=(255,0,0)   
 GREEN=(0,255,0)
@@ -36,25 +37,25 @@ def moveEnemy(enemy):
             i[0]+=i[2].speed
             frame=0
 
-def drawScene(screen,enemyList,enemy):
+def drawScene(screen):
     screen.blit(map1,(0,0))
-    for i in enemy:
-        screen.blit(enemyList[int(frame)],(i[0],i[1]))
-    display.flip()
 
-tank1=image.load(heavyTank.filename)
-pics=[]
-tank2=transform.rotate(tank1,-90)
-tank3=transform.rotate(tank1,90)
-tank4=transform.rotate(tank1,180)
-
-pics.append(tank1)
-pics.append(tank2)
-pics.append(tank3)
-pics.append(tank4)
-
-enemy=[[40,190,heavyTank]]
+enemy=[[40,190,transport],[40,190,heavyTank],[40,190,motorcycle],[40,190,lightTank],[40,190,infantry]]
 frame=0
+pics=[]
+
+for i in enemy:
+    img=[]
+    img.append(image.load(i[2].filename))
+    img.append(transform.rotate(image.load(i[2].filename),-90))
+    pics.append(img)
+
+def drawEnemies(screen,enemyList,enemy):
+    for i in range(len(enemy)):
+        screen.blit(enemyList[i][int(frame)],(enemy[i][0],enemy[i][1]))
+        if enemy[i][0]>=900:
+            enemy.remove(enemy[i])
+    display.flip()
 
 myclock=time.Clock()
 running=True
@@ -63,8 +64,8 @@ while running:
         if evt.type==QUIT:
             running=False
     moveEnemy(enemy)
-    drawScene(screen,pics,enemy)
-print("Chris ur fuckign gay")
+    drawScene(screen)
+    drawEnemies(screen,pics,enemy)
 
     myclock.tick(60)
 
