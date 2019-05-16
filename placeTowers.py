@@ -1,4 +1,5 @@
-#placeTower.py
+
+#placeTowers.py
 from pygame import *
 size=width,height=800,600
 screen=display.set_mode(size)
@@ -7,46 +8,68 @@ GREEN=(0,255,0)
 BLUE=(0,0,255)
 BLACK=(0,0,0)
 WHITE=(255,255,255)
-tower="no tower"
-mx,my=mouse.get_pos()
 
-heavyGunRect=Rect(100,100,50,50)
-draw.rect(screen,GREEN,heavyGunRect,1)
-heavyGun=image.load("FSE-Assets/Defenses/heavyGun.png")
-heavyGun=transform.scale(heavyGun,(50,50))
-screen.blit(heavyGun,(100,100))
+map1=image.load("FSE-Assets/Maps/map1.jpg")
+hudimg=image.load("FSE-Assets/hud.jpg")
+hud=transform.scale(hudimg,(500,75))
 
+class enemyType:
 
-def placeTower(t):
-    
-    if t!="no tower":
-        defenseImage=image.load("FSE-Assets/Defenses/"+t+".png")
-        defenseImage=transform.scale(defenseImage,(100,100))
-        if mb[0]==1:
-            screen.blit(defenseImage,(mx-50,my-50))
-                
-        
-        
-    
-    
+    def __init__(self,name,speed,health):
+        self.name=name
+        self.speed=speed
+        self.health=health
+        self.filename="FSE-Assets/Enemies/"+name+".png"
+
+infantry=enemyType('infantry',1.5,100)
+transport=enemyType('transport',1.7,400)
+motorcycle=enemyType('motorcycle',2,250)
+lightTank=enemyType('lightTank',1,700)
+heavyTank=enemyType('heavyTank',0.7,1000)
+
+class towerType:
+
+    def __init__(self,name,damage,price):
+        self.name=name
+        self.damage=damage
+        self.price=price
+        self.filename="FSE-Assets/Defenses/"+name+".png"
+
+antiTank=towerType('antiTank',150,800)
+bunker=towerType('bunker',50,1000)
+fortress=towerType('fortress',250,1250)
+heavyGun=towerType('heavyGun',350,1500)
+heavyMG=towerType('heavyMG',20,500)
+soldier=towerType('soldier',25,250)
+
+def drawScene(screen):
+    screen.blit(map1,(0,0))
+    screen.blit(hud,(550,20))
+
+buyRects=[Rect(610,31,57,57),Rect(685,31,57,57),Rect(760,31,57,57),Rect(834,31,57,57),Rect(908,31,57,57),Rect(982,31,57,57)]
+for i in buyRects:
+    draw.rect(screen,RED,i,3)
+
+myclock=time.Clock()
+
 running=True
 while running:
     for evt in event.get():
         if evt.type==QUIT:
             running=False
-
+        
     mb=mouse.get_pressed()
     mx,my=mouse.get_pos()
-    if mb[0]==1:
-        if heavyGunRect.collidepoint(mx,my) and tower=="no tower":
-            tower="heavyGun"
-            placeTower(tower)
-        elif heavyGunRect.collidepoint(mx,my) and tower=="heavy gun":
-            tower="no tower"
-    print(tower)
-    
-    
-    
     display.flip() 
 
+    drawScene(screen)
+    myclock.tick(60)
+    mx,my=mouse.get_pos()
+
+    for i in buyRects:
+        if i.collidepoint(mx,my):
+            draw.rect(screen,RED,i,2)
+
+    display.flip()
+print("chris is fukcing gay")
 quit()
