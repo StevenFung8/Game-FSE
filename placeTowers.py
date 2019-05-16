@@ -71,5 +71,5 @@ while running:
             draw.rect(screen,RED,i,2)
 
     display.flip()
-
+print("chris is fukcing gay")
 quit()
