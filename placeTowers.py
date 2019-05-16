@@ -9,15 +9,6 @@ BLUE=(0,0,255)
 BLACK=(0,0,0)
 WHITE=(255,255,255)
 
-
-from pygame import *
-from math import *
-from random import *
-screen=display.set_mode((1050,750))
-RED=(255,0,0)   
-GREEN=(0,255,0)
-BLACK=(0,0,0)
-
 map1=image.load("FSE-Assets/Maps/map1.jpg")
 hudimg=image.load("FSE-Assets/hud.jpg")
 hud=transform.scale(hudimg,(500,75))
@@ -70,7 +61,6 @@ while running:
     mb=mouse.get_pressed()
     mx,my=mouse.get_pos()
     display.flip() 
-
 
     drawScene(screen)
     myclock.tick(60)
