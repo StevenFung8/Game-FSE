@@ -1,13 +1,10 @@
-
-#placeTowers.py
-from pygame import *
-size=width,height=800,600
-screen=display.set_mode(size)
+from pygame import * 
+from math import *
+from random import *
+screen=display.set_mode((1050,750))
 RED=(255,0,0)   
 GREEN=(0,255,0)
-BLUE=(0,0,255)
 BLACK=(0,0,0)
-WHITE=(255,255,255)
 
 map1=image.load("FSE-Assets/Maps/map1.jpg")
 hudimg=image.load("FSE-Assets/hud.jpg")
@@ -50,26 +47,40 @@ buyRects=[Rect(610,31,57,57),Rect(685,31,57,57),Rect(760,31,57,57),Rect(834,31,5
 for i in buyRects:
     draw.rect(screen,RED,i,3)
 
-myclock=time.Clock()
+defenses=[soldier,heavyMG,antiTank,bunker,fortress,heavyGun]
+defensePics=[]
+for i in defenses:
+    defensePics.append(image.load(i.filename))
 
+mapRect=Rect(0,0,1050,750)
+
+myclock=time.Clock()
 running=True
 while running:
     for evt in event.get():
         if evt.type==QUIT:
             running=False
-        
-    mb=mouse.get_pressed()
-    mx,my=mouse.get_pos()
-    display.flip() 
-
+        if evt.type==MOUSEBUTTONDOWN:
+            capture=screen.copy()
+            
     drawScene(screen)
     myclock.tick(60)
     mx,my=mouse.get_pos()
+    mb=mouse.get_pressed()
 
     for i in buyRects:
         if i.collidepoint(mx,my):
             draw.rect(screen,RED,i,2)
 
+    if mb[0]==1:
+        if buyRects[0].collidepoint(mx,my):
+            screen.set_clip(mapRect)
+            defC="soldier"
+
+    if mb[0]==1:
+        if defC=="soldier":
+            if mapRect.collidepoint(mx,my):
+                screen.blit(defensePics[0],(mx,my))
+            
     display.flip()
-print("chris is fukcing gay")
 quit()

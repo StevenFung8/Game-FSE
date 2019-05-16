@@ -1,4 +1,3 @@
-
 #mainGame
 from pygame import *
 from math import *
@@ -15,8 +14,9 @@ WHITE=(255,255,255)
 YELLOW=(255,255,0)
 
 def main():
+    global mx,my
     mixer.init()
-    mixer.music.load("FSE-Assets/sound/menuMusic.ogg")
+    mixer.music.load("FSE-Assets/sound/menuMusic.mp3")
     mixer.music.play()
     running=True
     buttons=[Rect(57,294,210,47),Rect(57,370,270,49),Rect(57,448,170,49)]
@@ -25,7 +25,6 @@ def main():
         for evnt in event.get():
             if evnt.type==QUIT:
                 return "exit"
-            
         mx,my=mouse.get_pos()
         mb=mouse.get_pressed()
         screen.blit(mainMenu,(0,0))
@@ -39,7 +38,7 @@ def main():
 
 def creds():
     mixer.init()
-    mixer.music.load("FSE-Assets/sound/menuMusic2.ogg")
+    mixer.music.load("FSE-Assets/sound/menuMusic2.mp3")
     mixer.music.play()
     running=True
     reButton=Rect(100,100,50,50)
@@ -55,7 +54,7 @@ def creds():
 
 def instructions():
     mixer.init()
-    mixer.music.load("FSE-Assets/sound/menuMusic2.ogg")
+    mixer.music.load("FSE-Assets/sound/menuMusic2.mp3")
     mixer.music.play()
     running=True
     reButton=Rect(100,100,50,50)
