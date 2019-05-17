@@ -25,23 +25,27 @@ motorcycle=enemyType('motorcycle',2,250)
 lightTank=enemyType('lightTank',1,700)
 heavyTank=enemyType('heavyTank',0.7,1000)
 
-def moveEnemy(enemy):
-    global frame
-    for i in enemy:
-        if i[0]<220:
-            i[0]+=i[2].speed
-        if i[0]>=220 and i[1]<420:
-            i[1]+=i[2].speed
-            frame=1
-        if i[1]>=420:
-            i[0]+=i[2].speed
+def moveEnemy(screen,enemyList,enemy):
+    frame=0
+    for i in range(len(enemy)):
+        if enemy[i][0]<220:
+            enemy[i][0]+=enemy[i][2].speed
             frame=0
+        if enemy[i][0]>=220 and enemy[i][1]<420:
+            enemy[i][1]+=enemy[i][2].speed
+            frame=1
+        if enemy[i][1]>=410:
+            enemy[i][0]+=enemy[i][2].speed
+            frame=0
+        screen.blit(enemyList[i][int(frame)],(enemy[i][0],enemy[i][1]))
+        #if enemy[i][0]>=900:
+            #enemy.remove(enemy[i])
+    display.flip()
 
 def drawScene(screen):
     screen.blit(map1,(0,0))
 
-enemy=[[40,190,transport],[40,190,heavyTank],[40,190,motorcycle],[40,190,lightTank],[40,190,infantry]]
-frame=0
+enemy=[[-100,190,transport],[-100,190,heavyTank],[-100,190,motorcycle],[-100,190,lightTank],[-100,190,infantry]]
 pics=[]
 
 for i in enemy:
@@ -50,25 +54,24 @@ for i in enemy:
     img.append(transform.rotate(image.load(i[2].filename),-90))
     pics.append(img)
 
+'''
 def drawEnemies(screen,enemyList,enemy):
-    count=0
     for i in range(len(enemy)):
         screen.blit(enemyList[i][int(frame)],(enemy[i][0],enemy[i][1]))
         if enemy[i][0]>=900:
             enemy.remove(enemy[i])
     display.flip()
-
+'''
 myclock=time.Clock()
 running=True
 while running:
     for evt in event.get():
         if evt.type==QUIT:
             running=False
-    moveEnemy(enemy)
+    moveEnemy(screen,pics,enemy)
     drawScene(screen)
-    drawEnemies(screen,pics,enemy)
+    #drawEnemies(screen,pics,enemy)
 
     myclock.tick(60)
 
-    display.flip()
 quit()
