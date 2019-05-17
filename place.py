@@ -68,6 +68,7 @@ while running:
     mx,my=mouse.get_pos()
     mb=mouse.get_pressed()
 
+    holding='none'
     for i in buyRects:
         if i.collidepoint(mx,my):
             draw.rect(screen,RED,i,2)
@@ -76,11 +77,24 @@ while running:
         if buyRects[0].collidepoint(mx,my):
             screen.set_clip(mapRect)
             defC="soldier"
+        elif buyRects[1].collidepoint(mx,my):
+            screen.set_clip(mapRect)
+            defC="heavyMG"
 
     if mb[0]==1:
         if defC=="soldier":
             if mapRect.collidepoint(mx,my):
-                screen.blit(defensePics[0],(mx,my))
-            
+                holding="monkey"
+                screen.blit(defensePics[0],(mx-75,my-75))
+                
+                
+                
+                
+        elif defC=="heavyMG":
+            if mapRect.collidepoint(mx,my):
+                screen.blit(defensePics[1],(mx-75,my-75))
+    if mb[0]==0 and holding=="monkey":
+        screen.set_clip(mapRect)
+        screen.blit(defensePics[0],(mx-75,my-75))
     display.flip()
 quit()
