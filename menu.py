@@ -15,18 +15,11 @@ BLACK=(0,0,0)
 WHITE=(255,255,255)
 YELLOW=(255,255,0)
 
-<<<<<<< HEAD:main.py
 def creds():
-    mixer.init()
-    mixer.music.load("FSE-Assets/sound/menuMusic2.mp3")
-    mixer.music.play(-1)
-=======
-def main():
     global mx,my
     mixer.init()
-    mixer.music.load("FSE-Assets/sound/menuMusic.mp3")
+    mixer.music.load("FSE-Assets/sound/menuMusic2.mp3")
     mixer.music.play()
->>>>>>> f54ad5cb574ad450ebdb715159900524234661b8:mainMenu.py
     running=True
     while running:
         screen.blit(credMenu,(0,0))
@@ -34,11 +27,8 @@ def main():
         draw.rect(screen,BLACK,backButton,3)
         for evnt in event.get():
             if evnt.type==QUIT:
-<<<<<<< HEAD:main.py
                 running=False
-=======
                 return "exit"
->>>>>>> f54ad5cb574ad450ebdb715159900524234661b8:mainMenu.py
         mx,my=mouse.get_pos()
         mb=mouse.get_pressed()
         if backButton.collidepoint(mx,my):
@@ -51,11 +41,8 @@ def main():
 def instructions():
     mixer.init()
     mixer.music.load("FSE-Assets/sound/menuMusic2.mp3")
-<<<<<<< HEAD:main.py
     mixer.music.play(-1)
-=======
     mixer.music.play()
->>>>>>> f54ad5cb574ad450ebdb715159900524234661b8:mainMenu.py
     running=True
     while running:
         screen.blit(instructMenu,(0,0))
@@ -75,15 +62,10 @@ def instructions():
 
 def main():
     mixer.init()
-<<<<<<< HEAD:main.py
     mixer.music.load("FSE-Assets/sound/menuMusic.mp3")
     mixer.music.play(-1)
     buttons=[Rect(57,294,210,47),Rect(57,370,270,49),Rect(57,448,170,49)]
     vals=["game","instructions","credits"]
-=======
-    mixer.music.load("FSE-Assets/sound/menuMusic2.mp3")
-    mixer.music.play()
->>>>>>> f54ad5cb574ad450ebdb715159900524234661b8:mainMenu.py
     running=True
     while running:
         mx,my=mouse.get_pos()
