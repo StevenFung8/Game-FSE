@@ -51,6 +51,7 @@ for i in enemy:
     pics.append(img)
 
 def drawEnemies(screen,enemyList,enemy):
+    count=0
     for i in range(len(enemy)):
         screen.blit(enemyList[i][int(frame)],(enemy[i][0],enemy[i][1]))
         if enemy[i][0]>=900:
