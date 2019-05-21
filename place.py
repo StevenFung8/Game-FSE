@@ -57,6 +57,7 @@ for i in defenses:
 mapRect=Rect(0,0,1050,750)
 
 activeDefenses=[]
+towerPosition=[[100,125,50]]
 myclock=time.Clock()
 running=True
 while running:
@@ -71,7 +72,8 @@ while running:
     mx,my=mouse.get_pos()
     mb=mouse.get_pressed()
 
-    
+    for p in towerPosition:
+        draw.circle(screen,BLACK,(p[0],p[1]),p[2])
     for i in buyRects:
         if i.collidepoint(mx,my):
             draw.rect(screen,RED,i,2)
