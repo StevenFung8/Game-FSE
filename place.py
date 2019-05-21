@@ -86,6 +86,7 @@ while running:
             if mapRect.collidepoint(mx,my):
                 holding="monkey"
                 screen.blit(defensePics[0],(mx-75,my-75))
+                towerScreen=screen.copy()
                 
                 
                 
@@ -94,7 +95,7 @@ while running:
             if mapRect.collidepoint(mx,my):
                 screen.blit(defensePics[1],(mx-75,my-75))
     if mb[0]==0 and holding=="monkey":
-        screen.set_clip(mapRect)
+        screen.blit(towerScreen)
         screen.blit(defensePics[0],(mx-75,my-75))
     display.flip()
 quit()
