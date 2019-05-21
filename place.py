@@ -5,7 +5,9 @@ screen=display.set_mode((1050,750))
 RED=(255,0,0)   
 GREEN=(0,255,0)
 BLACK=(0,0,0)
-
+marker=Surface((200,200),SRCALPHA)
+defC="none"
+cond=False
 map1=image.load("FSE-Assets/Maps/map1.jpg")
 hudimg=image.load("FSE-Assets/hud.jpg")
 hud=transform.scale(hudimg,(500,75))
@@ -54,6 +56,7 @@ for i in defenses:
 
 mapRect=Rect(0,0,1050,750)
 
+activeDefenses=[]
 myclock=time.Clock()
 running=True
 while running:
@@ -68,34 +71,98 @@ while running:
     mx,my=mouse.get_pos()
     mb=mouse.get_pressed()
 
-    holding='none'
+    
     for i in buyRects:
         if i.collidepoint(mx,my):
             draw.rect(screen,RED,i,2)
 
     if mb[0]==1:
         if buyRects[0].collidepoint(mx,my):
-            screen.set_clip(mapRect)
-            defC="soldier"
+            defC=0
         elif buyRects[1].collidepoint(mx,my):
-            screen.set_clip(mapRect)
-            defC="heavyMG"
-
+            defC=1
+        elif buyRects[2].collidepoint(mx,my):
+            defC=2
+        elif buyRects[3].collidepoint(mx,my):
+            defC=3
+        elif buyRects[4].collidepoint(mx,my):
+            defC=4
+        elif buyRects[5].collidepoint(mx,my):
+            defC=5
+        
     if mb[0]==1:
-        if defC=="soldier":
+        if defC==0:
             if mapRect.collidepoint(mx,my):
-                holding="monkey"
+                draw.rect(marker,(255,0,0,175),(mx-70,my-50,150,150))
                 screen.blit(defensePics[0],(mx-75,my-75))
-                towerScreen=screen.copy()
-                
-                
-                
-                
-        elif defC=="heavyMG":
+                ax,ay=mx,my
+                cond=True
+                  
+        elif defC==1:
             if mapRect.collidepoint(mx,my):
+                valid=GREEN
+                draw.rect(screen,valid,(mx-65,my-75,150,150),1)
                 screen.blit(defensePics[1],(mx-75,my-75))
-    if mb[0]==0 and holding=="monkey":
-        screen.blit(towerScreen)
-        screen.blit(defensePics[0],(mx-75,my-75))
+                ax,ay=mx,my
+                cond=True
+        elif defC==2:
+            if mapRect.collidepoint(mx,my):
+                draw.rect(screen,RED,(mx-50,my-50,150,150),1)
+                screen.blit(defensePics[2],(mx-75,my-75))
+                ax,ay=mx,my
+                cond=True
+        elif defC==3:
+            if mapRect.collidepoint(mx,my):
+                draw.rect(screen,RED,(mx-50,my-50,150,150),1)
+                screen.blit(defensePics[3],(mx-75,my-75))
+                ax,ay=mx,my
+                cond=True
+        elif defC==4:
+            if mapRect.collidepoint(mx,my):
+                draw.rect(screen,RED,(mx-50,my-50,150,150),1)
+                screen.blit(defensePics[4],(mx-75,my-75))
+                ax,ay=mx,my
+                cond=True
+
+        elif defC==5:
+            if mapRect.collidepoint(mx,my):
+                draw.rect(screen,RED,(mx-50,my-50,150,150),1)
+                screen.blit(defensePics[5],(mx-75,my-75))
+                ax,ay=mx,my
+                cond=True
+                
+
+    if mb[0]==0:
+        if cond==True:
+            activeDefenses.append([defC,ax-75,ay-75])
+            cond=False
+            defC="none"
+            
+
+
+    for a in activeDefenses:
+        screen.blit(defensePics[a[0]],(a[1],a[2]))
+        
+    print(cond)       
+    
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
     display.flip()
 quit()
