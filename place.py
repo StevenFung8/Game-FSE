@@ -57,6 +57,9 @@ for i in defenses:
 mapRect=Rect(0,0,1050,750)
 
 activeDefenses=[]
+mixer.init()
+mixer.music.load("FSE-Assets/sound/bgMusic.mp3")
+mixer.music.play(-1)
 myclock=time.Clock()
 running=True
 while running:
@@ -70,12 +73,10 @@ while running:
     myclock.tick(60)
     mx,my=mouse.get_pos()
     mb=mouse.get_pressed()
-
     
     for i in buyRects:
         if i.collidepoint(mx,my):
             draw.rect(screen,RED,i,2)
-
     if mb[0]==1:
         if buyRects[0].collidepoint(mx,my):
             defC=0
@@ -93,16 +94,15 @@ while running:
     if mb[0]==1:
         if defC==0:
             if mapRect.collidepoint(mx,my):
-                draw.rect(marker,(255,0,0,175),(mx-70,my-50,150,150))
-                screen.blit(defensePics[0],(mx-75,my-75))
+                #draw.rect(marker,(255,0,0,175),(mx-70,my-50,150,150))
+                screen.blit(defensePics[0],(mx,my))
                 ax,ay=mx,my
-                cond=True
-                  
+                cond=True      
         elif defC==1:
-            if mapRect.collidepoint(mx,my):
+            if mapRect.collidepoint(mx,my) and click:
                 valid=GREEN
                 draw.rect(screen,valid,(mx-65,my-75,150,150),1)
-                screen.blit(defensePics[1],(mx-75,my-75))
+                screen.blit(defensePics[1],(mx,my))
                 ax,ay=mx,my
                 cond=True
         elif defC==2:
@@ -123,46 +123,21 @@ while running:
                 screen.blit(defensePics[4],(mx-75,my-75))
                 ax,ay=mx,my
                 cond=True
-
         elif defC==5:
             if mapRect.collidepoint(mx,my):
                 draw.rect(screen,RED,(mx-50,my-50,150,150),1)
                 screen.blit(defensePics[5],(mx-75,my-75))
                 ax,ay=mx,my
-                cond=True
-                
+                cond=True       
 
     if mb[0]==0:
         if cond==True:
             activeDefenses.append([defC,ax-75,ay-75])
             cond=False
             defC="none"
-            
-
 
     for a in activeDefenses:
         screen.blit(defensePics[a[0]],(a[1],a[2]))
         
-    print(cond)       
-    
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
     display.flip()
 quit()
