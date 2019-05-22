@@ -8,7 +8,7 @@ BLACK=(0,0,0)
 marker=Surface((200,200),SRCALPHA)
 defC="none"
 cond=False
-map1=image.load("FSE-Assets/Maps/map1.jpg")
+map1=image.load("FSE-Assets/Maps/map2.jpg")
 hudimg=image.load("FSE-Assets/hud.jpg")
 hud=transform.scale(hudimg,(500,75))
 
@@ -57,7 +57,7 @@ for i in defenses:
 mapRect=Rect(0,0,1050,750)
 
 activeDefenses=[]
-towerPosition=[[100,125,50]]
+towerPosition=[[100,125,50],[250,125,50]]
 myclock=time.Clock()
 running=True
 while running:
