@@ -94,38 +94,32 @@ while running:
     if mb[0]==1:
         if defC==0:
             if mapRect.collidepoint(mx,my):
-                #draw.rect(marker,(255,0,0,175),(mx-70,my-50,150,150))
                 screen.blit(defensePics[0],(mx,my))
                 ax,ay=mx,my
                 cond=True      
         elif defC==1:
-            if mapRect.collidepoint(mx,my) and click:
+            if mapRect.collidepoint(mx,my):
                 valid=GREEN
-                draw.rect(screen,valid,(mx-65,my-75,150,150),1)
                 screen.blit(defensePics[1],(mx,my))
                 ax,ay=mx,my
                 cond=True
         elif defC==2:
             if mapRect.collidepoint(mx,my):
-                draw.rect(screen,RED,(mx-50,my-50,150,150),1)
                 screen.blit(defensePics[2],(mx-75,my-75))
                 ax,ay=mx,my
                 cond=True
         elif defC==3:
             if mapRect.collidepoint(mx,my):
-                draw.rect(screen,RED,(mx-50,my-50,150,150),1)
                 screen.blit(defensePics[3],(mx-75,my-75))
                 ax,ay=mx,my
                 cond=True
         elif defC==4:
             if mapRect.collidepoint(mx,my):
-                draw.rect(screen,RED,(mx-50,my-50,150,150),1)
                 screen.blit(defensePics[4],(mx-75,my-75))
                 ax,ay=mx,my
                 cond=True
         elif defC==5:
             if mapRect.collidepoint(mx,my):
-                draw.rect(screen,RED,(mx-50,my-50,150,150),1)
                 screen.blit(defensePics[5],(mx-75,my-75))
                 ax,ay=mx,my
                 cond=True       
