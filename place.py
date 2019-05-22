@@ -62,7 +62,8 @@ mixer.init()
 mixer.music.load("FSE-Assets/sound/bgMusic.mp3")
 mixer.music.play(-1)
 
-towerPosition=[[100,125,50],[250,125,50]]
+towerPosition=[[75,450,25],[250,450,25],[250,300,25],[250,175,25],[425,175,25],
+               [600,175,25],[425,300,25],[600,300,25],[775,275,25],[825,375,25]]
 
 myclock=time.Clock()
 running=True
