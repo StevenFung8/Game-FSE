@@ -61,9 +61,14 @@ activeDefenses=[]
 mixer.init()
 mixer.music.load("FSE-Assets/sound/bgMusic.mp3")
 mixer.music.play(-1)
+########### I SET THE VOLUME OFF TO NOT KILL THE EARS ########
+mixer.music.set_volume(0)
+##############################
 
-towerPosition=[[75,450,25],[250,450,25],[250,300,25],[250,175,25],[425,175,25],
-               [600,175,25],[425,300,25],[600,300,25],[775,275,25],[825,375,25]]
+towerPosition=[Rect(75,450,50,50),Rect(225,450,50,50),Rect(225,300,50,50),Rect(225,125,50,50),Rect(425,125,50,50),
+               Rect(600,125,50,50),Rect(425,300,50,50),Rect(600,300,50,50),Rect(750,275,50,50),Rect(825,375,50,50)]
+
+
 
 myclock=time.Clock()
 running=True
@@ -82,8 +87,7 @@ while running:
     
 
 
-    for p in towerPosition:
-        draw.circle(screen,BLACK,(p[0],p[1]),p[2])
+    
 
     for i in buyRects:
         if i.collidepoint(mx,my):
@@ -105,39 +109,65 @@ while running:
     if mb[0]==1:
         if defC==0:
             if mapRect.collidepoint(mx,my):
-                screen.blit(defensePics[0],(mx,my))
+                for p in towerPosition:
+                    draw.rect(screen,BLACK,p,1)
+                screen.blit(defensePics[0],(mx-15,my-15))
                 ax,ay=mx,my
-                cond=True      
+                for t in towerPosition:
+                    if t.collidepoint(mx,my):
+                        cond=True      
         elif defC==1:
             if mapRect.collidepoint(mx,my):
-                valid=GREEN
-                screen.blit(defensePics[1],(mx,my))
+                for p in towerPosition:
+                    draw.rect(screen,BLACK,p,1)
+                screen.blit(defensePics[1],(mx-50,my-50))
                 ax,ay=mx,my
-                cond=True
+                for t in towerPosition:
+                    if t.collidepoint(mx,my):
+                        cond=True      
         elif defC==2:
             if mapRect.collidepoint(mx,my):
-                screen.blit(defensePics[2],(mx-75,my-75))
+                for p in towerPosition:
+                    draw.rect(screen,BLACK,p,1)
+                screen.blit(defensePics[2],(mx,my))
                 ax,ay=mx,my
-                cond=True
+                for t in towerPosition:
+                    if t.collidepoint(mx,my):
+                        cond=True      
         elif defC==3:
             if mapRect.collidepoint(mx,my):
-                screen.blit(defensePics[3],(mx-75,my-75))
+                for p in towerPosition:
+                    draw.rect(screen,BLACK,p,1)
+                screen.blit(defensePics[3],(mx,my))
                 ax,ay=mx,my
-                cond=True
+                for t in towerPosition:
+                    if t.collidepoint(mx,my):
+                        cond=True      
         elif defC==4:
             if mapRect.collidepoint(mx,my):
-                screen.blit(defensePics[4],(mx-75,my-75))
+                for p in towerPosition:
+                    draw.rect(screen,BLACK,p,1)
+                screen.blit(defensePics[4],(mx,my))
                 ax,ay=mx,my
-                cond=True
+                for t in towerPosition:
+                    if t.collidepoint(mx,my):
+                        cond=True      
         elif defC==5:
             if mapRect.collidepoint(mx,my):
-                screen.blit(defensePics[5],(mx-75,my-75))
-                ax,ay=mx,my
-                cond=True       
+                for p in towerPosition:
+                    draw.rect(screen,BLACK,p,1)
+                screen.blit(defensePics[5],(mx,my))
+                ax,ay=mx,my ##### fix this line, IT IS RELATIVE TO THE SAME THINGS
+                for t in towerPosition:
+                    if t.collidepoint(mx,my):
+                        cond=True             
 
     if mb[0]==0:
         if cond==True:
-            activeDefenses.append([defC,ax-75,ay-75])
+            activeDefenses.append([defC,ax-15,ay-15])
+            for t in towerPosition:
+                if t.collidepoint(mx,my):
+                    towerPosition.remove(t)
             cond=False
             defC="none"
 
