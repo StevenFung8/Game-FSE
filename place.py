@@ -1,3 +1,4 @@
+
 from pygame import * 
 from math import *
 from random import *
@@ -112,7 +113,7 @@ while running:
                 for p in towerPosition:
                     draw.rect(screen,BLACK,p,1)
                 screen.blit(defensePics[0],(mx-15,my-15))
-                ax,ay=mx,my
+                ax,ay=mx-15,my-15
                 for t in towerPosition:
                     if t.collidepoint(mx,my):
                         cond=True      
@@ -120,8 +121,8 @@ while running:
             if mapRect.collidepoint(mx,my):
                 for p in towerPosition:
                     draw.rect(screen,BLACK,p,1)
-                screen.blit(defensePics[1],(mx-50,my-50))
-                ax,ay=mx,my
+                screen.blit(defensePics[1],(mx-40,my-40))
+                ax,ay=mx-40,my-40
                 for t in towerPosition:
                     if t.collidepoint(mx,my):
                         cond=True      
@@ -164,7 +165,7 @@ while running:
 
     if mb[0]==0:
         if cond==True:
-            activeDefenses.append([defC,ax-15,ay-15])
+            activeDefenses.append([defC,ax,ay])
             for t in towerPosition:
                 if t.collidepoint(mx,my):
                     towerPosition.remove(t)
