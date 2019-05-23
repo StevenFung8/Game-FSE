@@ -63,14 +63,13 @@ mixer.init()
 mixer.music.load("FSE-Assets/sound/bgMusic.mp3")
 mixer.music.play(-1)
 ########### I SET THE VOLUME OFF TO NOT KILL THE EARS ########
-mixer.music.set_volume(0)
+#mixer.music.set_volume(0)
 ##############################
 
 towerPosition=[Rect(75,450,50,50),Rect(225,450,50,50),Rect(225,300,50,50),Rect(225,125,50,50),Rect(425,125,50,50),
                Rect(600,125,50,50),Rect(425,300,50,50),Rect(600,300,50,50),Rect(750,275,50,50),Rect(825,375,50,50)]
 
-
-
+range
 myclock=time.Clock()
 running=True
 while running:
@@ -84,11 +83,6 @@ while running:
     myclock.tick(60)
     mx,my=mouse.get_pos()
     mb=mouse.get_pressed()
-
-    
-
-
-    
 
     for i in buyRects:
         if i.collidepoint(mx,my):
@@ -111,7 +105,7 @@ while running:
         if defC==0:
             if mapRect.collidepoint(mx,my):
                 for p in towerPosition:
-                    draw.rect(screen,BLACK,p,1)
+                    draw.rect(screen,GREEN,p,3)
                 screen.blit(defensePics[0],(mx-15,my-15))
                 ax,ay=mx-15,my-15
                 for t in towerPosition:
@@ -120,25 +114,25 @@ while running:
         elif defC==1:
             if mapRect.collidepoint(mx,my):
                 for p in towerPosition:
-                    draw.rect(screen,BLACK,p,1)
-                screen.blit(defensePics[1],(mx-40,my-40))
-                ax,ay=mx-40,my-40
+                    draw.rect(screen,GREEN,p,3)
+                screen.blit(defensePics[1],(mx-30,my-30))
+                ax,ay=mx-30,my-30
                 for t in towerPosition:
                     if t.collidepoint(mx,my):
                         cond=True      
         elif defC==2:
             if mapRect.collidepoint(mx,my):
                 for p in towerPosition:
-                    draw.rect(screen,BLACK,p,1)
-                screen.blit(defensePics[2],(mx-50,my-50))
-                ax,ay=mx-50,my-50
+                    draw.rect(screen,GREEN,p,3)
+                screen.blit(defensePics[2],(mx-40,my-35))
+                ax,ay=mx-40,my-35
                 for t in towerPosition:
                     if t.collidepoint(mx,my):
                         cond=True      
         elif defC==3:
             if mapRect.collidepoint(mx,my):
                 for p in towerPosition:
-                    draw.rect(screen,BLACK,p,1)
+                    draw.rect(screen,GREEN,p,3)
                 screen.blit(defensePics[3],(mx-25,my-25))
                 ax,ay=mx-25,my-25
                 for t in towerPosition:
@@ -147,18 +141,18 @@ while running:
         elif defC==4:
             if mapRect.collidepoint(mx,my):
                 for p in towerPosition:
-                    draw.rect(screen,BLACK,p,1)
-                screen.blit(defensePics[4],(mx-25,my-25))
-                ax,ay=mx-25,my-25
+                    draw.rect(screen,GREEN,p,3)
+                screen.blit(defensePics[4],(mx-55,my-40))
+                ax,ay=mx-55,my-40
                 for t in towerPosition:
                     if t.collidepoint(mx,my):
                         cond=True      
         elif defC==5:
             if mapRect.collidepoint(mx,my):
                 for p in towerPosition:
-                    draw.rect(screen,BLACK,p,1)
-                screen.blit(defensePics[5],(mx-50,my-50))
-                ax,ay=mx-50,my-50 ##### fix this line, IT IS RELATIVE TO THE SAME THINGS
+                    draw.rect(screen,GREEN,p,3)
+                screen.blit(defensePics[5],(mx-40,my-50))
+                ax,ay=mx-40,my-50 ##### fix this line, IT IS RELATIVE TO THE SAME THINGS
                 for t in towerPosition:
                     if t.collidepoint(mx,my):
                         cond=True             

@@ -61,8 +61,6 @@ mixer.init()
 mixer.music.load("FSE-Assets/sound/bgMusic.mp3")
 mixer.music.play(-1)
 
-towerPosition=[[100,125,50],[250,125,50]]
-
 myclock=time.Clock()
 running=True
 while running:
@@ -76,9 +74,6 @@ while running:
     myclock.tick(60)
     mx,my=mouse.get_pos()
     mb=mouse.get_pressed()
-    
-    for p in towerPosition:
-        draw.circle(screen,BLACK,(p[0],p[1]),p[2])
 
     for i in buyRects:
         if i.collidepoint(mx,my):
