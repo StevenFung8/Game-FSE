@@ -140,7 +140,7 @@ while running:
                 for p in towerPosition:
                     draw.rect(screen,BLACK,p,1)
                 screen.blit(defensePics[3],(mx-25,my-25))
-                ax,ay=mx-25,my-25
+                ax,ay=mx-50,my-50s
                 for t in towerPosition:
                     if t.collidepoint(mx,my):
                         cond=True      
@@ -148,7 +148,7 @@ while running:
             if mapRect.collidepoint(mx,my):
                 for p in towerPosition:
                     draw.rect(screen,BLACK,p,1)
-                screen.blit(defensePics[4],(mx-25,my-25))
+                screen.blit(defensePics[4],(mx-50,my-50))
                 ax,ay=mx-25,my-25
                 for t in towerPosition:
                     if t.collidepoint(mx,my):
@@ -158,7 +158,8 @@ while running:
                 for p in towerPosition:
                     draw.rect(screen,BLACK,p,1)
                 screen.blit(defensePics[5],(mx-50,my-50))
-                ax,ay=mx-50,my-50 ##### fix this line, IT IS RELATIVE TO THE SAME THINGS
+                ax,ay=mx-50,my-50
+                ##### fix this line, IT IS RELATIVE TO THE SAME THINGS
                 for t in towerPosition:
                     if t.collidepoint(mx,my):
                         cond=True             
