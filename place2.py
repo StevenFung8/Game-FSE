@@ -47,9 +47,10 @@ def drawScene(screen):
     screen.blit(map1,(0,0))
     screen.blit(hud,(550,20))
 
-def placeTowers(buyRects,towerPosition,defensePics,activeDefenses):
+def placeTowers(buyRects,towerPosition,defensePics):
     cond=False
     defC="none"
+    activeDefenses=[]
     for i in buyRects:
         if i.collidepoint(mx,my):
             draw.rect(screen,RED,i,2)
@@ -142,7 +143,6 @@ for i in defenses:
     defensePics.append(image.load(i.filename))
 
 mapRect=Rect(0,0,1050,750)
-activeDefenses=[]
 
 mixer.init()
 mixer.music.load("FSE-Assets/sound/bgMusic.mp3")
@@ -165,7 +165,7 @@ while running:
     mx,my=mouse.get_pos()
     mb=mouse.get_pressed()
     drawScene(screen)
-    placeTowers(buyRects,towerPosition,defensePics,activeDefenses)
+    placeTowers(buyRects,towerPosition,defensePics)
     
     myclock.tick(60)
         

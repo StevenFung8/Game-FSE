@@ -1,4 +1,3 @@
-
 from pygame import * 
 from math import *
 from random import *
@@ -9,9 +8,14 @@ BLACK=(0,0,0)
 marker=Surface((200,200),SRCALPHA)
 defC="none"
 cond=False
+
 map1=image.load("FSE-Assets/Maps/map2.jpg")
 hudimg=image.load("FSE-Assets/hud.jpg")
+hudRect=image.load("FSE-Assets/hudRect.png")
 hud=transform.scale(hudimg,(500,75))
+hudRects=transform.scale(hudRect,(400,45))
+
+money=2000
 
 class enemyType:
 
@@ -45,10 +49,9 @@ soldier=towerType('soldier',25,250)
 def drawScene(screen):
     screen.blit(map1,(0,0))
     screen.blit(hud,(550,20))
+    screen.blit(hudRects,(20,20))
 
 buyRects=[Rect(610,31,57,57),Rect(685,31,57,57),Rect(760,31,57,57),Rect(834,31,57,57),Rect(908,31,57,57),Rect(982,31,57,57)]
-for i in buyRects:
-    draw.rect(screen,RED,i,3)
 
 defenses=[soldier,heavyMG,antiTank,bunker,fortress,heavyGun]
 defensePics=[]
@@ -62,14 +65,10 @@ activeDefenses=[]
 mixer.init()
 mixer.music.load("FSE-Assets/sound/bgMusic.mp3")
 mixer.music.play(-1)
-########### I SET THE VOLUME OFF TO NOT KILL THE EARS ########
-#mixer.music.set_volume(0)
-##############################
 
 towerPosition=[Rect(75,450,50,50),Rect(225,450,50,50),Rect(225,300,50,50),Rect(225,125,50,50),Rect(425,125,50,50),
                Rect(600,125,50,50),Rect(425,300,50,50),Rect(600,300,50,50),Rect(750,275,50,50),Rect(825,375,50,50)]
 
-range
 myclock=time.Clock()
 running=True
 while running:
@@ -156,7 +155,6 @@ while running:
                 for t in towerPosition:
                     if t.collidepoint(mx,my):
                         cond=True             
-
     if mb[0]==0:
         if cond==True:
             activeDefenses.append([defC,ax,ay])
