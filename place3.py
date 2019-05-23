@@ -68,8 +68,6 @@ mixer.music.set_volume(0)
 towerPosition=[Rect(75,450,50,50),Rect(225,450,50,50),Rect(225,300,50,50),Rect(225,125,50,50),Rect(425,125,50,50),
                Rect(600,125,50,50),Rect(425,300,50,50),Rect(600,300,50,50),Rect(750,275,50,50),Rect(825,375,50,50)]
 
-
-
 myclock=time.Clock()
 running=True
 while running:
@@ -84,14 +82,10 @@ while running:
     mx,my=mouse.get_pos()
     mb=mouse.get_pressed()
 
-    
-
-
-    
-
     for i in buyRects:
         if i.collidepoint(mx,my):
             draw.rect(screen,RED,i,2)
+
     if mb[0]==1:
         if buyRects[0].collidepoint(mx,my):
             defC=0
@@ -111,8 +105,8 @@ while running:
             if mapRect.collidepoint(mx,my):
                 for p in towerPosition:
                     draw.rect(screen,BLACK,p,1)
-                screen.blit(defensePics[0],(mx-15,my-15))
-                ax,ay=mx,my
+                screen.blit(defensePics[0],(mx-20,my-10))
+                ax,ay=mx-20,my-10
                 for t in towerPosition:
                     if t.collidepoint(mx,my):
                         cond=True      
@@ -120,8 +114,8 @@ while running:
             if mapRect.collidepoint(mx,my):
                 for p in towerPosition:
                     draw.rect(screen,BLACK,p,1)
-                screen.blit(defensePics[1],(mx-50,my-50))
-                ax,ay=mx,my
+                screen.blit(defensePics[1],(mx-28,my-20))
+                ax,ay=mx-28,my-20
                 for t in towerPosition:
                     if t.collidepoint(mx,my):
                         cond=True      
