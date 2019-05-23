@@ -1,3 +1,4 @@
+
 from pygame import * 
 from math import *
 from random import *
@@ -5,12 +6,12 @@ screen=display.set_mode((1050,750))
 RED=(255,0,0)   
 GREEN=(0,255,0)
 BLACK=(0,0,0)
-marker=Surface((200,200),SRCALPHA)
-defC="none"
-cond=False
+
 map1=image.load("FSE-Assets/Maps/map2.jpg")
 hudimg=image.load("FSE-Assets/hud.jpg")
 hud=transform.scale(hudimg,(500,75))
+
+mapRect=Rect(0,0,1050,750)
 
 class enemyType:
 
@@ -25,6 +26,7 @@ transport=enemyType('transport',1.7,400)
 motorcycle=enemyType('motorcycle',2,250)
 lightTank=enemyType('lightTank',1,700)
 heavyTank=enemyType('heavyTank',0.7,1000)
+tankDestroyer=enemyType('tankDestroyer',0.8,1200)
 
 class towerType:
 
@@ -45,36 +47,9 @@ def drawScene(screen):
     screen.blit(map1,(0,0))
     screen.blit(hud,(550,20))
 
-buyRects=[Rect(610,31,57,57),Rect(685,31,57,57),Rect(760,31,57,57),Rect(834,31,57,57),Rect(908,31,57,57),Rect(982,31,57,57)]
-for i in buyRects:
-    draw.rect(screen,RED,i,3)
-
-defenses=[soldier,heavyMG,antiTank,bunker,fortress,heavyGun]
-defensePics=[]
-for i in defenses:
-    defensePics.append(image.load(i.filename))
-
-mapRect=Rect(0,0,1050,750)
-activeDefenses=[]
-
-mixer.init()
-mixer.music.load("FSE-Assets/sound/bgMusic.mp3")
-mixer.music.play(-1)
-
-myclock=time.Clock()
-running=True
-while running:
-    for evt in event.get():
-        if evt.type==QUIT:
-            running=False
-        if evt.type==MOUSEBUTTONDOWN:
-            capture=screen.copy()
-            
-    drawScene(screen)
-    myclock.tick(60)
-    mx,my=mouse.get_pos()
-    mb=mouse.get_pressed()
-
+def placeTowers(buyRects,towerPosition,defensePics,activeDefenses):
+    cond=False
+    defC="none"
     for i in buyRects:
         if i.collidepoint(mx,my):
             draw.rect(screen,RED,i,2)
@@ -95,44 +70,104 @@ while running:
     if mb[0]==1:
         if defC==0:
             if mapRect.collidepoint(mx,my):
-                screen.blit(defensePics[0],(mx-20,my-10))
-                ax,ay=mx-20,my-10
-                cond=True      
+                for p in towerPosition:
+                    draw.rect(screen,GREEN,p,3)
+                screen.blit(defensePics[0],(mx-20,my-20))
+                ax,ay=mx-20,my-20
+                for t in towerPosition:
+                    if t.collidepoint(mx,my):
+                        cond=True      
         elif defC==1:
             if mapRect.collidepoint(mx,my):
-                valid=GREEN
-                screen.blit(defensePics[1],(mx-28,my-20))
-                ax,ay=mx-28,my-20
-                cond=True
+                for p in towerPosition:
+                    draw.rect(screen,GREEN,p,3)
+                screen.blit(defensePics[1],(mx-30,my-30))
+                ax,ay=mx-30,my-30
+                for t in towerPosition:
+                    if t.collidepoint(mx,my):
+                        cond=True      
         elif defC==2:
             if mapRect.collidepoint(mx,my):
-                screen.blit(defensePics[2],(mx-40,my-30))
-                ax,ay=mx-40,my-30
-                cond=True
+                for p in towerPosition:
+                    draw.rect(screen,GREEN,p,3)
+                screen.blit(defensePics[2],(mx-40,my-35))
+                ax,ay=mx-40,my-35
+                for t in towerPosition:
+                    if t.collidepoint(mx,my):
+                        cond=True      
         elif defC==3:
             if mapRect.collidepoint(mx,my):
-                screen.blit(defensePics[3],(mx-30,my-20))
-                ax,ay=mx-30,my-20
-                cond=True
+                for p in towerPosition:
+                    draw.rect(screen,GREEN,p,3)
+                screen.blit(defensePics[3],(mx-25,my-25))
+                ax,ay=mx-25,my-25
+                for t in towerPosition:
+                    if t.collidepoint(mx,my):
+                        cond=True      
         elif defC==4:
             if mapRect.collidepoint(mx,my):
-                screen.blit(defensePics[4],(mx-55,my-45))
-                ax,ay=mx-55,my-45
-                cond=True
-        elif defC==5: #dragging defenses
+                for p in towerPosition:
+                    draw.rect(screen,GREEN,p,3)
+                screen.blit(defensePics[4],(mx-55,my-40))
+                ax,ay=mx-55,my-40
+                for t in towerPosition:
+                    if t.collidepoint(mx,my):
+                        cond=True      
+        elif defC==5:
             if mapRect.collidepoint(mx,my):
-                screen.blit(defensePics[5],(mx-40,my-70))
-                ax,ay=mx-40,my-70
-                cond=True       
-
+                for p in towerPosition:
+                    draw.rect(screen,GREEN,p,3)
+                screen.blit(defensePics[5],(mx-40,my-50))
+                ax,ay=mx-40,my-50 ##### fix this line, IT IS RELATIVE TO THE SAME THINGS
+                for t in towerPosition:
+                    if t.collidepoint(mx,my):
+                        cond=True             
     if mb[0]==0:
         if cond==True:
             activeDefenses.append([defC,ax,ay])
+            for t in towerPosition:
+                if t.collidepoint(mx,my):
+                    towerPosition.remove(t)
             cond=False
             defC="none"
 
-    for a in activeDefenses: #dropping defenses
+    for a in activeDefenses:
         screen.blit(defensePics[a[0]],(a[1],a[2]))
+
+buyRects=[Rect(607,28,59,63),Rect(682,28,61,63),Rect(758,28,61,63),Rect(834,28,61,63),Rect(908,28,61,63),Rect(982,28,61,63)]
+
+defenses=[soldier,heavyMG,antiTank,bunker,fortress,heavyGun]
+defensePics=[]
+for i in defenses:
+    defensePics.append(image.load(i.filename))
+
+mapRect=Rect(0,0,1050,750)
+activeDefenses=[]
+
+mixer.init()
+mixer.music.load("FSE-Assets/sound/bgMusic.mp3")
+mixer.music.play(-1)
+########### I SET THE VOLUME OFF TO NOT KILL THE EARS ########
+#mixer.music.set_volume(0)
+##############################
+
+towerPosition=[Rect(75,450,50,50),Rect(225,450,50,50),Rect(225,300,50,50),Rect(225,125,50,50),Rect(425,125,50,50),
+               Rect(600,125,50,50),Rect(425,300,50,50),Rect(600,300,50,50),Rect(750,275,50,50),Rect(825,375,50,50)]
+
+myclock=time.Clock()
+running=True
+while running:
+    for evt in event.get():
+        if evt.type==QUIT:
+            running=False
+        if evt.type==MOUSEBUTTONDOWN:
+            capture=screen.copy()
+    mx,my=mouse.get_pos()
+    mb=mouse.get_pressed()
+    drawScene(screen)
+    placeTowers(buyRects,towerPosition,defensePics,activeDefenses)
+    
+    myclock.tick(60)
         
     display.flip()
 quit()
