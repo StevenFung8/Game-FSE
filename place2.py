@@ -45,16 +45,18 @@ soldier=towerType('soldier',25,250)
 def drawScene(screen):
     screen.blit(map1,(0,0))
     screen.blit(hud,(550,20))
-
+    
+defC="none"
 def placeTowers(buyRects,towerPosition,defensePics):
+    global defC
     cond=False
-    defC="none"
     activeDefenses=[]
     for i in buyRects:
         if i.collidepoint(mx,my):
             draw.rect(screen,RED,i,2)
-    if mb[0]==1:
+    if click:
         if buyRects[0].collidepoint(mx,my):
+            print("Click")
             defC=0
         elif buyRects[1].collidepoint(mx,my):
             defC=1
@@ -67,7 +69,7 @@ def placeTowers(buyRects,towerPosition,defensePics):
         elif buyRects[5].collidepoint(mx,my):
             defC=5
         
-    if mb[0]==1:
+    if True:
         if defC==0:
             if mapRect.collidepoint(mx,my):
                 for p in towerPosition:
@@ -121,18 +123,22 @@ def placeTowers(buyRects,towerPosition,defensePics):
                 ax,ay=mx-40,my-50 ##### fix this line, IT IS RELATIVE TO THE SAME THINGS
                 for t in towerPosition:
                     if t.collidepoint(mx,my):
-                        cond=True             
+                        cond=True
+                        
     if mb[0]==0:
         if cond==True:
             activeDefenses.append([defC,ax,ay])
             for t in towerPosition:
                 if t.collidepoint(mx,my):
+                    screen.blit(defensePics[defC],(t[0],t[1]))
+                    print(t[0],t[1])
                     towerPosition.remove(t)
             cond=False
             defC="none"
 
     for a in activeDefenses:
         screen.blit(defensePics[a[0]],(a[1],a[2]))
+    
 
 buyRects=[Rect(607,28,59,63),Rect(682,28,61,63),Rect(758,28,61,63),Rect(834,28,61,63),Rect(908,28,61,63),Rect(982,28,61,63)]
 
@@ -156,13 +162,16 @@ towerPosition=[Rect(75,450,50,50),Rect(225,450,50,50),Rect(225,300,50,50),Rect(2
 myclock=time.Clock()
 running=True
 while running:
+    click=False
     for evt in event.get():
         if evt.type==QUIT:
             running=False
         if evt.type==MOUSEBUTTONDOWN:
+            click=True
             capture=screen.copy()
     mx,my=mouse.get_pos()
     mb=mouse.get_pressed()
+    #print(click)
     drawScene(screen)
     placeTowers(buyRects,towerPosition,defensePics)
     
