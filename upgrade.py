@@ -60,7 +60,9 @@ def drawScene(enemy,defense):
         if mb[0]==1:
             soldierDisplay=True
     if soldierDisplay:
-         screen.blit(stencilFont3.render("%2i ---> %2i" '''(%soldier[ATK],%soldier[ATK]+5)''',True,(255,140,209)),(20,462))
+         screen.blit(stencilFont3.render("%2i -----> %2i"%(int(soldier[ATK]),int(soldier[ATK])+5),True,(255,140,209)),(100,465))
+         screen.blit(stencilFont3.render("%2i"%(soldier[R]),True,(255,140,209)),(100,505))
+         screen.blit(stencilFont3.render("%2i"%(soldier[UCOST],True,(255,140,209)),(
         
     display.flip()
     
@@ -68,9 +70,9 @@ def upgrade(soldier):
     if upgradeRect.collidepoint(mx,my):
         draw.rect(screen,GREEN,upgradeRect,2)
     dist=sqrt((int(soldier[X])-mx)**2+(int(soldier[Y])-my)**2)
-    if dist<=180:
-        if mb[0]==1:
-            soldier[ATK]+=10
+    #if dist<=180:
+    #    if mb[0]==1:
+    #        soldier[ATK]+=5
     
 
 def checkRange(enemy,defense):
