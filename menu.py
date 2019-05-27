@@ -16,8 +16,9 @@ mainMenu=image.load("FSE-Assets/mainscreen.jpg")
 credMenu=image.load("FSE-Assets/credits.jpg")
 instructMenu=image.load("FSE-Assets/instructions.jpg")
 levelSelectMenu=image.load("FSE-Assets/levelSelect.jpg")
+cross=image.load("FSE-Assets/cross.png")
 
-txtFont=font.SysFont("Bradley Hand ITC",35)
+txtFont=font.SysFont("Stencil",27)
 
 map2=image.load("FSE-Assets/Maps/map2.jpg")
 hudimg=image.load("FSE-Assets/hud.jpg")
@@ -28,6 +29,7 @@ quitP=image.load("FSE-Assets/quitRect.png")
 hud=transform.scale(hudimg,(500,75))
 hudRects=transform.scale(hudRect,(200,95))
 quitPic=transform.scale(quitP,(150,40))
+crossPic=transform.scale(cross,(30,30))
 
 money=2000
 score=0
@@ -104,7 +106,7 @@ def drawScene(screen):
     screen.blit(hud,(550,20))
     screen.blit(hudRects,(20,20))
     screen.blit(txtMoney,(100,30))
-    screen.blit(txtScore,(110,80))
+    screen.blit(txtScore,(110,84))
 
 def prep(screen):
     ready=False
@@ -157,6 +159,7 @@ def creds():
     running=True
     while running:
         screen.blit(credMenu,(0,0))
+        screen.blit(crossPic,(960,50))
         backButton=Rect(950,40,50,50)
         draw.rect(screen,BLACK,backButton,3)
         for evnt in event.get():
@@ -179,6 +182,7 @@ def instructions():
     running=True
     while running:
         screen.blit(instructMenu,(0,0))
+        screen.blit(crossPic,(960,50))
         backButton=Rect(950,40,50,50)
         draw.rect(screen,BLACK,backButton,3)
         for evnt in event.get():
@@ -207,6 +211,7 @@ def levelSelect():
                 running=False
                 return "exit"
         screen.blit(levelSelectMenu,(0,0))
+        screen.blit(crossPic,(960,50))
         backButton=Rect(950,40,50,50)
         draw.rect(screen,BLACK,backButton,3)
 
@@ -224,7 +229,6 @@ def levelSelect():
         display.flip()
     return "main"
     
-
 def main():
     mixer.init()
     mixer.music.load("FSE-Assets/sound/menuMusic.mp3")
@@ -239,14 +243,16 @@ def main():
         for evnt in event.get():
             if evnt.type==QUIT:
                 return "exit"
-            if evnt.type==MOUSEBUTTONUP:
+            if evnt.type==MOUSEBUTTONDOWN:
                 click=True
+            if evnt.type==MOUSEBUTTONUP:
+                click=False
         screen.blit(mainMenu,(0,0))
         for i in range(len(buttons)):
             draw.rect(screen,RED,buttons[i],3)
             if buttons[i].collidepoint(mx,my):
                 draw.rect(screen,(255,255,0),buttons[i],3)
-                if mb[0]==1 and click:
+                if mb[0]==1 and click==False:
                     return vals[i]
         display.flip()
 
@@ -277,4 +283,5 @@ while current!="exit":
         current=lev4()
     if current=="lev5":
         current=lev5()
+
 quit()
