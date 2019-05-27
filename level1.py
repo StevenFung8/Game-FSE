@@ -24,28 +24,33 @@ transport=enemyType('transport',1.7,400)
 motorcycle=enemyType('motorcycle',2,250)
 lightTank=enemyType('lightTank',1,700)
 heavyTank=enemyType('heavyTank',0.7,1000)
+tankDestroyer=enemyType('tankDestroyer',0.8,900)
 
 def moveEnemy(screen,enemyList,enemy):
     frame=0
-    for i in range(len(enemy)):
-        if enemy[i][0]<220:
-            enemy[i][0]+=enemy[i][2].speed
+    count=0
+    for i in enemy:
+        if i[0]<220:
+            i[0]+=i[2].speed
             frame=0
-        if enemy[i][0]>=220 and enemy[i][1]<420:
-            enemy[i][1]+=enemy[i][2].speed
+        if i[0]>=220 and i[1]<420:
+            i[1]+=i[2].speed
             frame=1
-        if enemy[i][1]>=410:
-            enemy[i][0]+=enemy[i][2].speed
+        if i[1]>=410:
+            i[0]+=i[2].speed
             frame=0
-        screen.blit(enemyList[i][int(frame)],(enemy[i][0],enemy[i][1]))
-        #if enemy[i][0]>=900:
-            #enemy.remove(enemy[i])
+        screen.blit(enemyList[count][int(frame)],(i[0],i[1]))
+        count+=1
+    for c in range(len(enemy)):
+        if enemy[c][0]>=930:
+            del(enemy[c])
+    
     display.flip()
 
 def drawScene(screen):
     screen.blit(map1,(0,0))
 
-enemy=[[-100,190,transport],[-100,190,heavyTank],[-100,190,motorcycle],[-100,190,lightTank],[-100,190,infantry]]
+enemy=[[-100,190,transport],[-100,190,tankDestroyer],[-100,190,motorcycle],[-100,190,lightTank],[-100,190,infantry],[-100,183,heavyTank]]
 pics=[]
 
 for i in enemy:
@@ -62,6 +67,9 @@ def drawEnemies(screen,enemyList,enemy):
             enemy.remove(enemy[i])
     display.flip()
 '''
+#def playsound(musicList):
+    
+
 myclock=time.Clock()
 running=True
 while running:
@@ -70,7 +78,7 @@ while running:
             running=False
     moveEnemy(screen,pics,enemy)
     drawScene(screen)
-    #drawEnemies(screen,pics,enemy)
+    #playsound(musicList)
 
     myclock.tick(60)
 
