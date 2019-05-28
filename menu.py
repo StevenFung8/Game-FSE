@@ -22,7 +22,7 @@ hudRect=image.load("FSE-Assets/hudRect.png")
 readyPic=image.load("FSE-Assets/readyRect.jpg")
 quitP=image.load("FSE-Assets/quitRect.png")
 
-txtFont=font.SysFont("Bradley Hand ITC",35)
+txtFont=font.SysFont("Stencil",25)
 
 #loading maps
 map1=image.load("FSE-Assets/Maps/map1.jpg")
