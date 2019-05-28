@@ -6,9 +6,9 @@ RED=(255,0,0)
 GREEN=(0,255,0)
 BLACK=(0,0,0)
 marker=Surface((200,200),SRCALPHA)
-defC="none"
-cond=False
 
+mx,my=mouse.get_pos()
+mb=mouse.get_pressed()
 map1=image.load("FSE-Assets/Maps/map2.jpg")
 hudimg=image.load("FSE-Assets/hud.jpg")
 hudRect=image.load("FSE-Assets/hudRect.png")
@@ -68,6 +68,102 @@ def drawScene(screen):
     screen.blit(hud,(550,20))
     screen.blit(hudRects,(20,20))
 
+def placeTowers(towerPosition,defensePics,activeDefenses):
+    defC="none"
+    cond=False
+    
+    if mb[0]==1 and click:
+        if buyRects[0].collidepoint(mx,my):
+            defC=0
+        elif buyRects[1].collidepoint(mx,my):
+            defC=1
+        elif buyRects[2].collidepoint(mx,my):
+            defC=2
+        elif buyRects[3].collidepoint(mx,my):
+            defC=3
+        elif buyRects[4].collidepoint(mx,my):
+            defC=4
+        elif buyRects[5].collidepoint(mx,my):
+            defC=5
+        
+    if mb[0]==1:
+        if defC==0:
+            if mapRect.collidepoint(mx,my):
+                print("shitbitch")
+                for p in towerPosition:
+                    draw.rect(screen,GREEN,p,3)
+                screen.set_clip()
+                screen.blit(defensePics[0],(mx-15,my-15))
+                ax,ay=mx-15,my-15
+                for t in towerPosition:
+                    if t.collidepoint(mx,my):
+                        cond=True      
+        elif defC==1:
+            if mapRect.collidepoint(mx,my):
+                for p in towerPosition:
+                    draw.rect(screen,GREEN,p,3)
+                screen.blit(defensePics[1],(mx-30,my-30))
+                ax,ay=mx-30,my-30
+                for t in towerPosition:
+                    if t.collidepoint(mx,my):
+                        cond=True      
+        elif defC==2:
+            if mapRect.collidepoint(mx,my):
+                for p in towerPosition:
+                    draw.rect(screen,GREEN,p,3)
+                screen.blit(defensePics[2],(mx-40,my-35))
+                ax,ay=mx-40,my-35
+                for t in towerPosition:
+                    if t.collidepoint(mx,my):
+                        cond=True      
+        elif defC==3:
+            if mapRect.collidepoint(mx,my):
+                for p in towerPosition:
+                    draw.rect(screen,GREEN,p,3)
+                screen.blit(defensePics[3],(mx-25,my-25))
+                ax,ay=mx-25,my-25
+                for t in towerPosition:
+                    if t.collidepoint(mx,my):
+                        cond=True      
+        elif defC==4:
+            if mapRect.collidepoint(mx,my):
+                for p in towerPosition:
+                    draw.rect(screen,GREEN,p,3)
+                    screen.blit(defensePics[4],(mx-55,my-40))
+                    ax,ay=mx-55,my-40
+
+                for t in towerPosition:
+                    if t.collidepoint(mx,my):
+                        cond=True      
+        elif defC==5:
+            if mapRect.collidepoint(mx,my):
+                for p in towerPosition:
+
+                    draw.rect(screen,GREEN,p,3)
+                screen.blit(defensePics[5],(mx-50,my-50))
+                ax,ay=mx-50,my-50
+                
+
+                for t in towerPosition:
+                    if t.collidepoint(mx,my):
+                        cond=True             
+    if mb[0]==0:
+        if cond==True:
+            print("fuck you")
+            for t in towerPosition:
+                if t.collidepoint(mx,my):
+                    activeDefenses.append([defC,ax,ay])
+            for t in towerPosition:
+                if t.collidepoint(mx,my):
+                    towerPosition.remove(t)
+            cond=False
+            defC="none"
+
+    for a in activeDefenses:
+        screen.blit(defensePics[a[0]],(a[1],a[2]))
+    display.flip()
+
+
 buyRects=[Rect(610,31,57,57),Rect(685,31,57,57),Rect(760,31,57,57),Rect(834,31,57,57),Rect(908,31,57,57),Rect(982,31,57,57)]
 
 defenses=[soldier,heavyMG,antiTank,bunker,fortress,heavyGun]
@@ -97,15 +193,18 @@ towerPosition=[Rect(75,450,50,50),Rect(225,450,50,50),Rect(225,300,50,50),Rect(2
 
 myclock=time.Clock()
 running=True
+click=False
 while running:
     for evt in event.get():
         if evt.type==QUIT:
             running=False
         if evt.type==MOUSEBUTTONDOWN:
+            click=True
             capture=screen.copy()
             
     drawScene(screen)
-    moveEnemy(screen,pics,enemy)
+    placeTowers(towerPosition,defensePics,activeDefenses)
+    #moveEnemy(screen,pics,enemy)
     myclock.tick(60)
     mx,my=mouse.get_pos()
     mb=mouse.get_pressed()
@@ -113,6 +212,7 @@ while running:
     for i in buyRects:
         if i.collidepoint(mx,my):
             draw.rect(screen,RED,i,2)
+    '''
     if mb[0]==1:
         if buyRects[0].collidepoint(mx,my):
             defC=0
@@ -160,44 +260,37 @@ while running:
                 for p in towerPosition:
                     draw.rect(screen,GREEN,p,3)
                 screen.blit(defensePics[3],(mx-25,my-25))
-                ax,ay=mx-50,my-50
+                ax,ay=mx-25,my-25
                 for t in towerPosition:
                     if t.collidepoint(mx,my):
                         cond=True      
         elif defC==4:
             if mapRect.collidepoint(mx,my):
                 for p in towerPosition:
-#<<<<<<< HEAD
-                    draw.rect(screen,BLACK,p,1)
-                screen.blit(defensePics[4],(mx-50,my-50))
-                ax,ay=mx-25,my-25
-#=======
-                draw.rect(screen,GREEN,p,3)
-                screen.blit(defensePics[4],(mx-55,my-40))
-                ax,ay=mx-55,my-40
-#>>>>>>> 83fb43e63d68a443d355347a42b3db5227aa9d28
+                    draw.rect(screen,GREEN,p,3)
+                    screen.blit(defensePics[4],(mx-55,my-40))
+                    ax,ay=mx-55,my-40
+
                 for t in towerPosition:
                     if t.collidepoint(mx,my):
                         cond=True      
         elif defC==5:
             if mapRect.collidepoint(mx,my):
                 for p in towerPosition:
-#<<<<<<< HEAD
-                    draw.rect(screen,BLACK,p,1)
+
+                    draw.rect(screen,GREEN,p,3)
                 screen.blit(defensePics[5],(mx-50,my-50))
                 ax,ay=mx-50,my-50
                 ##### fix this line, IT IS RELATIVE TO THE SAME THINGS
-#=======
-                draw.rect(screen,GREEN,p,3)
-                screen.blit(defensePics[5],(mx-40,my-50))
-                ax,ay=mx-40,my-50 ##### fix this line, IT IS RELATIVE TO THE SAME THINGS
-#>>>>>>> 83fb43e63d68a443d355347a42b3db5227aa9d28
+
                 for t in towerPosition:
                     if t.collidepoint(mx,my):
                         cond=True             
     if mb[0]==0:
         if cond==True:
-            activeDefenses.append([defC,ax,ay])
+            for t in towerPosition:
+                if t.collidepoint(mx,my):
+                    activeDefenses.append([defC,ax,ay])
             for t in towerPosition:
                 if t.collidepoint(mx,my):
                     towerPosition.remove(t)
@@ -206,6 +299,6 @@ while running:
 
     for a in activeDefenses:
         screen.blit(defensePics[a[0]],(a[1],a[2]))
-        
+    '''  
     display.flip()
 quit()
