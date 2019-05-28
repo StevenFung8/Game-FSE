@@ -1,6 +1,7 @@
 from pygame import *
 from math import *
 from random import *
+from tkinter import *
 
 screen=display.set_mode((1050,750))
 RED=(255,0,0)   
@@ -8,8 +9,9 @@ GREEN=(0,255,0)
 BLACK=(0,0,0)
 pathCol=(128,128,128,255)
 pathCol2=(129,128,124,255)
-
+init()
 map1=image.load("FSE-Assets/Maps/map1.jpg")
+
 
 class enemyType:
 
@@ -25,7 +27,11 @@ transport=enemyType('transport',1.7,400,5)
 motorcycle=enemyType('motorcycle',2,250,10)
 lightTank=enemyType('lightTank',1,700,15)
 heavyTank=enemyType('heavyTank',0.7,1000,20)
-
+#fonts
+comicSans40=font.SysFont("Comic Sans MS",40)
+stencil20=font.SysFont("Stencil",20)
+#fhjdfkh
+   
 def moveEnemy(screen,enemyList,enemy):
     frame=0
     for i in range(len(enemy)):
@@ -45,18 +51,33 @@ def moveEnemy(screen,enemyList,enemy):
 
 
 
-def base(enemy):
-    enemiesHere=[]
+def baseHealth(enemy):
+    blackHeart=image.load("FSE-Assets/blackHeart.png")
+    blackHeart=transform.scale(blackHeart,(25,25))
+    screen.blit(blackHeart,(940,350))
+    bars=100
+    count=0
+    draw.rect(screen,BLACK,(944,374,102,12),0)
     for i in range(len(enemy)):
         if enemy[i][0]>=900:
-            enemiesHere.append(enemy)
-            print("hi")
-            print(enemiesHere)
-
+            bars-=enemy[i][2].damage
+    
+    baseHealth=stencil20.render(str(bars),True,BLACK)
+    draw.rect(screen,RED,(1044,375,bars-100,10),0)
+    draw.rect(screen,GREEN,(945,375,bars,10),0)
+    
+    screen.blit(baseHealth,(965,353))
+    
+            
+           
+def healthBars(enemy):
+    for e in enemy:
+        draw.rect(screen,BLACK,(e[0]+14,e[1]-11,52,12),0)
+        draw.rect(screen,GREEN,(e[0]+15,e[1]-10,50,10),0)
 def drawScene(screen):
     screen.blit(map1,(0,0))
 
-enemy=[[-100,190,transport],[-100,190,heavyTank],[-100,190,motorcycle],[-100,190,lightTank],[-100,190,infantry]]
+enemy=[[-100,190,transport],[-100,190,heavyTank],[-100,190,motorcycle],[-100,190,lightTank],[-100,190,infantry],[-100,190,infantry],[-100,190,infantry]]
 pics=[]
 
 for i in enemy:
@@ -82,7 +103,9 @@ while running:
     moveEnemy(screen,pics,enemy)
     drawScene(screen)
     #drawEnemies(screen,pics,enemy)
-    base(enemy)
+    baseHealth(enemy)
+    healthBars(enemy)
+    
     myclock.tick(60)
 
 quit()

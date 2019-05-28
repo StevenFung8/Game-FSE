@@ -46,8 +46,8 @@ def drawScene(screen):
     screen.blit(map1,(0,0))
     screen.blit(hud,(550,20))
     
-defC="none"
 def placeTowers(buyRects,towerPosition,defensePics):
+    defC="none"
     global defC
     cond=False
     activeDefenses=[]
@@ -171,7 +171,6 @@ while running:
             capture=screen.copy()
     mx,my=mouse.get_pos()
     mb=mouse.get_pressed()
-    #print(click)
     drawScene(screen)
     placeTowers(buyRects,towerPosition,defensePics)
     
