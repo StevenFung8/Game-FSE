@@ -17,12 +17,13 @@ mainMenu=image.load("FSE-Assets/mainscreen.jpg")
 credMenu=image.load("FSE-Assets/credits.jpg")
 instructMenu=image.load("FSE-Assets/instructions.jpg")
 levelSelectMenu=image.load("FSE-Assets/levelSelect.jpg")
+cross=image.load("FSE-Assets/cross.png")
 hudimg=image.load("FSE-Assets/hud.jpg")
 hudRect=image.load("FSE-Assets/hudRect.png")
 readyPic=image.load("FSE-Assets/readyRect.jpg")
 quitP=image.load("FSE-Assets/quitRect.png")
 
-txtFont=font.SysFont("Bradley Hand ITC",35)
+txtFont=font.SysFont("Stencil",25)
 
 #loading maps
 map1=image.load("FSE-Assets/Maps/map1.jpg")
@@ -35,11 +36,7 @@ map5=image.load("FSE-Assets/Maps/map5.jpg")
 hud=transform.scale(hudimg,(500,75))
 hudRects=transform.scale(hudRect,(200,95))
 quitPic=transform.scale(quitP,(150,40))
-
-money=2000
-score=0
-txtMoney=txtFont.render("$"+str(money),True,RED)
-txtScore=txtFont.render(str(score),True,RED)
+crossPic=transform.scale(cross,(30,30))
 
 class enemyType:
 
@@ -83,6 +80,14 @@ def genPics(enemy):
         pics.append(img)
     return pics
 
+def moneyScore(screen):
+    money=2000
+    score=0
+    txtMoney=txtFont.render("$"+str(money),True,RED)
+    txtScore=txtFont.render(str(score),True,RED)
+    screen.blit(txtMoney,(100,30))
+    screen.blit(txtScore,(110,84))
+
 def moveEnemy(screen,enemyList,enemy):
     frame=0
     count=0
@@ -120,11 +125,10 @@ def drawScene5(screen):
 def hudElements(screen):
     screen.blit(hud,(550,20))
     screen.blit(hudRects,(20,20))
-    screen.blit(txtMoney,(100,30))
-    screen.blit(txtScore,(110,80))
 
 def prep(screen):
     ready=False
+    buyRects=[Rect(607,28,59,63),Rect(682,28,61,63),Rect(758,28,61,63),Rect(834,28,61,63),Rect(908,28,61,63),Rect(982,28,61,63)]
     readyRect=Rect(830,120,179,69)
     draw.rect(screen,RED,readyRect,2)
     screen.blit(readyPic,(830,120))
@@ -134,6 +138,9 @@ def prep(screen):
         draw.rect(screen,(255,255,0),readyRect,2)
         if mb[0]==1:
             ready=True
+    for i in buyRects:
+        if i.collidepoint(mx,my):
+            draw.rect(screen,YELLOW,i,2)
 
 def lev1():
     ready=False
@@ -147,6 +154,7 @@ def lev1():
         myclock.tick(60)
         drawScene1(screen)
         hudElements(screen)
+        moneyScore(screen)
         screen.blit(quitPic,(260,25))
         for evt in event.get():
             if evt.type==QUIT:
@@ -178,6 +186,7 @@ def lev2():
         myclock.tick(60)
         drawScene2(screen)
         hudElements(screen)
+        moneyScore(screen)
         screen.blit(quitPic,(260,25))
         for evt in event.get():
             if evt.type==QUIT:
@@ -209,6 +218,7 @@ def lev3():
         myclock.tick(60)
         drawScene3(screen)
         hudElements(screen)
+        moneyScore(screen)
         screen.blit(quitPic,(260,25))
         for evt in event.get():
             if evt.type==QUIT:
@@ -240,6 +250,7 @@ def lev4():
         myclock.tick(60)
         drawScene4(screen)
         hudElements(screen)
+        moneyScore(screen)
         screen.blit(quitPic,(260,25))
         for evt in event.get():
             if evt.type==QUIT:
@@ -271,6 +282,7 @@ def lev5():
         myclock.tick(60)
         drawScene5(screen)
         hudElements(screen)
+        moneyScore(screen)
         screen.blit(quitPic,(260,25))
         for evt in event.get():
             if evt.type==QUIT:
@@ -298,6 +310,7 @@ def creds():
     running=True
     while running:
         screen.blit(credMenu,(0,0))
+        screen.blit(crossPic,(960,50))
         backButton=Rect(950,40,50,50)
         draw.rect(screen,BLACK,backButton,3)
         for evnt in event.get():
@@ -320,6 +333,7 @@ def instructions():
     running=True
     while running:
         screen.blit(instructMenu,(0,0))
+        screen.blit(crossPic,(960,50))
         backButton=Rect(950,40,50,50)
         draw.rect(screen,BLACK,backButton,3)
         for evnt in event.get():
@@ -348,6 +362,7 @@ def levelSelect():
                 running=False
                 return "exit"
         screen.blit(levelSelectMenu,(0,0))
+        screen.blit(crossPic,(960,50))
         backButton=Rect(950,40,50,50)
         draw.rect(screen,BLACK,backButton,3)
 
@@ -365,7 +380,6 @@ def levelSelect():
         display.flip()
     return "main"
     
-
 def main():
     mixer.init()
     mixer.music.load("FSE-Assets/sound/menuMusic.mp3")
@@ -385,12 +399,22 @@ def main():
             if evnt.type==MOUSEBUTTONUP:
                 click=False
         screen.blit(mainMenu,(0,0))
+        backButton=Rect(950,650,50,50)
+        musicButton=Rect(870,650,50,50)
+        draw.rect(screen,RED,backButton,3)
+        draw.rect(screen,RED,musicButton,3)
+        screen.blit(crossPic,(960,660))
+        
         for i in range(len(buttons)):
             draw.rect(screen,RED,buttons[i],3)
             if buttons[i].collidepoint(mx,my):
                 draw.rect(screen,(255,255,0),buttons[i],3)
                 if mb[0]==1 and click==False:
                     return vals[i]
+        if backButton.collidepoint(mx,my):
+            draw.rect(screen,YELLOW,backButton,3)
+            if mb[0]==1:
+                return "exit"
         display.flip()
 
 size=width,height=1050,750
@@ -420,4 +444,5 @@ while current!="exit":
         current=lev4()
     if current=="lev5":
         current=lev5()
+
 quit()
