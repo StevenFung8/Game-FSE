@@ -12,19 +12,26 @@ WHITE=(255,255,255)
 YELLOW=(255,255,0)
 
 init()
+#load pictures
 mainMenu=image.load("FSE-Assets/mainscreen.jpg")
 credMenu=image.load("FSE-Assets/credits.jpg")
 instructMenu=image.load("FSE-Assets/instructions.jpg")
 levelSelectMenu=image.load("FSE-Assets/levelSelect.jpg")
-
-txtFont=font.SysFont("Bradley Hand ITC",35)
-
-map2=image.load("FSE-Assets/Maps/map2.jpg")
 hudimg=image.load("FSE-Assets/hud.jpg")
 hudRect=image.load("FSE-Assets/hudRect.png")
 readyPic=image.load("FSE-Assets/readyRect.jpg")
 quitP=image.load("FSE-Assets/quitRect.png")
 
+txtFont=font.SysFont("Bradley Hand ITC",35)
+
+#loading maps
+map1=image.load("FSE-Assets/Maps/map1.jpg")
+map2=image.load("FSE-Assets/Maps/map2.jpg")
+map3=image.load("FSE-Assets/Maps/map3.jpg")
+map4=image.load("FSE-Assets/Maps/map4.jpg")
+map5=image.load("FSE-Assets/Maps/map5.jpg")
+
+#transform pictures
 hud=transform.scale(hudimg,(500,75))
 hudRects=transform.scale(hudRect,(200,95))
 quitPic=transform.scale(quitP,(150,40))
@@ -99,8 +106,18 @@ def moveEnemy(screen,enemyList,enemy):
         screen.blit(enemyList[count][int(frame)],(i[0],i[1]))
         count+=1
 
-def drawScene(screen):
+def drawScene1(screen):
+    screen.blit(map1,(0,0))
+def drawScene2(screen):
     screen.blit(map2,(0,0))
+def drawScene3(screen):
+    screen.blit(map3,(0,0))
+def drawScene4(screen):
+    screen.blit(map4,(0,0))
+def drawScene5(screen):
+    screen.blit(map5,(0,0))
+
+def hudElements(screen):
     screen.blit(hud,(550,20))
     screen.blit(hudRects,(20,20))
     screen.blit(txtMoney,(100,30))
@@ -118,7 +135,7 @@ def prep(screen):
         if mb[0]==1:
             ready=True
 
-def lev2():
+def lev1():
     ready=False
     running=True
     myclock=time.Clock()
@@ -126,10 +143,10 @@ def lev2():
     mixer.music.load("FSE-Assets/sound/bgMusic.mp3")
     mixer.music.play(-1)
     quitRect=Rect(260,25,150,40)
-    enemy=[[-100,500,transport],[-100,500,tankDestroyer],[-100,500,motorcycle],[-100,500,lightTank],[-100,500,infantry],[-100,500,heavyTank]]
     while running:
         myclock.tick(60)
-        drawScene(screen)
+        drawScene1(screen)
+        hudElements(screen)
         screen.blit(quitPic,(260,25))
         for evt in event.get():
             if evt.type==QUIT:
@@ -143,9 +160,133 @@ def lev2():
             if mb[0]==1:
                 running=False
                 return "levelSelect"
-        genPics(enemy)
+        #genPics(enemy)
         prep(screen)
-        moveEnemy(screen,pics,enemy)
+        #moveEnemy(screen,pics,enemy)
+        display.flip()
+    return "main"
+
+def lev2():
+    ready=False
+    running=True
+    myclock=time.Clock()
+    mixer.init()
+    mixer.music.load("FSE-Assets/sound/bgMusic.mp3")
+    mixer.music.play(-1)
+    quitRect=Rect(260,25,150,40)
+    while running:
+        myclock.tick(60)
+        drawScene2(screen)
+        hudElements(screen)
+        screen.blit(quitPic,(260,25))
+        for evt in event.get():
+            if evt.type==QUIT:
+                running=False
+                return "exit"
+        mx,my=mouse.get_pos()
+        mb=mouse.get_pressed()
+
+        if quitRect.collidepoint(mx,my):
+            draw.rect(screen,RED,quitRect,3)
+            if mb[0]==1:
+                running=False
+                return "levelSelect"
+        #genPics(enemy)
+        prep(screen)
+        #moveEnemy(screen,pics,enemy)
+        display.flip()
+    return "main"
+
+def lev3():
+    ready=False
+    running=True
+    myclock=time.Clock()
+    mixer.init()
+    mixer.music.load("FSE-Assets/sound/bgMusic.mp3")
+    mixer.music.play(-1)
+    quitRect=Rect(260,25,150,40)
+    while running:
+        myclock.tick(60)
+        drawScene3(screen)
+        hudElements(screen)
+        screen.blit(quitPic,(260,25))
+        for evt in event.get():
+            if evt.type==QUIT:
+                running=False
+                return "exit"
+        mx,my=mouse.get_pos()
+        mb=mouse.get_pressed()
+
+        if quitRect.collidepoint(mx,my):
+            draw.rect(screen,RED,quitRect,3)
+            if mb[0]==1:
+                running=False
+                return "levelSelect"
+        #genPics(enemy)
+        prep(screen)
+        #moveEnemy(screen,pics,enemy)
+        display.flip()
+    return "main"
+
+def lev4():
+    ready=False
+    running=True
+    myclock=time.Clock()
+    mixer.init()
+    mixer.music.load("FSE-Assets/sound/bgMusic.mp3")
+    mixer.music.play(-1)
+    quitRect=Rect(260,25,150,40)
+    while running:
+        myclock.tick(60)
+        drawScene4(screen)
+        hudElements(screen)
+        screen.blit(quitPic,(260,25))
+        for evt in event.get():
+            if evt.type==QUIT:
+                running=False
+                return "exit"
+        mx,my=mouse.get_pos()
+        mb=mouse.get_pressed()
+
+        if quitRect.collidepoint(mx,my):
+            draw.rect(screen,RED,quitRect,3)
+            if mb[0]==1:
+                running=False
+                return "levelSelect"
+        #genPics(enemy)
+        prep(screen)
+        #moveEnemy(screen,pics,enemy)
+        display.flip()
+    return "main"
+
+def lev5():
+    ready=False
+    running=True
+    myclock=time.Clock()
+    mixer.init()
+    mixer.music.load("FSE-Assets/sound/bgMusic.mp3")
+    mixer.music.play(-1)
+    quitRect=Rect(260,25,150,40)
+    while running:
+        myclock.tick(60)
+        drawScene5(screen)
+        hudElements(screen)
+        screen.blit(quitPic,(260,25))
+        for evt in event.get():
+            if evt.type==QUIT:
+                running=False
+                return "exit"
+        mx,my=mouse.get_pos()
+        mb=mouse.get_pressed()
+
+        if quitRect.collidepoint(mx,my):
+            draw.rect(screen,RED,quitRect,3)
+            if mb[0]==1:
+                running=False
+                return "levelSelect"
+        #genPics(enemy)
+        prep(screen)
+        #moveEnemy(screen,pics,enemy)
         display.flip()
     return "main"
 
@@ -239,14 +380,16 @@ def main():
         for evnt in event.get():
             if evnt.type==QUIT:
                 return "exit"
-            if evnt.type==MOUSEBUTTONUP:
+            if evnt.type==MOUSEBUTTONDOWN:
                 click=True
+            if evnt.type==MOUSEBUTTONUP:
+                click=False
         screen.blit(mainMenu,(0,0))
         for i in range(len(buttons)):
             draw.rect(screen,RED,buttons[i],3)
             if buttons[i].collidepoint(mx,my):
                 draw.rect(screen,(255,255,0),buttons[i],3)
-                if mb[0]==1 and click:
+                if mb[0]==1 and click==False:
                     return vals[i]
         display.flip()
 
