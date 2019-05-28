@@ -46,13 +46,23 @@ def moveEnemy(screen,enemyList,enemy):
 
 
 def base(enemy):
-    enemiesHere=[]
+    bars=100
+    count=0
+    draw.rect(screen,BLACK,(944,374,102,12),0)
     for i in range(len(enemy)):
         if enemy[i][0]>=900:
-            enemiesHere.append(enemy)
-            print("hi")
-            print(enemiesHere)
-
+            count+=1
+    
+    bars=bars-count*10
+    draw.rect(screen,GREEN,(945,375,bars,10),0)
+    
+    
+            
+           
+def healthBars(enemy):
+    for e in enemy:
+        draw.rect(screen,BLACK,(e[0]+14,e[1]-11,52,12),0)
+        draw.rect(screen,GREEN,(e[0]+15,e[1]-10,50,10),0)
 def drawScene(screen):
     screen.blit(map1,(0,0))
 
@@ -83,6 +93,7 @@ while running:
     drawScene(screen)
     #drawEnemies(screen,pics,enemy)
     base(enemy)
+    healthBars(enemy)
     myclock.tick(60)
 
 quit()

@@ -89,10 +89,8 @@ def placeTowers(towerPosition,defensePics,activeDefenses):
     if mb[0]==1:
         if defC==0:
             if mapRect.collidepoint(mx,my):
-                print("shitbitch")
                 for p in towerPosition:
                     draw.rect(screen,GREEN,p,3)
-                screen.set_clip()
                 screen.blit(defensePics[0],(mx-15,my-15))
                 ax,ay=mx-15,my-15
                 for t in towerPosition:
