@@ -1,3 +1,4 @@
+
 #Range.py
 from pygame import *
 from math import *
@@ -60,9 +61,10 @@ def drawScene(enemy,defense):
     dist=sqrt((int(soldier[X])-mx)**2+(int(soldier[Y])-my)**2)
     if dist<=45:
         draw.circle(screen,BLACK,(int(soldier[X]),int(soldier[Y])),int(soldier[R]),2)
-        if mb[0]==1:
+        if click:
             soldierDisplay=True
             upgradeCheck=True
+            
     if soldierDisplay:
         screen.blit(stencilFont2.render("%2i"%(int(soldier[ATK])),True,(255,140,209)),(100,463))
         if upgradeCheck:
@@ -124,3 +126,7 @@ while running:
     myglock.tick(10)
 print("Chris is gay")
 quit()
+
+
+
+
