@@ -1,9 +1,12 @@
+
 from pygame import *
 from math import *
 from random import *
 from tkinter import *
+width=1050
+height=750
+screen=display.set_mode((width,height))
 
-screen=display.set_mode((1050,750))
 RED=(255,0,0)   
 GREEN=(0,255,0)
 BLACK=(0,0,0)
@@ -63,11 +66,19 @@ def baseHealth(enemy):
             bars-=enemy[i][2].damage
     
     baseHealth=stencil20.render(str(bars),True,BLACK)
-    draw.rect(screen,RED,(1044,375,bars-100,10),0)
-    draw.rect(screen,GREEN,(945,375,bars,10),0)
-    
     screen.blit(baseHealth,(965,353))
     
+    if bars<=0:
+        bars=0
+        draw.rect(screen,RED,(945,375,100,10),0)
+        shivan=Surface((width,height),SRCALPHA)
+        shivan.fill((220,220,220,127))
+        screen.blit(shivan,(0,0))
+        youLost=comicSans40.render("bitch you ass",True,BLACK)
+        screen.blit(youLost,(400,350))
+        
+    draw.rect(screen,RED,(1044,375,bars-100,10),0)
+    draw.rect(screen,GREEN,(945,375,bars,10),0)
             
            
 def healthBars(enemy):
@@ -77,7 +88,7 @@ def healthBars(enemy):
 def drawScene(screen):
     screen.blit(map1,(0,0))
 
-enemy=[[-100,190,transport],[-100,190,heavyTank],[-100,190,motorcycle],[-100,190,lightTank],[-100,190,infantry],[-100,190,infantry],[-100,190,infantry]]
+enemy=[[-100,190,transport],[-100,190,heavyTank],[-150,190,heavyTank],[-250,190,heavyTank],[-100,190,motorcycle],[-100,190,lightTank],[-100,190,infantry],[-200,190,infantry],[-300,190,infantry]]
 pics=[]
 
 for i in enemy:

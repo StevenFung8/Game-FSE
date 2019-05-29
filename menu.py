@@ -25,6 +25,7 @@ quitP=image.load("FSE-Assets/quitRect.png")
 dialogueP=image.load("FSE-Assets/dialogueRect.png")
 
 txtFont=font.SysFont("Stencil",25)
+txtFont2=font.SysFont("Stencil",17)
 
 #loading maps
 map1=image.load("FSE-Assets/Maps/map1.jpg")
@@ -63,11 +64,11 @@ class towerType:
         self.price=price
         self.filename="FSE-Assets/Defenses/"+name+".png"
 
-antiTank=towerType('antiTank',150,800)
-bunker=towerType('bunker',50,1000)
-fortress=towerType('fortress',250,1250)
-heavyGun=towerType('heavyGun',350,1500)
-heavyMG=towerType('heavyMG',20,500)
+antiTank=towerType('antiTank',80,800)
+bunker=towerType('bunker',100,1000)
+fortress=towerType('fortress',150,1250)
+heavyGun=towerType('heavyGun',200,1500)
+heavyMG=towerType('heavyMG',35,500)
 soldier=towerType('soldier',25,250)
 
 def genEnemies(enemy):
@@ -136,6 +137,14 @@ def prep(screen):
     towerPos=[Rect(75,450,50,50),Rect(225,450,50,50),Rect(225,300,50,50),Rect(225,125,50,50),Rect(425,125,50,50),
                Rect(600,125,50,50),Rect(425,300,50,50),Rect(600,300,50,50),Rect(750,275,50,50),Rect(825,375,50,50)]
 
+    txtD1=txtFont2.render("Basic Soldier - Cost: $250, Damage: 25",True,BLACK)
+    txtD2=txtFont2.render("Machine Gun - Cost: $500, Damage: 35",True,BLACK)
+    txtD3=txtFont2.render("Anti-Tank Gun - Cost: $800, Damage: 80",True,BLACK)
+    txtD4=txtFont2.render("Bunker - Cost: $1000, Damage: 100",True,BLACK)
+    txtD5=txtFont2.render("Fortress - Cost: $1250, Damage: 150",True,BLACK)
+    txtD6=txtFont2.render("Heavy AT Gun - Cost: $1500, Damage: 200",True,BLACK)
+    towerDescription=[txtD1,txtD2,txtD3,txtD4,txtD5,txtD6]
+    
     ##generating defense images
     defenses=[soldier,heavyMG,antiTank,bunker,fortress,heavyGun]
     defensePics=[]
@@ -149,12 +158,13 @@ def prep(screen):
     
     if readyRect.collidepoint(mx,my):
         draw.rect(screen,(255,255,0),readyRect,2)
-        if mb[0]==1:
-            ready=True
+        #if mb[0]==1:
+            #ready=True
     for i in range(len(buyRects)):
         if buyRects[i].collidepoint(mx,my):
             draw.rect(screen,YELLOW,buyRects[i],2)
-            #screen.blit(defensePics[i],(600,600))
+            #screen.blit(defensePics[i],(630,630))
+            screen.blit(towerDescription[i],(620,630))
 
 def lev1():
     ready=False
