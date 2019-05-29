@@ -297,6 +297,7 @@ while running:
 
     for a in activeDefenses:
         screen.blit(defensePics[a[0]],(a[1],a[2]))
-    '''  
+    '''
+    print("chris is gay")
     display.flip()
 quit()
