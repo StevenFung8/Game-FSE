@@ -147,7 +147,6 @@ def placeTowers(towerPosition,defensePics,activeDefenses):
                         cond=True             
     if mb[0]==0:
         if cond==True:
-            print("fuck you")
             for t in towerPosition:
                 if t.collidepoint(mx,my):
                     activeDefenses.append([defC,ax,ay])
