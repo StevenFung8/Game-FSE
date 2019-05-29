@@ -22,6 +22,7 @@ hudimg=image.load("FSE-Assets/hud.jpg")
 hudRect=image.load("FSE-Assets/hudRect.png")
 readyPic=image.load("FSE-Assets/readyRect.jpg")
 quitP=image.load("FSE-Assets/quitRect.png")
+dialogueP=image.load("FSE-Assets/dialogueRect.png")
 
 txtFont=font.SysFont("Stencil",25)
 
@@ -37,6 +38,7 @@ hud=transform.scale(hudimg,(500,75))
 hudRects=transform.scale(hudRect,(200,95))
 quitPic=transform.scale(quitP,(150,40))
 crossPic=transform.scale(cross,(30,30))
+dialoguePic=transform.scale(dialogueP,(400,110))
 
 class enemyType:
 
@@ -68,7 +70,7 @@ heavyGun=towerType('heavyGun',350,1500)
 heavyMG=towerType('heavyMG',20,500)
 soldier=towerType('soldier',25,250)
 
-def genPics(enemy):
+def genEnemies(enemy):
     global pics
     pics=[]
     for i in enemy:
@@ -125,22 +127,34 @@ def drawScene5(screen):
 def hudElements(screen):
     screen.blit(hud,(550,20))
     screen.blit(hudRects,(20,20))
+    screen.blit(dialoguePic,(600,600))
 
 def prep(screen):
-    ready=False
+    #rectangle defining
     buyRects=[Rect(607,28,59,63),Rect(682,28,61,63),Rect(758,28,61,63),Rect(834,28,61,63),Rect(908,28,61,63),Rect(982,28,61,63)]
     readyRect=Rect(830,120,179,69)
+    towerPos=[Rect(75,450,50,50),Rect(225,450,50,50),Rect(225,300,50,50),Rect(225,125,50,50),Rect(425,125,50,50),
+               Rect(600,125,50,50),Rect(425,300,50,50),Rect(600,300,50,50),Rect(750,275,50,50),Rect(825,375,50,50)]
+
+    ##generating defense images
+    defenses=[soldier,heavyMG,antiTank,bunker,fortress,heavyGun]
+    defensePics=[]
+    for i in defenses:
+        defensePics.append(image.load(i.filename))
+              
     draw.rect(screen,RED,readyRect,2)
     screen.blit(readyPic,(830,120))
     mx,my=mouse.get_pos()
     mb=mouse.get_pressed()
+    
     if readyRect.collidepoint(mx,my):
         draw.rect(screen,(255,255,0),readyRect,2)
         if mb[0]==1:
             ready=True
-    for i in buyRects:
-        if i.collidepoint(mx,my):
-            draw.rect(screen,YELLOW,i,2)
+    for i in range(len(buyRects)):
+        if buyRects[i].collidepoint(mx,my):
+            draw.rect(screen,YELLOW,buyRects[i],2)
+            #screen.blit(defensePics[i],(600,600))
 
 def lev1():
     ready=False
@@ -156,6 +170,7 @@ def lev1():
         hudElements(screen)
         moneyScore(screen)
         screen.blit(quitPic,(260,25))
+        draw.rect(screen,BLACK,quitRect,2)
         for evt in event.get():
             if evt.type==QUIT:
                 running=False
@@ -188,6 +203,7 @@ def lev2():
         hudElements(screen)
         moneyScore(screen)
         screen.blit(quitPic,(260,25))
+        draw.rect(screen,BLACK,quitRect,2)
         for evt in event.get():
             if evt.type==QUIT:
                 running=False
@@ -220,6 +236,7 @@ def lev3():
         hudElements(screen)
         moneyScore(screen)
         screen.blit(quitPic,(260,25))
+        draw.rect(screen,BLACK,quitRect,2)
         for evt in event.get():
             if evt.type==QUIT:
                 running=False
@@ -252,6 +269,7 @@ def lev4():
         hudElements(screen)
         moneyScore(screen)
         screen.blit(quitPic,(260,25))
+        draw.rect(screen,BLACK,quitRect,2)
         for evt in event.get():
             if evt.type==QUIT:
                 running=False
@@ -278,6 +296,7 @@ def lev5():
     mixer.music.load("FSE-Assets/sound/bgMusic.mp3")
     mixer.music.play(-1)
     quitRect=Rect(260,25,150,40)
+    draw.rect(screen,BLACK,quitRect,2)
     while running:
         myclock.tick(60)
         drawScene5(screen)
