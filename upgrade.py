@@ -32,8 +32,11 @@ stencilFont3=font.SysFont("stencil",14)
 
 soldierDisplay=False
 
+upgradeCheck=False
+
 def drawScene(enemy,defense):
     global soldierDisplay
+    global upgradeCheck
     screen.fill(WHITE)
     for  i in range(len(enemy)):
         enemy[i][X]+=enemy[i][M]
@@ -46,7 +49,8 @@ def drawScene(enemy,defense):
     draw.rect(screen,BLACK,hubRect,2)
     draw.rect(screen,BLACK,upgradeRect,2)
     if upgradeRect.collidepoint(mx,my):
-        draw.rect(screen,GREEN,upgradeRect,2)
+        if upgradeCheck:
+            draw.rect(screen,GREEN,upgradeRect,2)
     screen.blit(stencilFont1.render("BARRACKS",True,(255,140,209)),(5,402))
     screen.blit(stencilFont2.render("ATTACK:",True,(255,140,209)),(8,462))
     screen.blit(stencilFont2.render("RANGE:",True,(255,140,209)),(8,502))
@@ -55,25 +59,36 @@ def drawScene(enemy,defense):
     
     dist=sqrt((int(soldier[X])-mx)**2+(int(soldier[Y])-my)**2)
     if dist<=45:
-        print("showing")
         draw.circle(screen,BLACK,(int(soldier[X]),int(soldier[Y])),int(soldier[R]),2)
         if mb[0]==1:
             soldierDisplay=True
+            upgradeCheck=True
     if soldierDisplay:
-         screen.blit(stencilFont3.render("%2i -----> %2i"%(int(soldier[ATK]),int(soldier[ATK])+5),True,(255,140,209)),(100,465))
-         screen.blit(stencilFont3.render("%2i"%(soldier[R]),True,(255,140,209)),(100,505))
-         screen.blit(stencilFont3.render("%2i"%(soldier[UCOST],True,(255,140,209)),(
+        screen.blit(stencilFont2.render("%2i"%(int(soldier[ATK])),True,(255,140,209)),(100,463))
+        if upgradeCheck:
+            screen.blit(stencilFont2.render(" -----> %2i"%(int(soldier[ATK])+5),True,(255,140,209)),(125,463))
+        screen.blit(stencilFont2.render("%2i"%(soldier[R]),True,(255,140,209)),(100,503))
+        try:
+            screen.blit(stencilFont2.render("$%2i"%(soldier[UCOST]),True,(255,140,209)),(145,557))
+        except:
+            screen.blit(stencilFont2.render("NONE",True,(255,140,209)),(145,557))
         
     display.flip()
     
 def upgrade(soldier):
+    global money
+    global upgradeCheck
     if upgradeRect.collidepoint(mx,my):
         draw.rect(screen,GREEN,upgradeRect,2)
-    dist=sqrt((int(soldier[X])-mx)**2+(int(soldier[Y])-my)**2)
-    #if dist<=180:
-    #    if mb[0]==1:
-    #        soldier[ATK]+=5
-    
+        if click:
+            try:
+                money-=int(soldier[UCOST])
+                soldier[ATK]+=5
+                del soldier[UCOST]
+                upgradeCheck=False
+                print("p e b n i s")
+            except:
+                pass
 
 def checkRange(enemy,defense):
     global money
