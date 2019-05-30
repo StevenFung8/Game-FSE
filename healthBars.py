@@ -66,6 +66,8 @@ def baseHealth(enemy):
     for i in range(len(enemy)):
         if enemy[i][0]>=900:
             bars-=enemy[i][2].damage
+            if bars<=0:
+                bars=0
     
     baseHealth=stencil20.render(str(bars),True,BLACK)
     screen.blit(baseHealth,(965,353))
@@ -78,7 +80,7 @@ def baseHealth(enemy):
         shivan=Surface((width,height),SRCALPHA)
         shivan.fill((220,220,220,127))
         screen.blit(shivan,(0,0))
-        youLost=stencil40.render("YOU LOST",True,BLACK)
+        youLost=stencil40.render("BITCH YOU ASS",True,BLACK)
         screen.blit(youLost,(400,350))
       
    
