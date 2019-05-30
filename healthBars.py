@@ -33,6 +33,8 @@ heavyTank=enemyType('heavyTank',0.7,1000,20)
 #fonts
 comicSans40=font.SysFont("Comic Sans MS",40)
 stencil20=font.SysFont("Stencil",20)
+stencil40=font.SysFont("Stencil",40)
+
 #fhjdfkh
    
 def moveEnemy(screen,enemyList,enemy):
@@ -58,7 +60,7 @@ def baseHealth(enemy):
     blackHeart=image.load("FSE-Assets/blackHeart.png")
     blackHeart=transform.scale(blackHeart,(25,25))
     screen.blit(blackHeart,(940,350))
-    bars=100
+    bars=35
     count=0
     draw.rect(screen,BLACK,(944,374,102,12),0)
     for i in range(len(enemy)):
@@ -67,6 +69,8 @@ def baseHealth(enemy):
     
     baseHealth=stencil20.render(str(bars),True,BLACK)
     screen.blit(baseHealth,(965,353))
+    draw.rect(screen,RED,(1044,375,bars-100,10),0)
+    draw.rect(screen,GREEN,(945,375,bars,10),0)
     
     if bars<=0:
         bars=0
@@ -74,11 +78,10 @@ def baseHealth(enemy):
         shivan=Surface((width,height),SRCALPHA)
         shivan.fill((220,220,220,127))
         screen.blit(shivan,(0,0))
-        youLost=comicSans40.render("bitch you ass",True,BLACK)
+        youLost=stencil40.render("YOU LOST",True,BLACK)
         screen.blit(youLost,(400,350))
-        
-    draw.rect(screen,RED,(1044,375,bars-100,10),0)
-    draw.rect(screen,GREEN,(945,375,bars,10),0)
+      
+   
             
            
 def healthBars(enemy):
