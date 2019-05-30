@@ -99,7 +99,7 @@ def baseHealth(enemy):
         shivan=Surface((width,height),SRCALPHA)
         shivan.fill((220,220,220,127))
         screen.blit(shivan,(0,0))
-        youLost=stencil40.render("YOU LOST",True,BLACK)
+        youLost=stencil40.render("BITCH YOU ASS",True,BLACK)
         screen.blit(youLost,(400,350))
       
 
