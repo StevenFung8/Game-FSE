@@ -135,6 +135,8 @@ def prep(screen):
     #rectangle defining
     readyRect=Rect(830,120,179,69)
     buyRects=[Rect(607,28,59,63),Rect(682,28,61,63),Rect(758,28,61,63),Rect(834,28,61,63),Rect(908,28,61,63),Rect(982,28,61,63)]
+    towerPos=[Rect(75,450,50,50),Rect(225,450,50,50),Rect(225,300,50,50),Rect(225,125,50,50),Rect(425,125,50,50),
+            Rect(600,125,50,50),Rect(425,300,50,50),Rect(600,300,50,50),Rect(750,275,50,50),Rect(825,375,50,50)]
 
     txtD1=txtFont2.render("Basic Soldier - Cost: $250, Damage: 25",True,BLACK)
     txtD2=txtFont2.render("Machine Gun - Cost: $500, Damage: 35",True,BLACK)
@@ -165,12 +167,7 @@ def prep(screen):
             draw.rect(screen,YELLOW,buyRects[i],2)
             #screen.blit(defensePics[i],(630,630))
             screen.blit(towerDescription[i],(620,630))
-
-def placeTowers(screen):
-    buyRects=[Rect(607,28,59,63),Rect(682,28,61,63),Rect(758,28,61,63),Rect(834,28,61,63),Rect(908,28,61,63),Rect(982,28,61,63)]
-    towerPos=[Rect(75,450,50,50),Rect(225,450,50,50),Rect(225,300,50,50),Rect(225,125,50,50),Rect(425,125,50,50),
-            Rect(600,125,50,50),Rect(425,300,50,50),Rect(600,300,50,50),Rect(750,275,50,50),Rect(825,375,50,50)]
-    defenses=[soldier,heavyMG,antiTank,bunker,fortress,heavyGun]
+            
     screen.blit(cancelPic,(23,125))
 
 def lev1():
@@ -203,7 +200,6 @@ def lev1():
         #genPics(enemy)
         if ready==False:
             prep(screen)
-            placeTowers(screen)
         #moveEnemy(screen,pics,enemy)
         display.flip()
     return "main"

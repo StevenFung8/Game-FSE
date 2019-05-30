@@ -85,6 +85,7 @@ def placeTowers(towerPosition,defensePics,activeDefenses):
             defC=4
         elif buyRects[5].collidepoint(mx,my):
             defC=5
+    print(defC)
         
     if mb[0]==1:
         if defC==0:
@@ -297,6 +298,6 @@ while running:
     for a in activeDefenses:
         screen.blit(defensePics[a[0]],(a[1],a[2]))
     '''
-    print("chris is gay")
+    #print("chris is gay")
     display.flip()
 quit()
