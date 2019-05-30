@@ -161,7 +161,7 @@ def prep(screen,towerPos):
         if mb[0]==1:
             ready=True
 
-    placeCond=False
+    placeCond=True
     defC="none"
     
     for i in range(len(buyRects)):
@@ -176,10 +176,13 @@ def prep(screen,towerPos):
     if placeCond==True:
         for i in towerPos:
             draw.rect(screen,RED,i,3)
+            if i.collidepoint(mx,my):
+                draw.rect(screen,YELLOW,i,3)
 
 def lev1():
     ready=False
     running=True
+    mouseDown = False
     myclock=time.Clock()
     mixer.init()
     mixer.music.load("FSE-Assets/sound/bgMusic.mp3")
@@ -207,8 +210,9 @@ def lev1():
                 running=False
                 return "levelSelect"
         #genPics(enemy)
-        if ready==False:
-            prep(screen,towerPos1)
+        prep(screen,towerPos1)
+        #moveEnemy(screen,pics,enemy)
+        display.flip()
 
         display.flip()
     return "main"
