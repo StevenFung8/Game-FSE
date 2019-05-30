@@ -15,6 +15,23 @@ pathCol2=(129,128,124,255)
 init()
 map1=image.load("FSE-Assets/Maps/map1.jpg")
 
+class towerType:
+
+    def __init__(self,name,damage,price,upgrade,uCost):
+        self.name=name
+        self.damage=damage
+        self.price=price
+        self.upgrade=upgrade
+        self.uCost=uCost
+        self.filename="FSE-Assets/Defenses/"+name+".png"
+
+antiTank=towerType('antiTank',80,800,False,300)
+bunker=towerType('bunker',100,1000,False,350)
+fortress=towerType('fortress',150,1250,False,450)
+heavyGun=towerType('heavyGun',200,1500,False,500)
+heavyMG=towerType('heavyMG',35,500,False,200)
+soldier=towerType('soldier',25,250,False,150)
+
 
 class enemyType:
 
@@ -30,7 +47,9 @@ transport=enemyType('transport',1.7,400,5)
 motorcycle=enemyType('motorcycle',2,250,10)
 lightTank=enemyType('lightTank',1,700,15)
 heavyTank=enemyType('heavyTank',0.7,1000,20)
+
 #fonts
+
 comicSans40=font.SysFont("Comic Sans MS",40)
 stencil20=font.SysFont("Stencil",20)
 stencil40=font.SysFont("Stencil",40)
@@ -63,17 +82,19 @@ def baseHealth(enemy):
     bars=35
     count=0
     draw.rect(screen,BLACK,(944,374,102,12),0)
+        
     for i in range(len(enemy)):
         if enemy[i][0]>=900:
             bars-=enemy[i][2].damage
+            if bars<=0:
+                bars=0
     
     baseHealth=stencil20.render(str(bars),True,BLACK)
     screen.blit(baseHealth,(965,353))
     draw.rect(screen,RED,(1044,375,bars-100,10),0)
     draw.rect(screen,GREEN,(945,375,bars,10),0)
-    
-    if bars<=0:
-        bars=0
+
+    if bars==0:
         draw.rect(screen,RED,(945,375,100,10),0)
         shivan=Surface((width,height),SRCALPHA)
         shivan.fill((220,220,220,127))
@@ -81,7 +102,7 @@ def baseHealth(enemy):
         youLost=stencil40.render("YOU LOST",True,BLACK)
         screen.blit(youLost,(400,350))
       
-   
+
             
            
 def healthBars(enemy):

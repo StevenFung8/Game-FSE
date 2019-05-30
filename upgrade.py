@@ -15,12 +15,14 @@ ATK=2
 M=3
 R=3
 HP=4
-UCOST=4
+UPGR=4
+UCOST=5
 PRIZE=5
+
      #  x   y  atk m  hp
 enemy=[[100,200,10, 5,600, 100]]
-    #     x   y  Atk  range  upgrade cost
-soldier=[400,350, 10, 150,   100 ]
+    #     x   y  Atk  range  Status upgrade cost 
+soldier=[400,350, 10, 150, False,  100]
 
 enemyRect=[Rect(int(enemy[i][X]),int(enemy[i][Y]),30,30) for i in range(len(enemy))]
 hubRect=Rect(3,400,252,195)
@@ -63,7 +65,8 @@ def drawScene(enemy,defense):
         draw.circle(screen,BLACK,(int(soldier[X]),int(soldier[Y])),int(soldier[R]),2)
         if click:
             soldierDisplay=True
-            upgradeCheck=True
+            if not soldier[UPGR]:
+                upgradeCheck=True
             
     if soldierDisplay:
         screen.blit(stencilFont2.render("%2i"%(int(soldier[ATK])),True,(255,140,209)),(100,463))
@@ -81,16 +84,18 @@ def upgrade(soldier):
     global money
     global upgradeCheck
     if upgradeRect.collidepoint(mx,my):
-        draw.rect(screen,GREEN,upgradeRect,2)
         if click:
-            try:
-                money-=int(soldier[UCOST])
-                soldier[ATK]+=5
-                del soldier[UCOST]
-                upgradeCheck=False
-                print("p e b n i s")
-            except:
-                pass
+            if upgradeCheck==True:
+                try:
+                    soldier[UPGR]=True
+                    money-=int(soldier[UCOST])
+                    soldier[ATK]+=5
+                    del soldier[UCOST]
+                    upgradeCheck=False
+                    print("p e b n i s")
+                
+                except:
+                    pass
 
 def checkRange(enemy,defense):
     global money
