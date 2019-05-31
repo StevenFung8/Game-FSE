@@ -42,6 +42,10 @@ quitPic=transform.scale(quitP,(150,40))
 crossPic=transform.scale(cross,(30,30))
 dialoguePic=transform.scale(dialogueP,(400,110))
 
+
+
+
+
 class enemyType:
 
     def __init__(self,name,speed,health):
@@ -133,6 +137,8 @@ def hudElements(screen):
 
 def prep(screen,towerPos):
     ready=False
+    placeCond = True
+    defC = "none"
     #rectangle defining
     readyRect=Rect(830,120,179,69)
     buyRects=[Rect(607,28,59,63),Rect(682,28,61,63),Rect(758,28,61,63),Rect(834,28,61,63),Rect(908,28,61,63),Rect(982,28,61,63)]
@@ -161,8 +167,7 @@ def prep(screen,towerPos):
         if mb[0]==1:
             ready=True
 
-    placeCond=True
-    defC="none"
+
     
     for i in range(len(buyRects)):
         if buyRects[i].collidepoint(mx,my):
@@ -172,6 +177,11 @@ def prep(screen,towerPos):
             if mb[0]==1:
                 placeCond=True
                 defC=int(i)
+
+    print(defC)
+    if defC!='none':
+        draw.rect(screen,GREEN,buyRects[defC],2)
+
 
     if placeCond==True:
         for i in towerPos:
