@@ -180,7 +180,6 @@ def prep(screen,towerPos):
                 draw.rect(screen,YELLOW,i,3)
 
 def lev1():
-    ready=False
     running=True
     mouseDown = False
     myclock=time.Clock()
@@ -218,7 +217,6 @@ def lev1():
     return "main"
 
 def lev2():
-    ready=False
     running=True
     myclock=time.Clock()
     mixer.init()
@@ -253,7 +251,6 @@ def lev2():
     return "main"
 
 def lev3():
-    ready=False
     running=True
     myclock=time.Clock()
     mixer.init()
@@ -288,7 +285,6 @@ def lev3():
     return "main"
 
 def lev4():
-    ready=False
     running=True
     myclock=time.Clock()
     mixer.init()
@@ -323,7 +319,6 @@ def lev4():
     return "main"
 
 def lev5():
-    ready=False
     running=True
     myclock=time.Clock()
     mixer.init()

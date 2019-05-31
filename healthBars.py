@@ -15,6 +15,10 @@ pathCol2=(129,128,124,255)
 init()
 map1=image.load("FSE-Assets/Maps/map1.jpg")
 
+boomPics=[]
+for i in range(28):
+    boomPics+=[image.load("FSE-Assets/bomb wait/images/Explode-05_frame_"+str(i)+".gif")]
+
 class towerType:
 
     def __init__(self,name,damage,price,upgrade,uCost):
@@ -53,8 +57,6 @@ heavyTank=enemyType('heavyTank',0.7,1000,20)
 comicSans40=font.SysFont("Comic Sans MS",40)
 stencil20=font.SysFont("Stencil",20)
 stencil40=font.SysFont("Stencil",40)
-
-#fhjdfkh
    
 def moveEnemy(screen,enemyList,enemy):
     frame=0
@@ -68,24 +70,28 @@ def moveEnemy(screen,enemyList,enemy):
         if enemy[i][1]>=410:
             enemy[i][0]+=enemy[i][2].speed
             frame=0
-        screen.blit(enemyList[i][int(frame)],(enemy[i][0],enemy[i][1]))
         #if enemy[i][0]>=900:
-            #enemy.remove(enemy[i])
+        #enemy.remove(enemy[i])
+        screen.blit(enemyList[i][int(frame)],(enemy[i][0],enemy[i][1]))
+
     display.flip()
 
-
+def bombAnimation(screen,bombList):
+    FRAME=0
+    for bomb in bombList:
+        screen.blit(boomPics[bomb[FRAME]],(900,600))
 
 def baseHealth(enemy):
     blackHeart=image.load("FSE-Assets/blackHeart.png")
     blackHeart=transform.scale(blackHeart,(25,25))
     screen.blit(blackHeart,(940,350))
-    bars=35
+    bars=100
     count=0
     draw.rect(screen,BLACK,(944,374,102,12),0)
-        
     for i in range(len(enemy)):
         if enemy[i][0]>=900:
             bars-=enemy[i][2].damage
+            bombAnimation(screen,boomPics)
             if bars<=0:
                 bars=0
     
@@ -96,14 +102,11 @@ def baseHealth(enemy):
 
     if bars==0:
         draw.rect(screen,RED,(945,375,100,10),0)
-        shivan=Surface((width,height),SRCALPHA)
-        shivan.fill((220,220,220,127))
-        screen.blit(shivan,(0,0))
-        youLost=stencil40.render("BITCH YOU ASS",True,BLACK)
+        endScreen=Surface((width,height),SRCALPHA)
+        endScreen.fill((220,220,220,127))
+        screen.blit(endScreen,(0,0))
+        youLost=stencil40.render("GAME OVER",True,BLACK)
         screen.blit(youLost,(400,350))
-      
-
-            
            
 def healthBars(enemy):
     for e in enemy:
@@ -112,7 +115,7 @@ def healthBars(enemy):
 def drawScene(screen):
     screen.blit(map1,(0,0))
 
-enemy=[[-100,190,transport],[-100,190,heavyTank],[-150,190,heavyTank],[-250,190,heavyTank],[-100,190,motorcycle],[-100,190,lightTank],[-100,190,infantry],[-200,190,infantry],[-300,190,infantry]]
+enemy=[[-100,190,transport],[-100,190,heavyTank],[-100,190,motorcycle],[-100,190,lightTank],[-100,190,infantry],[-200,190,infantry],[-300,190,infantry]]
 pics=[]
 
 for i in enemy:
