@@ -63,18 +63,19 @@ tankDestroyer=enemyType('tankDestroyer',0.8,900)
 
 class towerType:
 
-    def __init__(self,name,damage,price):
+    def __init__(self,name,damage,price,uCost):
         self.name=name
         self.damage=damage
         self.price=price
+        self.uCost=uCost
         self.filename="FSE-Assets/Defenses/"+name+".png"
 
-antiTank=towerType('antiTank',80,800)
-bunker=towerType('bunker',100,1000)
-fortress=towerType('fortress',150,1250)
-heavyGun=towerType('heavyGun',200,1500)
-heavyMG=towerType('heavyMG',35,500)
-soldier=towerType('soldier',25,250)
+antiTank=towerType('antiTank',80,800,350)
+bunker=towerType('bunker',100,1000,450)
+fortress=towerType('fortress',150,1250,600)
+heavyGun=towerType('heavyGun',200,1500,700)
+heavyMG=towerType('heavyMG',35,500,200)
+soldier=towerType('soldier',25,250,100)
 
 def genEnemies(enemy):
     global pics
@@ -141,6 +142,7 @@ def prep(screen,towerPos):
     defC = "none"
     #rectangle defining
     readyRect=Rect(830,120,179,69)
+    upgradeRect=Rect(750,662,70,30)
     buyRects=[Rect(607,28,59,63),Rect(682,28,61,63),Rect(758,28,61,63),Rect(834,28,61,63),Rect(908,28,61,63),Rect(982,28,61,63)]
 
     txtD1=txtFont2.render("Basic Soldier - Cost: $250, Damage: 25",True,BLACK)
@@ -167,21 +169,26 @@ def prep(screen,towerPos):
         if mb[0]==1:
             ready=True
 
-
-    
     for i in range(len(buyRects)):
         if buyRects[i].collidepoint(mx,my):
             draw.rect(screen,YELLOW,buyRects[i],2)
             #screen.blit(defensePics[i],(630,630))
             screen.blit(towerDescription[i],(620,630))
-            if mb[0]==1:
+            txtUpgrade=txtFont2.render("UPGRADE?",True,BLACK)
+            txtuCost=txtFont2.render("$%2i"%(defenses[i].uCost),True,BLACK)
+            screen.blit(txtUpgrade,(650,670))
+            screen.blit(txtuCost,(763,670))
+            draw.rect(screen,BLACK,upgradeRect,2)
+        if mb[0]==1:
+            if buyRects[i].collidepoint(mx,my):
                 placeCond=True
                 defC=int(i)
-
-    print(defC)
+    
+    #print(defC)
     if defC!='none':
         draw.rect(screen,GREEN,buyRects[defC],2)
-
+    #if txtdisplay:
+        
 
     if placeCond==True:
         for i in towerPos:
@@ -197,8 +204,7 @@ def lev1():
     mixer.music.load("FSE-Assets/sound/bgMusic.mp3")
     mixer.music.play(-1)
     quitRect=Rect(260,25,150,40)
-    towerPos1=[Rect(115,273,50,50),Rect(264,114,50,50),Rect(319,242,50,50),Rect(217,529,50,50),Rect(388,342,50,50),
-            Rect(570,342,50,50),Rect(750,342,50,50),Rect(418,503,50,50),Rect(598,503,50,50),Rect(778,503,50,50)]
+    towerPos1=[Rect(115,273,50,50),Rect(264,114,50,50),Rect(319,242,50,50),Rect(217,529,50,50),Rect(388,342,50,50),Rect(570,342,50,50),Rect(750,342,50,50),Rect(418,503,50,50),Rect(598,503,50,50),Rect(778,503,50,50)]
     while running:
         myclock.tick(60)
         drawScene1(screen)
@@ -206,13 +212,18 @@ def lev1():
         moneyScore(screen)
         screen.blit(quitPic,(260,25))
         draw.rect(screen,BLACK,quitRect,2)
+        click=False
         for evt in event.get():
             if evt.type==QUIT:
                 running=False
                 return "exit"
+            if evt.type==MOUSEBUTTONDOWN:
+                click=True
+            if evt.type==MOUSEBUTTONUP:
+                click=False
         mx,my=mouse.get_pos()
         mb=mouse.get_pressed()
-
+        
         if quitRect.collidepoint(mx,my):
             draw.rect(screen,RED,quitRect,3)
             if mb[0]==1:
