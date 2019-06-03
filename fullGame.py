@@ -43,9 +43,6 @@ crossPic=transform.scale(cross,(30,30))
 dialoguePic=transform.scale(dialogueP,(400,110))
 
 
-
-
-
 class enemyType:
 
     def __init__(self,name,speed,health):
@@ -60,6 +57,7 @@ motorcycle=enemyType('motorcycle',2,250)
 lightTank=enemyType('lightTank',1,700)
 heavyTank=enemyType('heavyTank',0.7,1000)
 tankDestroyer=enemyType('tankDestroyer',0.8,900)
+
 
 class towerType:
 
@@ -179,14 +177,20 @@ def prep(screen,towerPos):
             screen.blit(txtUpgrade,(650,670))
             screen.blit(txtuCost,(763,670))
             draw.rect(screen,BLACK,upgradeRect,2)
-        if mb[0]==1:
-            if buyRects[i].collidepoint(mx,my):
+            if mb[0]==1:
                 placeCond=True
                 defC=int(i)
     
-    #print(defC)
+    print(defC)
     if defC!='none':
         draw.rect(screen,GREEN,buyRects[defC],2)
+        #screen.blit(defensePics[i],(630,630))
+        screen.blit(towerDescription[defC],(620,630))
+        txtUpgrade=txtFont2.render("UPGRADE?",True,BLACK)
+        txtuCost=txtFont2.render("$%2i"%(defenses[defC].uCost),True,BLACK)
+        screen.blit(txtUpgrade,(650,670))
+        screen.blit(txtuCost,(763,670))
+        draw.rect(screen,BLACK,upgradeRect,2)
     #if txtdisplay:
         
 
@@ -196,6 +200,14 @@ def prep(screen,towerPos):
             if i.collidepoint(mx,my):
                 draw.rect(screen,YELLOW,i,3)
 
+def upgrade():
+    global money
+    for i in range(len(buyRects)):
+        if upgradeRect.collidepoint(mx,my):
+            draw.rect(screen,GREEN,upgradeRect,2)
+                if click:
+                
+            
 def lev1():
     running=True
     mouseDown = False
@@ -253,10 +265,15 @@ def lev2():
         moneyScore(screen)
         screen.blit(quitPic,(260,25))
         draw.rect(screen,BLACK,quitRect,2)
+        click=False
         for evt in event.get():
             if evt.type==QUIT:
                 running=False
                 return "exit"
+            if evt.type==MOUSEBUTTONDOWN:
+                click=True
+            if evt.type==MOUSEBUTTONUP:
+                click=False
         mx,my=mouse.get_pos()
         mb=mouse.get_pressed()
 
@@ -287,10 +304,15 @@ def lev3():
         moneyScore(screen)
         screen.blit(quitPic,(260,25))
         draw.rect(screen,BLACK,quitRect,2)
+        click=False
         for evt in event.get():
             if evt.type==QUIT:
                 running=False
                 return "exit"
+            if evt.type==MOUSEBUTTONDOWN:
+                click=True
+            if evt.type==MOUSEBUTTONUP:
+                click=False
         mx,my=mouse.get_pos()
         mb=mouse.get_pressed()
 
@@ -321,10 +343,15 @@ def lev4():
         moneyScore(screen)
         screen.blit(quitPic,(260,25))
         draw.rect(screen,BLACK,quitRect,2)
+        click=False
         for evt in event.get():
             if evt.type==QUIT:
                 running=False
                 return "exit"
+            if evt.type==MOUSEBUTTONDOWN:
+                click=True
+            if evt.type==MOUSEBUTTONUP:
+                click=False
         mx,my=mouse.get_pos()
         mb=mouse.get_pressed()
 
@@ -355,10 +382,15 @@ def lev5():
         hudElements(screen)
         moneyScore(screen)
         screen.blit(quitPic,(260,25))
+        click=False
         for evt in event.get():
             if evt.type==QUIT:
                 running=False
                 return "exit"
+            if evt.type==MOUSEBUTTONDOWN:
+                click=True
+            if evt.type==MOUSEBUTTONUP:
+                click=False
         mx,my=mouse.get_pos()
         mb=mouse.get_pressed()
         print(mx,my)
