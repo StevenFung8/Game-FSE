@@ -62,7 +62,7 @@ def moveGuy(guy,dropCount):
         guy[Y] -= 10
     if keys[K_SPACE] and dropCount == 0:
         bombs.append([guy[X]-120,guy[Y]-90,0,0])
-        dropCount = 30
+        dropCount = 0
     if dropCount > 0:
         dropCount-=1
     return dropCount

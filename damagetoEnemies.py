@@ -14,10 +14,11 @@ pathCol=(128,128,128,255)
 pathCol2=(129,128,124,255)
 init()
 map1=image.load("FSE-Assets/Maps/map1.jpg")
+deadSoldier=image.load("FSE-Assets/enemies/dead.png")
 
 boomPics=[]
 for i in range(28):
-    boomPics+=[image.load("FSE-Assets/bomb wait/images/Explode-05_frame_"+str(i)+".gif")]
+    boomPics+=[image.load("FSE-Assets/bomb wait/images\\Explode-05_frame_"+str(i)+".gif")]
 
 class towerType:
 
@@ -57,47 +58,68 @@ comicSans40=font.SysFont("Comic Sans MS",40)
 stencil20=font.SysFont("Stencil",20)
 stencil40=font.SysFont("Stencil",40)
 
-def genEnemies(enemy,enemyList):
+def genEnemies(enemy):
     global pics
-    delay=0
+    DELAY=2
     pics=[]
-    if delay==0 and len(enemyList)>0:
-        enemy.append(enemyList[0])
-        enemyList.remove(enemyList[0])
-        delay=30
-    print(delay)
-    if delay>0:
-        delay-=1
-
+    '''
+    for i in range(len(enemyList)):
+        enemyList[i][DELAY]=30
+        print(enemyList[i][DELAY])
+        if enemyList[i][DELAY]>0:
+            enemyList[i][DELAY]-=1
+        if enemyList[i][DELAY]==0:
+            enemy.append(enemyList[i])
+            enemyList.remove(enemyList[i])
+    '''
     for i in enemy:
         img=[]
-        img.append(image.load(i[3].filename))
-        img.append(transform.rotate(image.load(i[3].filename),-90))
+        img.append(image.load(i[4].filename))
+        img.append(transform.rotate(image.load(i[4].filename),-90))
+        img.append(transform.rotate(image.load(i[4].filename),-270))
+        img.append(transform.rotate(image.load(i[4].filename),-180))
         pics.append(img)
     
 def moveEnemy(screen,enemy):
     count=-1
     for i in enemy:
         if i[0]<220:
-            i[0]+=i[3].speed
-            i[2]=0
+            i[0]+=i[4].speed
+            i[3]=0
         if i[0]>=220 and i[1]<420:
-            i[1]+=i[3].speed
-            i[2]=1
+            i[1]+=i[4].speed
+            i[3]=1
         if i[1]>=410:
-            i[0]+=i[3].speed
-            i[2]=0
+            i[0]+=i[4].speed
+            i[3]=0
         count+=1
-        screen.blit(pics[count][i[2]],i[:2])
+        screen.blit(pics[count][i[3]],i[:2])
 
     display.flip()
 
-def bombAnimation(screen,bombList):
-    FRAME=0
-    for bomb in bombList:
-        screen.blit(boomPics[bomb[FRAME]],(900,600))
-        FRAME+=1
+def bombAnimation(screen,bombs):
+    for bomb in bombs:
+        screen.blit(boomPics[bomb[3]],bomb[:2])
 
+def advanceBombs(bombs):
+    for bomb in bombs[:]:
+        bomb[2]+=1
+        if bomb[2]>90 and bomb[2]%5==0:
+            bomb[3]+=1
+            if bomb[3]==28:
+                bombs.remove(bomb)
+
+def damageCollide(screen,defenses,enemy):
+    screen.blit(image.load(defenses[0].filename),(600,500))
+    rangeRect=(525,425,200,200)
+    draw.rect(screen,RED,rangeRect,3)
+    enemyRect=[Rect(int(enemy[i][0]-100),int(enemy[i][1]-100),125,125) for i in range(len(enemy))]
+    for i in enemy:
+        if enemyRect[i].colliderect(rangeRect):
+            enemy[i][5]-=defenses[4].damage
+        if enemy[i][5]<=0:
+            enemy.remove(enemy[i])
+    
 def baseHealth(enemy):
     blackHeart=image.load("FSE-Assets/blackHeart.png")
     blackHeart=transform.scale(blackHeart,(25,25))
@@ -107,7 +129,7 @@ def baseHealth(enemy):
     draw.rect(screen,BLACK,(944,374,102,12),0)
     for i in enemy:
         if i[0]>=900:
-            bars-=i[3].damage
+            bars-=i[4].damage
             if bars<=0:
                 bars=0
     
@@ -132,9 +154,10 @@ def healthBars(enemy):
 def drawScene(screen):
     screen.blit(map1,(0,0))
     
-        #[x,y,FRAME,className]
-enemy=[]
-enemyList=[[-100,190,0,infantry],[-100,190,0,infantry],[-100,190,0,infantry]]
+        #[x,y,DELAY,FRAME,className]
+#enemy=[]
+enemy=[[-100,190,0,0,infantry,infantry.health],[-160,190,0,0,infantry,infantry.health]]
+defenses=[soldier,heavyMG,antiTank,bunker,fortress,heavyGun]
 
 myclock=time.Clock()
 running=True
@@ -142,12 +165,13 @@ while running:
     for evt in event.get():
         if evt.type==QUIT:
             running=False
-    genEnemies(enemy,enemyList)
+    genEnemies(enemy)
             
     moveEnemy(screen,enemy)
     drawScene(screen)
     baseHealth(enemy)
     healthBars(enemy)
+    damageCollide(screen,defenses,enemy)
     
     myclock.tick(60)
 
