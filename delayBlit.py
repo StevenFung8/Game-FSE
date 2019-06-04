@@ -6,7 +6,7 @@ from tkinter import *
 width=1050
 height=750
 screen=display.set_mode((width,height))
-
+aa=True
 RED=(255,0,0)   
 GREEN=(0,255,0)
 BLACK=(0,0,0)
@@ -97,19 +97,25 @@ def moveEnemy(screen,enemy):
     display.flip()
 
 def bombAnimation(screen,bombs):
-    for bomb in bombs:
+    print(len(bombs))
+    for bomb in bombs[:]:
+        #print("99",bomb)
+        print(bomb)
+        
         screen.blit(boomPics[bomb[3]],bomb[:2])
+        
 
 def advanceBombs(bombs):
     for bomb in bombs[:]:
         bomb[2]+=1
-        if bomb[2]>90 and bomb[2]%5==0:
+        if bomb[2]>5 and bomb[2]%5==0:
             bomb[3]+=1
-            if bomb[3]==28:
-                bombs.remove(bomb)
+##            if bomb[3]==28:
+##                del(bomb)
     #print(bombs)
 
 def baseHealth(enemy):
+    global aa
     blackHeart=image.load("FSE-Assets/blackHeart.png")
     blackHeart=transform.scale(blackHeart,(25,25))
     screen.blit(blackHeart,(940,350))
@@ -117,15 +123,14 @@ def baseHealth(enemy):
     count=0
     draw.rect(screen,BLACK,(944,374,102,12),0)
     for i in enemy:
-        if i[0]>=900:
+        if i[0]>=900 and aa:
+            bombs.append([870,350,0,0])
+            aa=False
             bars-=i[4].damage
-            '''
-            bombs.append([870,450,0,0])
-            advanceBombs(bombs)
-            bombAnimation(screen,bombs)
-            '''
-            if bars<=0:
-                bars=0
+        advanceBombs(bombs)
+        
+        if bars<=0:
+            bars=0
     
     baseHealth=stencil20.render(str(bars),True,BLACK)
     screen.blit(baseHealth,(965,353))
@@ -147,6 +152,7 @@ def healthBars(enemy):
         
 def drawScene(screen):
     screen.blit(map1,(0,0))
+    bombAnimation(screen,bombs)
     
         #[x,y,DELAY,FRAME,className]
 #enemy=[]
@@ -165,10 +171,6 @@ while running:
     drawScene(screen)
     baseHealth(enemy)
     healthBars(enemy)
-
-    bombs.append([870,450,0,0])
-    advanceBombs(bombs)
-    bombAnimation(screen,bombs)
     
     myclock.tick(60)
 

@@ -38,7 +38,6 @@ def drawScene(screen,guy, bombs):
     is done remove it from the list of bombs. '''
         
 def advanceBombs(bombs):
-    
     for bomb in bombs[:]:       
         bomb[DELAY]+=1
         if bomb[DELAY] > 90 and bomb[DELAY]%5==0: # the DELAY acts as a wait to start the
