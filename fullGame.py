@@ -145,7 +145,6 @@ defC=None
 def prep(screen,towerPos):
     global defC
     ready=False
-    placeCond = True
     #rectangle defining
     readyRect=Rect(830,120,179,69)
     upgradeRect=Rect(750,662,70,30)
@@ -179,10 +178,8 @@ def prep(screen,towerPos):
         if buyRects[i].collidepoint(mx,my):
             draw.rect(screen,YELLOW,buyRects[i],2)
             if mb[0]==1:
-                placeCond=True
                 defC=int(i)
     
-    print(defC)
     if defC!=None:
         draw.rect(screen,GREEN,buyRects[defC],2)
         #screen.blit(defensePics[i],(630,630))
@@ -192,15 +189,11 @@ def prep(screen,towerPos):
         screen.blit(txtUpgrade,(650,670))
         screen.blit(txtuCost,(763,670))
         draw.rect(screen,BLACK,upgradeRect,2)
-    #if txtdisplay:
-        
-
-    if placeCond==True:
         for i in towerPos:
             draw.rect(screen,RED,i,3)
             if i.collidepoint(mx,my):
                 draw.rect(screen,YELLOW,i,3)
-
+                
 def upgrade():
     global money
     for i in range(len(buyRects)):
@@ -214,6 +207,7 @@ def upgrade():
 airpods = AirPods()
             
 def lev1():
+    global defC
     running=True
     mouseDown = False
     myclock=time.Clock()
@@ -244,6 +238,7 @@ def lev1():
         if quitRect.collidepoint(mx,my):
             draw.rect(screen,RED,quitRect,3)
             if mb[0]==1:
+                defC=None
                 running=False
                 return "levelSelect"
         #genPics(enemy)
@@ -255,6 +250,7 @@ def lev1():
     return "main"
 
 def lev2():
+    global defC
     running=True
     myclock=time.Clock()
     mixer.init()
@@ -286,6 +282,7 @@ def lev2():
             draw.rect(screen,RED,quitRect,3)
             if mb[0]==1:
                 running=False
+                defC=None
                 return "levelSelect"
         #genPics(enemy)
         prep(screen,towerPos2)
@@ -294,6 +291,7 @@ def lev2():
     return "main"
 
 def lev3():
+    global defC
     running=True
     myclock=time.Clock()
     mixer.init()
@@ -325,6 +323,7 @@ def lev3():
             draw.rect(screen,RED,quitRect,3)
             if mb[0]==1:
                 running=False
+                defC=None
                 return "levelSelect"
         #genPics(enemy)
         prep(screen,towerPos3)
@@ -333,6 +332,7 @@ def lev3():
     return "main"
 
 def lev4():
+    global defC
     running=True
     myclock=time.Clock()
     mixer.init()
@@ -364,6 +364,7 @@ def lev4():
             draw.rect(screen,RED,quitRect,3)
             if mb[0]==1:
                 running=False
+                defC=None
                 return "levelSelect"
         #genPics(enemy)
         prep(screen,towerPos4)
@@ -372,6 +373,7 @@ def lev4():
     return "main"
 
 def lev5():
+    global defC
     running=True
     myclock=time.Clock()
     mixer.init()
@@ -404,6 +406,7 @@ def lev5():
             draw.rect(screen,RED,quitRect,3)
             if mb[0]==1:
                 running=False
+                defC=None
                 return "levelSelect"
         #genPics(enemy)
         prep(screen,towerPos5)
