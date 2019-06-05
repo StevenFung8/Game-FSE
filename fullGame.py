@@ -203,13 +203,22 @@ def prep(screen,towerPos):
                 if towerPos[i][0].collidepoint(mx,my):
                     draw.rect(screen,YELLOW,towerPos[i][0],3)
                     if mb[0]==1:
-                        activeDefenses.append([defensePics[defC],towerPos[i][2]])
+                        activeDefenses.append([defensePics[defC],towerPos[i][3]])
                         towerPos[i][1]=True
+                        print(towerPos[i][1])
                     
         if cancelRect.collidepoint(mx,my):
             draw.rect(screen,RED,cancelRect,2)
             if mb[0]==1:
                 defC=None
+
+    if defC==None:
+        for i in towerPos:
+            if i[0].collidepoint(mx,my) and i[1]==True:
+                draw.rect(screen,YELLOW,i[0],3)
+                if mb[0]==1:
+                    i[2]=True
+                
 
 def upgrade():
     global money
@@ -233,9 +242,12 @@ def lev1():
     mixer.music.load("FSE-Assets/sound/bgMusic.mp3")
     mixer.music.play(-1)
     quitRect=Rect(260,25,150,40)
-                #rect,status,blit position
-    towerPos1=[[Rect(115,273,50,50),False,(115,273)],[Rect(264,114,50,50),False,(264,114)],[Rect(319,242,50,50),False,(319,242)],[Rect(217,529,50,50),False,(217,529)],[Rect(388,342,50,50),False,(388,342)],[Rect(570,342,50,50),False,(570,342)],
-               [Rect(750,342,50,50),False,(750,342)],[Rect(418,503,50,50),False,(418,503)],[Rect(598,503,50,50),False,(598,503)],[Rect(778,503,50,50),False,(778,503)]]
+                #rect, status, edit status, blit position
+    towerPos1=[[Rect(115,273,50,50),False,False,(115,273)],[Rect(264,114,50,50),False,False,(264,114)],
+               [Rect(319,242,50,50),False,False,(319,242)],[Rect(217,529,50,50),False,False,(217,529)],
+               [Rect(388,342,50,50),False,False,(388,342)],[Rect(570,342,50,50),False,False,(570,342)],
+               [Rect(750,342,50,50),False,False,(750,342)],[Rect(418,503,50,50),False,False,(418,503)],
+               [Rect(598,503,50,50),False,False,(598,503)],[Rect(778,503,50,50),False,False,(778,503)]]
     while running:
         myclock.tick(60)
         drawScene1(screen)
@@ -280,8 +292,10 @@ def lev2():
     mixer.music.load("FSE-Assets/sound/bgMusic.mp3")
     mixer.music.play(-1)
     quitRect=Rect(260,25,150,40)
-    towerPos2=[[Rect(75,430,50,50),False],[Rect(225,430,50,50),False],[Rect(225,300,50,50),False],[Rect(225,125,50,50),False],[Rect(425,125,50,50),False],
-            [Rect(600,125,50,50),False],[Rect(425,300,50,50),False],[Rect(600,300,50,50),False],[Rect(750,275,50,50),False],[Rect(825,375,50,50),False]]
+    towerPos2=[[Rect(75,430,50,50),False],[Rect(225,430,50,50),False],[Rect(225,300,50,50),False],
+               [Rect(225,125,50,50),False],[Rect(425,125,50,50),False],
+                [Rect(600,125,50,50),False],[Rect(425,300,50,50),False],[Rect(600,300,50,50),False],
+               [Rect(750,275,50,50),False],[Rect(825,375,50,50),False]]
     while running:
         myclock.tick(60)
         drawScene2(screen)
