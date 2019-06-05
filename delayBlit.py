@@ -98,20 +98,20 @@ def moveEnemy(screen,enemy):
 
 def bombAnimation(screen,bombs):
     print(len(bombs))
-    for bomb in bombs[:]:
+    for bomb in bombs:
         #print("99",bomb)
         print(bomb)
-        
         screen.blit(boomPics[bomb[3]],bomb[:2])
-        
 
 def advanceBombs(bombs):
-    for bomb in bombs[:]:
+    for bomb in bombs:
         bomb[2]+=1
         if bomb[2]>5 and bomb[2]%5==0:
             bomb[3]+=1
-##            if bomb[3]==28:
-##                del(bomb)
+            if bomb[3]==27:
+                bombs.remove(bomb)
+                #bombs=[]
+                print("delete")
     #print(bombs)
 
 def baseHealth(enemy):
@@ -128,7 +128,6 @@ def baseHealth(enemy):
             aa=False
             bars-=i[4].damage
         advanceBombs(bombs)
-        
         if bars<=0:
             bars=0
     
@@ -152,11 +151,12 @@ def healthBars(enemy):
         
 def drawScene(screen):
     screen.blit(map1,(0,0))
-    bombAnimation(screen,bombs)
+    if len(bombs)>0:
+        bombAnimation(screen,bombs)
     
         #[x,y,DELAY,FRAME,className]
 #enemy=[]
-enemy=[[-100,190,0,0,infantry],[-160,190,0,0,infantry]]
+enemy=[[-100,190,0,0,infantry],[-1000,190,0,0,infantry]]
 bombs=[]
 
 myclock=time.Clock()
