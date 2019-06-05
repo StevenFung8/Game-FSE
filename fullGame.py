@@ -25,6 +25,8 @@ quitP=image.load("FSE-Assets/quitRect.png")
 dialogueP=image.load("FSE-Assets/dialogueRect.png")
 cancelPic=image.load("FSE-Assets/cancelRect.png")
 deletePic=image.load("FSE-Assets/deleteRect.png")
+mutePic=image.load("FSE-Assets/musicPicMUTE.png")
+eigthNote=image.load("FSE-Assets/musicPic.png")
 
 txtFont=font.SysFont("Stencil",25)
 txtFont2=font.SysFont("Stencil",17)
@@ -42,6 +44,13 @@ hudRects=transform.scale(hudRect,(200,95))
 quitPic=transform.scale(quitP,(150,40))
 crossPic=transform.scale(cross,(30,30))
 dialoguePic=transform.scale(dialogueP,(400,110))
+
+
+
+
+mx,my=mouse.get_pos()
+mb=mouse.get_pressed()
+
 
 class AirPods:
     value = float('-Inf')
@@ -145,7 +154,15 @@ def hudElements(screen):
 
 
 def music():
-    if volumeRect.collidepoint(mx,my) and pause=False:
+    pause=False
+    muteRect=Rect(400,400,80,80)
+    draw.rect(screen,RED,muteRect,1)
+    screen.blit(mutePic,(400,400))
+
+    if mb[0] == 1 and muteRect.collidepoint(mx, my) and pause == False:
+        pause=True
+    print(pause)
+
 
 
 
@@ -200,7 +217,7 @@ def prep(screen,towerPos):
             if mb[0]==1:
                 defC=int(i)
     
-    print(defC)
+
 
     if defC!=None:
         draw.rect(screen,GREEN,buyRects[defC],2)
@@ -291,9 +308,11 @@ def lev1():
                 return "levelSelect"
         #genPics(enemy)
         prep(screen,towerPos1)
+        music()
         #moveEnemy(screen,pics,enemy)
 
         display.flip()
+
     return "main"
 
 def lev2():
