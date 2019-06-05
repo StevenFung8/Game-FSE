@@ -42,6 +42,13 @@ quitPic=transform.scale(quitP,(150,40))
 crossPic=transform.scale(cross,(30,30))
 dialoguePic=transform.scale(dialogueP,(400,110))
 
+class AirPods:
+    value = float('-Inf')
+    sound_isolation = None
+    sound_profile = "tinny"
+    def __init__(self):
+        print("Airpods evalution: \nValue: %s\nSound Isolation: %s\nSound Profile: %s"%(self.value, self.sound_isolation, self.sound_profile))
+
 
 class enemyType:
 
@@ -134,10 +141,18 @@ def hudElements(screen):
     screen.blit(hudRects,(20,20))
     screen.blit(dialoguePic,(600,600))
 
+def music():
+    if volumeRect.collidepoint(mx,my) and pause=False:
+
+
+
+    
+defC=None
+
 def prep(screen,towerPos):
+    global defC
     ready=False
     placeCond = True
-    defC = "none"
     #rectangle defining
     readyRect=Rect(830,120,179,69)
     upgradeRect=Rect(750,662,70,30)
@@ -170,19 +185,12 @@ def prep(screen,towerPos):
     for i in range(len(buyRects)):
         if buyRects[i].collidepoint(mx,my):
             draw.rect(screen,YELLOW,buyRects[i],2)
-            #screen.blit(defensePics[i],(630,630))
-            screen.blit(towerDescription[i],(620,630))
-            txtUpgrade=txtFont2.render("UPGRADE?",True,BLACK)
-            txtuCost=txtFont2.render("$%2i"%(defenses[i].uCost),True,BLACK)
-            screen.blit(txtUpgrade,(650,670))
-            screen.blit(txtuCost,(763,670))
-            draw.rect(screen,BLACK,upgradeRect,2)
             if mb[0]==1:
                 placeCond=True
                 defC=int(i)
     
     print(defC)
-    if defC!='none':
+    if defC!=None:
         draw.rect(screen,GREEN,buyRects[defC],2)
         #screen.blit(defensePics[i],(630,630))
         screen.blit(towerDescription[defC],(620,630))
@@ -205,8 +213,12 @@ def upgrade():
     for i in range(len(buyRects)):
         if upgradeRect.collidepoint(mx,my):
             draw.rect(screen,GREEN,upgradeRect,2)
-                if click:
+            if click:
+                money-=defenses[i].uCost
+                defenses[i].uCost = None
+                defenses[i].damage+=10*(i+1)
                 
+airpods = AirPods()
             
 def lev1():
     running=True

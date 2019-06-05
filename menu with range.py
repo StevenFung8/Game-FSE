@@ -129,6 +129,7 @@ def hudElements(screen):
     screen.blit(hudRects,(20,20))
     screen.blit(dialoguePic,(600,600))
 
+
 def prep(screen):
     #rectangle defining
     buyRects=[Rect(607,28,59,63),Rect(682,28,61,63),Rect(758,28,61,63),Rect(834,28,61,63),Rect(908,28,61,63),Rect(982,28,61,63)]
