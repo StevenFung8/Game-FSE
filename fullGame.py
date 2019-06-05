@@ -4,7 +4,7 @@ from math import *
 from random import *
 from datetime import datetime
 
-RED=(255,0,0)   
+RED=(255,0,0)
 GREEN=(0,255,0)
 BLUE=(0,0,255)
 BLACK=(0,0,0)
@@ -24,6 +24,7 @@ readyPic=image.load("FSE-Assets/readyRect.jpg")
 quitP=image.load("FSE-Assets/quitRect.png")
 dialogueP=image.load("FSE-Assets/dialogueRect.png")
 cancelPic=image.load("FSE-Assets/cancelRect.png")
+deletePic=image.load("FSE-Assets/deleteRect.png")
 
 txtFont=font.SysFont("Stencil",25)
 txtFont2=font.SysFont("Stencil",17)
@@ -50,6 +51,8 @@ class AirPods:
         print("Airpods evalution: \nValue: %s\nSound Isolation: %s\nSound Profile: %s"%(self.value, self.sound_isolation, self.sound_profile))
 
 
+
+
 class enemyType:
 
     def __init__(self,name,speed,health):
@@ -64,7 +67,6 @@ motorcycle=enemyType('motorcycle',2,250)
 lightTank=enemyType('lightTank',1,700)
 heavyTank=enemyType('heavyTank',0.7,1000)
 tankDestroyer=enemyType('tankDestroyer',0.8,900)
-
 
 class towerType:
 
@@ -121,7 +123,7 @@ def moveEnemy(screen,enemyList,enemy):
         if i[1]>=670 and i[0]==690:
             i[0]+=i[2].speed*2
             frame=0
-    
+
         screen.blit(enemyList[count][int(frame)],(i[0],i[1]))
         count+=1
 
@@ -141,6 +143,7 @@ def hudElements(screen):
     screen.blit(hudRects,(20,20))
     screen.blit(dialoguePic,(600,600))
 
+
 def music():
     if volumeRect.collidepoint(mx,my) and pause=False:
 
@@ -153,10 +156,19 @@ def prep(screen,towerPos):
     global defC
     ready=False
     placeCond = True
-    #rectangle defining
+
+defC=None
+ready=False
+activeDefenses=[]
+
+def prep(screen,towerPos):
+    global defC
+    global ready
+    global activeDefenses
     readyRect=Rect(830,120,179,69)
     upgradeRect=Rect(750,662,70,30)
     buyRects=[Rect(607,28,59,63),Rect(682,28,61,63),Rect(758,28,61,63),Rect(834,28,61,63),Rect(908,28,61,63),Rect(982,28,61,63)]
+    cancelRect=Rect(20,125,125,30)
 
     txtD1=txtFont2.render("Basic Soldier - Cost: $250, Damage: 25",True,BLACK)
     txtD2=txtFont2.render("Machine Gun - Cost: $500, Damage: 35",True,BLACK)
@@ -165,18 +177,18 @@ def prep(screen,towerPos):
     txtD5=txtFont2.render("Fortress - Cost: $1250, Damage: 150",True,BLACK)
     txtD6=txtFont2.render("Heavy AT Gun - Cost: $1500, Damage: 200",True,BLACK)
     towerDescription=[txtD1,txtD2,txtD3,txtD4,txtD5,txtD6]
-    
+
     ##generating defense images
     defenses=[soldier,heavyMG,antiTank,bunker,fortress,heavyGun]
     defensePics=[]
     for i in defenses:
         defensePics.append(image.load(i.filename))
-              
+
     draw.rect(screen,RED,readyRect,2)
     screen.blit(readyPic,(830,120))
     mx,my=mouse.get_pos()
     mb=mouse.get_pressed()
-    
+
     if readyRect.collidepoint(mx,my):
         draw.rect(screen,(255,255,0),readyRect,2)
         if mb[0]==1:
@@ -186,27 +198,36 @@ def prep(screen,towerPos):
         if buyRects[i].collidepoint(mx,my):
             draw.rect(screen,YELLOW,buyRects[i],2)
             if mb[0]==1:
-                placeCond=True
                 defC=int(i)
     
     print(defC)
+
     if defC!=None:
         draw.rect(screen,GREEN,buyRects[defC],2)
         #screen.blit(defensePics[i],(630,630))
         screen.blit(towerDescription[defC],(620,630))
         txtUpgrade=txtFont2.render("UPGRADE?",True,BLACK)
         txtuCost=txtFont2.render("$%2i"%(defenses[defC].uCost),True,BLACK)
+        cancelRect=Rect(20,125,125,30)
+
         screen.blit(txtUpgrade,(650,670))
         screen.blit(txtuCost,(763,670))
+        screen.blit(cancelPic,(20,125))
         draw.rect(screen,BLACK,upgradeRect,2)
-    #if txtdisplay:
-        
 
-    if placeCond==True:
-        for i in towerPos:
-            draw.rect(screen,RED,i,3)
-            if i.collidepoint(mx,my):
-                draw.rect(screen,YELLOW,i,3)
+        for i in range(len(towerPos)):
+            if towerPos[i][1]==False:
+                draw.rect(screen,RED,towerPos[i][0],3)
+                if towerPos[i][0].collidepoint(mx,my):
+                    draw.rect(screen,YELLOW,towerPos[i][0],3)
+                    if mb[0]==1:
+                        activeDefenses.append([defensePics[defC],towerPos[i][2]])
+                        towerPos[i][1]=True
+                    
+        if cancelRect.collidepoint(mx,my):
+            draw.rect(screen,RED,cancelRect,2)
+            if mb[0]==1:
+                defC=None
 
 def upgrade():
     global money
@@ -217,18 +238,28 @@ def upgrade():
                 money-=defenses[i].uCost
                 defenses[i].uCost = None
                 defenses[i].damage+=10*(i+1)
+
                 
 airpods = AirPods()
             
+
+
+airpods = AirPods()
+
+
 def lev1():
+    global defC
+    global ready
+    global activeDefenses
     running=True
-    mouseDown = False
     myclock=time.Clock()
     mixer.init()
     mixer.music.load("FSE-Assets/sound/bgMusic.mp3")
     mixer.music.play(-1)
     quitRect=Rect(260,25,150,40)
-    towerPos1=[Rect(115,273,50,50),Rect(264,114,50,50),Rect(319,242,50,50),Rect(217,529,50,50),Rect(388,342,50,50),Rect(570,342,50,50),Rect(750,342,50,50),Rect(418,503,50,50),Rect(598,503,50,50),Rect(778,503,50,50)]
+                #rect,status,blit position
+    towerPos1=[[Rect(115,273,50,50),False,(115,273)],[Rect(264,114,50,50),False,(264,114)],[Rect(319,242,50,50),False,(319,242)],[Rect(217,529,50,50),False,(217,529)],[Rect(388,342,50,50),False,(388,342)],[Rect(570,342,50,50),False,(570,342)],
+               [Rect(750,342,50,50),False,(750,342)],[Rect(418,503,50,50),False,(418,503)],[Rect(598,503,50,50),False,(598,503)],[Rect(778,503,50,50),False,(778,503)]]
     while running:
         myclock.tick(60)
         drawScene1(screen)
@@ -247,29 +278,34 @@ def lev1():
                 click=False
         mx,my=mouse.get_pos()
         mb=mouse.get_pressed()
-        
+
+        for a in activeDefenses:
+            screen.blit(a[0],a[1])
+
         if quitRect.collidepoint(mx,my):
             draw.rect(screen,RED,quitRect,3)
             if mb[0]==1:
+                defC=None
+                activeDefenses=[]
                 running=False
                 return "levelSelect"
         #genPics(enemy)
         prep(screen,towerPos1)
         #moveEnemy(screen,pics,enemy)
-        display.flip()
 
         display.flip()
     return "main"
 
 def lev2():
+    global defC
     running=True
     myclock=time.Clock()
     mixer.init()
     mixer.music.load("FSE-Assets/sound/bgMusic.mp3")
     mixer.music.play(-1)
     quitRect=Rect(260,25,150,40)
-    towerPos2=[Rect(75,430,50,50),Rect(225,430,50,50),Rect(225,300,50,50),Rect(225,125,50,50),Rect(425,125,50,50),
-            Rect(600,125,50,50),Rect(425,300,50,50),Rect(600,300,50,50),Rect(750,275,50,50),Rect(825,375,50,50)]
+    towerPos2=[[Rect(75,430,50,50),False],[Rect(225,430,50,50),False],[Rect(225,300,50,50),False],[Rect(225,125,50,50),False],[Rect(425,125,50,50),False],
+            [Rect(600,125,50,50),False],[Rect(425,300,50,50),False],[Rect(600,300,50,50),False],[Rect(750,275,50,50),False],[Rect(825,375,50,50),False]]
     while running:
         myclock.tick(60)
         drawScene2(screen)
@@ -293,6 +329,7 @@ def lev2():
             draw.rect(screen,RED,quitRect,3)
             if mb[0]==1:
                 running=False
+                defC=None
                 return "levelSelect"
         #genPics(enemy)
         prep(screen,towerPos2)
@@ -301,14 +338,15 @@ def lev2():
     return "main"
 
 def lev3():
+    global defC
     running=True
     myclock=time.Clock()
     mixer.init()
     mixer.music.load("FSE-Assets/sound/bgMusic.mp3")
     mixer.music.play(-1)
     quitRect=Rect(260,25,150,40)
-    towerPos3=[Rect(52,391,50,50),Rect(200,391,50,50),Rect(190,563,50,50),Rect(274,294,50,50),Rect(274,136,50,50),Rect(450,136,50,50),
-            Rect(474,325,50,50),Rect(630,305,50,50),Rect(800,305,50,50),Rect(580,136,50,50),Rect(700,136,50,50)]
+    towerPos3=[[Rect(52,391,50,50),False],[Rect(200,391,50,50),False],[Rect(190,563,50,50),False],[Rect(274,294,50,50),False],[Rect(274,136,50,50),False],[Rect(450,136,50,50),False],
+            [Rect(474,325,50,50),False],[Rect(630,305,50,50),False],[Rect(800,305,50,50),False],[Rect(580,136,50,50),False],[Rect(700,136,50,50),False]]
     while running:
         myclock.tick(60)
         drawScene3(screen)
@@ -332,6 +370,7 @@ def lev3():
             draw.rect(screen,RED,quitRect,3)
             if mb[0]==1:
                 running=False
+                defC=None
                 return "levelSelect"
         #genPics(enemy)
         prep(screen,towerPos3)
@@ -340,14 +379,15 @@ def lev3():
     return "main"
 
 def lev4():
+    global defC
     running=True
     myclock=time.Clock()
     mixer.init()
     mixer.music.load("FSE-Assets/sound/bgMusic.mp3")
     mixer.music.play(-1)
     quitRect=Rect(260,25,150,40)
-    towerPos4=[Rect(107,355,50,50),Rect(193,190,50,50),Rect(331,298,50,50),Rect(331,423,50,50),Rect(457,472,50,50),
-            Rect(241,647,50,50),Rect(689,429,50,50),Rect(495,260,50,50),Rect(686,240,50,50),Rect(820,409,50,50)]
+    towerPos4=[[Rect(107,355,50,50),False],[Rect(193,190,50,50),False],[Rect(331,298,50,50),False],[Rect(331,423,50,50),False],[Rect(457,472,50,50),False],
+            [Rect(241,647,50,50),False],[Rect(689,429,50,50),False],[Rect(495,260,50,50),False],[Rect(686,240,50,50),False],[Rect(820,409,50,50),False]]
     while running:
         myclock.tick(60)
         drawScene4(screen)
@@ -371,6 +411,7 @@ def lev4():
             draw.rect(screen,RED,quitRect,3)
             if mb[0]==1:
                 running=False
+                defC=None
                 return "levelSelect"
         #genPics(enemy)
         prep(screen,towerPos4)
@@ -379,6 +420,7 @@ def lev4():
     return "main"
 
 def lev5():
+    global defC
     running=True
     myclock=time.Clock()
     mixer.init()
@@ -386,8 +428,8 @@ def lev5():
     mixer.music.play(-1)
     quitRect=Rect(260,25,150,40)
     draw.rect(screen,BLACK,quitRect,2)
-    towerPos5=[Rect(30,197,50,50),Rect(232,173,50,50),Rect(382,173,50,50),Rect(228,337,50,50),Rect(332,379,50,50),Rect(332,520,50,50),
-            Rect(525,262,50,50),Rect(525,409,50,50),Rect(645,409,50,50),Rect(459,589,50,50),Rect(815,409,50,50)]
+    towerPos5=[[Rect(30,197,50,50),False],[Rect(232,173,50,50),False],[Rect(382,173,50,50),False],[Rect(228,337,50,50),False],[Rect(332,379,50,50),False],[Rect(332,520,50,50),False],
+            [Rect(525,262,50,50),False],[Rect(525,409,50,50),False],[Rect(645,409,50,50),False],[Rect(459,589,50,50),False],[Rect(815,409,50,50),False]]
     while running:
         myclock.tick(60)
         drawScene5(screen)
@@ -411,6 +453,7 @@ def lev5():
             draw.rect(screen,RED,quitRect,3)
             if mb[0]==1:
                 running=False
+                defC=None
                 return "levelSelect"
         #genPics(enemy)
         prep(screen,towerPos5)
@@ -495,7 +538,7 @@ def levelSelect():
                     return levels[i]
         display.flip()
     return "main"
-    
+
 def main():
     mixer.init()
     mixer.music.load("FSE-Assets/sound/menuMusic.mp3")
@@ -520,11 +563,10 @@ def main():
         draw.rect(screen,RED,backButton,3)
         draw.rect(screen,RED,musicButton,3)
         screen.blit(crossPic,(960,660))
-        
+
         for i in range(len(buttons)):
-            draw.rect(screen,RED,buttons[i],3)
             if buttons[i].collidepoint(mx,my):
-                draw.rect(screen,(255,255,0),buttons[i],3)
+                draw.rect(screen,RED,buttons[i],3)
                 if mb[0]==1 and click==False:
                     return vals[i]
         if backButton.collidepoint(mx,my):
