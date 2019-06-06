@@ -10,6 +10,8 @@ BLUE=(0,0,255)
 BLACK=(0,0,0)
 WHITE=(255,255,255)
 YELLOW=(255,255,0)
+size=width,height=1050,750
+screen=display.set_mode(size)
 
 init()
 #load pictures
@@ -46,7 +48,7 @@ crossPic=transform.scale(cross,(30,30))
 dialoguePic=transform.scale(dialogueP,(400,110))
 
 
-
+pause=False
 
 mx,my=mouse.get_pos()
 mb=mouse.get_pressed()
@@ -153,14 +155,30 @@ def hudElements(screen):
     screen.blit(dialoguePic,(600,600))
 
 
-def music():
-    pause=False
+
+def music(evt):
+
+    global pause
+
     muteRect=Rect(400,400,80,80)
     draw.rect(screen,RED,muteRect,1)
-    screen.blit(mutePic,(400,400))
+    screen.blit(eigthNote,(400,400))
 
-    if mb[0] == 1 and muteRect.collidepoint(mx, my) and pause == False:
-        pause=True
+
+    mx,my=mouse.get_pos()
+    mb=mouse.get_pressed()
+    if evt.type==MOUSEBUTTONDOWN:
+        if muteRect.collidepoint(mx, my) and pause == False:
+            pause=True
+            if pause:
+                mixer.music.pause()
+                screen.blit(mutePic,(400,400))
+    if evt.type==MOUSEBUTTONDOWN:
+        if muteRect.collidepoint(mx,my) and pause == True:
+            pause = False
+            if not pause:
+                mixer.music.pause()
+
     print(pause)
 
 
@@ -282,6 +300,7 @@ def lev1():
     mixer.init()
     mixer.music.load("FSE-Assets/sound/bgMusic.mp3")
     mixer.music.play(-1)
+
     quitRect=Rect(260,25,150,40)
                 #rect, status, edit status, blit position
     towerPos1=[[Rect(115,273,50,50),False,False,(115,273)],[Rect(264,114,50,50),False,False,(264,114)],
@@ -303,8 +322,21 @@ def lev1():
                 return "exit"
             if evt.type==MOUSEBUTTONDOWN:
                 click=True
+                if muteRect.collidepoint(mx, my) and pause == False:
+                    pause = True
+                    if pause:
+                        mixer.music.pause()
+                        screen.blit(mutePic, (400, 400))
+
+                elif muteRect.collidepoint(mx, my) and pause == True:
+                    pause = False
+                    if not pause:
+                        mixer.music.pause()
+
             if evt.type==MOUSEBUTTONUP:
                 click=False
+            music(evt)
+
         mx,my=mouse.get_pos()
         mb=mouse.get_pressed()
 
@@ -320,7 +352,7 @@ def lev1():
                 return "levelSelect"
         #genPics(enemy)
         prep(screen,towerPos1)
-        music()
+
         #moveEnemy(screen,pics,enemy)
 
         display.flip()
