@@ -234,7 +234,7 @@ def prep(screen,towerPos):
                             if a[3]==i[4]:
                                 activeDefenses.remove(a)
                                 money+=a[2].refund
-                            
+'''                          
 def upgrade():
     global money
     for i in range(len(buyRects)):
@@ -244,11 +244,14 @@ def upgrade():
                 money-=defenses[i].uCost
                 defenses[i].uCost = None
                 defenses[i].damage+=10*(i+1)
+'''
 
 def lev1():
     global defC
     global ready
     global activeDefenses
+    global money
+    global score
     running=True
     myclock=time.Clock()
     mixer.init()
@@ -290,10 +293,17 @@ def lev1():
                 editCond=False
                 activeDefenses=[]
                 running=False
+                ready=False
+                money=2000
+                score=0
                 return "levelSelect"
-        #genPics(enemy)
-        prep(screen,towerPos1)
-        #moveEnemy(screen,pics,enemy)
+        if ready==False:
+            prep(screen,towerPos1)
+        '''
+        if ready==True:
+            genEnemies(enemy)
+            moveEnemy(screen,pics,enemy)
+        '''
 
         display.flip()
 
@@ -301,16 +311,20 @@ def lev1():
 
 def lev2():
     global defC
+    global ready
+    global activeDefenses
+    global money
+    global score
     running=True
     myclock=time.Clock()
     mixer.init()
     mixer.music.load("FSE-Assets/sound/bgMusic.mp3")
     mixer.music.play(-1)
     quitRect=Rect(260,25,150,40)
-    towerPos2=[[Rect(75,430,50,50),False,(75,430)],[Rect(225,430,50,50),False,(225,430)],[Rect(225,300,50,50),False,(225,300)],
-               [Rect(225,125,50,50),False,(225,125)],[Rect(425,125,50,50),False,(425,125)],
-                [Rect(600,125,50,50),False,(600,125)],[Rect(425,300,50,50),False,(425,300)],[Rect(600,300,50,50),False,(600,300)],
-               [Rect(750,275,50,50),False,(750,275)],[Rect(825,375,50,50),False,(825,375)]]
+    towerPos2=[[Rect(75,430,50,50),False,(75,430),False,1],[Rect(225,430,50,50),False,(225,430),False,2],[Rect(225,300,50,50),False,(225,300),False,3],
+               [Rect(225,125,50,50),False,(225,125),False,4],[Rect(425,125,50,50),False,(425,125),False,5],
+                [Rect(600,125,50,50),False,(600,125),False,6],[Rect(425,300,50,50),False,(425,300),False,7],[Rect(600,300,50,50),False,(600,300),False,8],
+               [Rect(750,275,50,50),False,(750,275),False,9],[Rect(825,375,50,50),False,(825,375),False,10]]
     while running:
         myclock.tick(60)
         drawScene2(screen)
@@ -336,27 +350,35 @@ def lev2():
         if quitRect.collidepoint(mx,my):
             draw.rect(screen,RED,quitRect,3)
             if mb[0]==1:
-                running=False
                 defC=None
+                editCond=False
+                activeDefenses=[]
+                running=False
+                ready=False
+                money=2000
+                score=0
                 return "levelSelect"
-        #genPics(enemy)
-        prep(screen,towerPos2)
-        #moveEnemy(screen,pics,enemy)
+        if ready==False:
+            prep(screen,towerPos2)
         display.flip()
     return "main"
 
 def lev3():
     global defC
+    global ready
+    global activeDefenses
+    global money
+    global score
     running=True
     myclock=time.Clock()
     mixer.init()
     mixer.music.load("FSE-Assets/sound/bgMusic.mp3")
     mixer.music.play(-1)
     quitRect=Rect(260,25,150,40)
-    towerPos3=[[Rect(52,391,50,50),False,(52,391)],[Rect(200,391,50,50),False,(200,391)],[Rect(190,563,50,50),False,(190,563)],
-               [Rect(274,294,50,50),False,(274,294)],[Rect(274,136,50,50),False,(274,136)],[Rect(450,136,50,50),False,(450,136)],
-            [Rect(474,325,50,50),False,(474,325)],[Rect(630,305,50,50),False,(630,305)],[Rect(800,305,50,50),False,(800,305)],
-               [Rect(580,136,50,50),False,(580,136)],[Rect(700,136,50,50),False,(700,136)]]
+    towerPos3=[[Rect(52,391,50,50),False,(52,391),False,1],[Rect(200,391,50,50),False,(200,391),False,2],[Rect(190,563,50,50),False,(190,563),False,3],
+               [Rect(274,294,50,50),False,(274,294),False,4],[Rect(274,136,50,50),False,(274,136),False,5],[Rect(450,136,50,50),False,(450,136),False,6],
+            [Rect(474,325,50,50),False,(474,325),False,7],[Rect(630,305,50,50),False,(630,305),False,8],[Rect(800,305,50,50),False,(800,305),False,9],
+               [Rect(580,136,50,50),False,(580,136),False,10],[Rect(700,136,50,50),False,(700,136),False,11]]
     while running:
         myclock.tick(60)
         drawScene3(screen)
@@ -382,27 +404,35 @@ def lev3():
         if quitRect.collidepoint(mx,my):
             draw.rect(screen,RED,quitRect,3)
             if mb[0]==1:
-                running=False
                 defC=None
+                editCond=False
+                activeDefenses=[]
+                running=False
+                ready=False
+                money=2000
+                score=0
                 return "levelSelect"
-        #genPics(enemy)
-        prep(screen,towerPos3)
-        #moveEnemy(screen,pics,enemy)
+        if ready==False:
+            prep(screen,towerPos3)
         display.flip()
     return "main"
 
 def lev4():
     global defC
+    global ready
+    global activeDefenses
+    global money
+    global score
     running=True
     myclock=time.Clock()
     mixer.init()
     mixer.music.load("FSE-Assets/sound/bgMusic.mp3")
     mixer.music.play(-1)
     quitRect=Rect(260,25,150,40)
-    towerPos4=[[Rect(107,355,50,50),False,(107,355)],[Rect(193,190,50,50),False,(193,190)],[Rect(331,298,50,50),False,(331,298)],
-               [Rect(331,423,50,50),False,(331,423)],[Rect(457,472,50,50),False,(457,472)],
-            [Rect(241,647,50,50),False,(241,647)],[Rect(689,429,50,50),False,(689,429)],[Rect(495,260,50,50),False,(495,260)],
-               [Rect(686,240,50,50),False,(686,240)],[Rect(820,409,50,50),False,(820,409)]]
+    towerPos4=[[Rect(107,355,50,50),False,(107,355),False,1],[Rect(193,190,50,50),False,(193,190),False,2],[Rect(331,298,50,50),False,(331,298),False,3],
+               [Rect(331,423,50,50),False,(331,423),False,4],[Rect(457,472,50,50),False,(457,472),False,5],
+            [Rect(241,647,50,50),False,(241,647),False,6],[Rect(689,429,50,50),False,(689,429),False,7],[Rect(495,260,50,50),False,(495,260),False,8],
+               [Rect(686,240,50,50),False,(686,240),False,9],[Rect(820,409,50,50),False,(820,409),False,10]]
     while running:
         myclock.tick(60)
         drawScene4(screen)
@@ -428,17 +458,25 @@ def lev4():
         if quitRect.collidepoint(mx,my):
             draw.rect(screen,RED,quitRect,3)
             if mb[0]==1:
-                running=False
                 defC=None
+                editCond=False
+                activeDefenses=[]
+                running=False
+                ready=False
+                money=2000
+                score=0
                 return "levelSelect"
-        #genPics(enemy)
-        prep(screen,towerPos4)
-        #moveEnemy(screen,pics,enemy)
+        if ready==False:
+            prep(screen,towerPos4)
         display.flip()
     return "main"
 
 def lev5():
     global defC
+    global ready
+    global activeDefenses
+    global money
+    global score
     running=True
     myclock=time.Clock()
     mixer.init()
@@ -446,10 +484,10 @@ def lev5():
     mixer.music.play(-1)
     quitRect=Rect(260,25,150,40)
     draw.rect(screen,BLACK,quitRect,2)
-    towerPos5=[[Rect(30,197,50,50),False,(30,197)],[Rect(232,173,50,50),False,(232,173)],[Rect(382,173,50,50),False,(382,173)],[Rect(228,337,50,50),False,(228,337)]
-               ,[Rect(332,379,50,50),False,(332,379)],[Rect(332,520,50,50),False,(332,520)],
-            [Rect(525,262,50,50),False,(525,262)],[Rect(525,409,50,50),False,(525,409)],[Rect(645,409,50,50),False,(645,409)],
-               [Rect(459,589,50,50),False,(459,589)],[Rect(815,409,50,50),False,(815,409)]]
+    towerPos5=[[Rect(30,197,50,50),False,(30,197),False,1],[Rect(232,173,50,50),False,(232,173),False,2],[Rect(382,173,50,50),False,(382,173),False,3],
+               [Rect(228,337,50,50),False,(228,337),False,4],[Rect(332,379,50,50),False,(332,379),False,5],[Rect(332,520,50,50),False,(332,520),False,6],
+            [Rect(525,262,50,50),False,(525,262),False,7],[Rect(525,409,50,50),False,(525,409),False,8],[Rect(645,409,50,50),False,(645,409),False,9],
+               [Rect(459,589,50,50),False,(459,589),False,10],[Rect(815,409,50,50),False,(815,409),False,11]]
     while running:
         myclock.tick(60)
         drawScene5(screen)
@@ -474,12 +512,16 @@ def lev5():
         if quitRect.collidepoint(mx,my):
             draw.rect(screen,RED,quitRect,3)
             if mb[0]==1:
-                running=False
                 defC=None
+                editCond=False
+                activeDefenses=[]
+                running=False
+                ready=False
+                money=2000
+                score=0
                 return "levelSelect"
-        #genPics(enemy)
-        prep(screen,towerPos5)
-        #moveEnemy(screen,pics,enemy)
+        if ready==False:
+            prep(screen,towerPos5)
         display.flip()
     return "main"
 
