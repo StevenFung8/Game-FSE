@@ -213,6 +213,8 @@ def prep(screen,towerPos):
                         activeDefenses.append([defensePics[defC],towerPos[i][2],defenses[defC],towerPos[i][4]])
                         money-=defenses[defC].price
                         towerPos[i][1]=True
+                        towerPos[i][5]=defC
+                        
                     
         if cancelRect.collidepoint(mx,my):
             draw.rect(screen,RED,cancelRect,2)
@@ -229,6 +231,22 @@ def prep(screen,towerPos):
                 deleteRect=Rect(20,125,125,30)
                 draw.rect(screen,GREEN,i[0],3)
                 screen.blit(deletePic,(20,125))
+
+                draw.rect(screen,GREEN,buyRects[i][5],2)
+                screen.blit(towerDescription[i][5],(620,630))
+                txtUpgrade=txtFont2.render("UPGRADE?",True,BLACK)
+                txtuCost=txtFont2.render("$%2i"%(defenses[i][5].uCost),True,BLACK)
+                cancelRect=Rect(20,125,125,30)
+                
+                screen.blit(txtUpgrade,(650,670))
+                screen.blit(txtuCost,(763,670))
+                screen.blit(cancelPic,(20,125))
+                
+                if upgradeRect.collidepoint(mx,my):
+                    draw.rect(screen,GREEN,upgradeRect,2)
+                else:
+                    draw.rect(screen,BLACK,upgradeRect,2)
+                    
                 if deleteRect.collidepoint(mx,my):
                     draw.rect(screen,RED,deleteRect,2)
                     if mb[0]==1:
@@ -238,7 +256,8 @@ def prep(screen,towerPos):
                             if a[3]==i[4]:
                                 activeDefenses.remove(a)
                                 money+=a[2].refund
-                            
+                                
+'''                            
 def upgrade():
     global money
     for i in range(len(buyRects)):
@@ -247,6 +266,7 @@ def upgrade():
                 money-=defenses[i].uCost
                 defenses[i].uCost = None
                 defenses[i].damage+=10*(i+1)
+'''
 
 def lev1():
     global defC
@@ -258,12 +278,12 @@ def lev1():
     mixer.music.load("FSE-Assets/sound/bgMusic.mp3")
     mixer.music.play(-1)
     quitRect=Rect(260,25,150,40)
-                #rect, status, blit position, edit status, rect #
-    towerPos1=[[Rect(115,273,50,50),False,(115,273),False,1],[Rect(264,114,50,50),False,(264,114),False,2],
-               [Rect(319,242,50,50),False,(319,242),False,3],[Rect(217,529,50,50),False,(217,529),False,4],
-               [Rect(388,342,50,50),False,(388,342),False,5],[Rect(570,342,50,50),False,(570,342),False,6],
-               [Rect(750,342,50,50),False,(750,342),False,7],[Rect(418,503,50,50),False,(418,503),False,8],
-               [Rect(598,503,50,50),False,(598,503),False,9],[Rect(778,503,50,50),False,(778,503),False,10]]
+                #rect, status, blit position, edit status, rect, tower type#
+    towerPos1=[[Rect(115,273,50,50),False,(115,273),False,1,None],[Rect(264,114,50,50),False,(264,114),False,2,None],
+               [Rect(319,242,50,50),False,(319,242),False,3,None],[Rect(217,529,50,50),False,(217,529),False,4,None],
+               [Rect(388,342,50,50),False,(388,342),False,5,None],[Rect(570,342,50,50),False,(570,342),False,6,None],
+               [Rect(750,342,50,50),False,(750,342),False,7,None],[Rect(418,503,50,50),False,(418,503),False,8,None],
+               [Rect(598,503,50,50),False,(598,503),False,9,None],[Rect(778,503,50,50),False,(778,503),False,10,None]]
     while running:
         myclock.tick(60)
         drawScene1(screen)
