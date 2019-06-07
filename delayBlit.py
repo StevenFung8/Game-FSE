@@ -97,15 +97,9 @@ def moveEnemy(screen,enemy):
     display.flip()
 
 def bombAnimation(screen,bombs):
-    print(len(bombs))
 
     for bomb in bombs[:]:
         #print("99",bomb)
-        print(bomb)
-
-    for bomb in bombs:
-        #print("99",bomb)
-        print(bomb)
 
         screen.blit(boomPics[bomb[3]],bomb[:2])
         

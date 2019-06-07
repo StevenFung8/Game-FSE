@@ -48,20 +48,41 @@ dialoguePic=transform.scale(dialogueP,(400,110))
 money=2000
 score=0
 
+class AirPods:
+    value = float("-Inf")
+    price = "Too high"
+    sound_signature = "Tinny"
+    sound_isolation = None
+    name = "AirPods"
+
+class Asian:
+    name = "Asian"
+    def __init__(self, name):
+        self.name = name
+    def checkItemValue(self, item):
+        print("%s's item assesement of %s:"%(self.name, item.name))
+        print("Value: %s\nPrice: %s\nSound Signature: %s\nSound Isolation: %s"%(item.value, item.price, item.sound_signature, item.sound_isolation))
+
+ryanAirPod = AirPods()
+chris = Asian("Chris")
+
+chris.checkItemValue(ryanAirPod)
+
 class enemyType:
 
-    def __init__(self,name,speed,health):
+    def __init__(self,name,speed,health,damage):
         self.name=name
         self.speed=speed
         self.health=health
+        self.damage=damage
         self.filename="FSE-Assets/Enemies/"+name+".png"
 
-infantry=enemyType('infantry',1.5,100)
-transport=enemyType('transport',1.7,400)
-motorcycle=enemyType('motorcycle',2,250)
-lightTank=enemyType('lightTank',1,700)
-heavyTank=enemyType('heavyTank',0.7,1000)
-tankDestroyer=enemyType('tankDestroyer',0.8,900)
+infantry=enemyType('infantry',1.5,100,5)
+transport=enemyType('transport',1.7,400,10)
+motorcycle=enemyType('motorcycle',2,250,5)
+lightTank=enemyType('lightTank',1,700,15)
+heavyTank=enemyType('heavyTank',0.7,1000,20)
+tankDestroyer=enemyType('tankDestroyer',0.8,1100,25)
 
 class towerType:
 
@@ -101,8 +122,7 @@ def moneyScore(screen):
     screen.blit(txtMoney,(100,30))
     screen.blit(txtScore,(110,84))
 
-
-def moveEnemy(screen,enemyList,enemy):
+def moveEnemy2(screen,enemyList,enemy):
     frame=0
     count=0
     for i in enemy:
@@ -189,7 +209,6 @@ def prep(screen,towerPos):
 
     if defC!=None:
         draw.rect(screen,GREEN,buyRects[defC],2)
-        #screen.blit(defensePics[i],(630,630))
         screen.blit(towerDescription[defC],(620,630))
         txtUpgrade=txtFont2.render("UPGRADE?",True,BLACK)
         txtuCost=txtFont2.render("$%2i"%(defenses[defC].uCost),True,BLACK)
@@ -210,7 +229,7 @@ def prep(screen,towerPos):
                 if towerPos[i][0].collidepoint(mx,my):
                     draw.rect(screen,YELLOW,towerPos[i][0],3)
                     if mb[0]==1 and money-defenses[defC].price>=0:
-                        activeDefenses.append([defensePics[defC],towerPos[i][2],defenses[defC],towerPos[i][4]])
+                        activeDefenses.append([defensePics[defC],towerPos[i][2],defenses[defC],towerPos[i][4],defenses[defC].damage])
                         money-=defenses[defC].price
                         towerPos[i][1]=True
                     
@@ -238,7 +257,7 @@ def prep(screen,towerPos):
                             if a[3]==i[4]:
                                 activeDefenses.remove(a)
                                 money+=a[2].refund
-'''                          
+'''                        
 def upgrade():
     global money
     for i in range(len(buyRects)):
@@ -302,11 +321,9 @@ def lev1():
                 return "levelSelect"
         if ready==False:
             prep(screen,towerPos1)
-        '''
         if ready==True:
             genEnemies(enemy)
             moveEnemy(screen,pics,enemy)
-        '''
 
         display.flip()
 
