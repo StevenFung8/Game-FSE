@@ -156,7 +156,7 @@ def hudElements(screen):
 
 
 
-def music(evt):
+def music(state):
 
     global pause
 
@@ -164,20 +164,20 @@ def music(evt):
     draw.rect(screen,RED,muteRect,1)
     screen.blit(eigthNote,(400,400))
 
-
     mx,my=mouse.get_pos()
     mb=mouse.get_pressed()
-    if evt.type==MOUSEBUTTONDOWN:
-        if muteRect.collidepoint(mx, my) and pause == False:
-            pause=True
-            if pause:
-                mixer.music.pause()
-                screen.blit(mutePic,(400,400))
-    if evt.type==MOUSEBUTTONDOWN:
-        if muteRect.collidepoint(mx,my) and pause == True:
-            pause = False
-            if not pause:
-                mixer.music.pause()
+    if state is not None:
+        if state:
+            if muteRect.collidepoint(mx, my) and pause == False:
+               pause=True
+               if pause:
+                    mixer.music.pause()
+                    screen.blit(mutePic,(400,400))
+        else:
+            if muteRect.collidepoint(mx,my) and pause == True:
+                pause = False
+                if not pause:
+                    mixer.music.pause()
 
     print(pause)
 
@@ -322,21 +322,23 @@ def lev1():
                 return "exit"
             if evt.type==MOUSEBUTTONDOWN:
                 click=True
-                if muteRect.collidepoint(mx, my) and pause == False:
-                    pause = True
-                    if pause:
-                        mixer.music.pause()
-                        screen.blit(mutePic, (400, 400))
-
-                elif muteRect.collidepoint(mx, my) and pause == True:
-                    pause = False
-                    if not pause:
-                        mixer.music.pause()
+                music(True)
+                # if muteRect.collidepoint(mx, my) and pause == False:
+                #     pause = True
+                #     if pause:
+                #         mixer.music.pause()
+                #         screen.blit(mutePic, (400, 400))
+                #
+                # elif muteRect.collidepoint(mx, my) and pause == True:
+                #     pause = False
+                #     if not pause:
+                #         mixer.music.pause()
 
             if evt.type==MOUSEBUTTONUP:
-                click=False
-            music(evt)
 
+                click=False
+                music(False)
+        music(None)
         mx,my=mouse.get_pos()
         mb=mouse.get_pressed()
 
