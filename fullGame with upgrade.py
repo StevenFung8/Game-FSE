@@ -231,8 +231,6 @@ def prep(screen,towerPos):
                 deleteRect=Rect(20,125,125,30)
                 draw.rect(screen,GREEN,i[0],3)
                 screen.blit(deletePic,(20,125))
-
-                draw.rect(screen,GREEN,buyRects[i][5],2)
                 screen.blit(towerDescription[i][5],(620,630))
                 txtUpgrade=txtFont2.render("UPGRADE?",True,BLACK)
                 txtuCost=txtFont2.render("$%2i"%(defenses[i][5].uCost),True,BLACK)
