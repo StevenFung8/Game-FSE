@@ -281,7 +281,7 @@ def prep(screen,towerPos):
                 draw.rect(screen,YELLOW,i[0],3)
                 if click:
                     i[3]=True
-                    #select=False
+                    select=False
             if i[3]==True and select:
                 select=False
                 draw.rect(screen,GREEN,buyRects[i[5]],2)
