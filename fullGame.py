@@ -46,6 +46,8 @@ hudRects=transform.scale(hudRect,(200,95))
 quitPic=transform.scale(quitP,(150,40))
 crossPic=transform.scale(cross,(30,30))
 dialoguePic=transform.scale(dialogueP,(400,110))
+eigthNote = transform.scale(eigthNote,(45,45))
+mutePic = transform.scale(mutePic,(45,45))
 
 
 pause=False
@@ -157,33 +159,25 @@ def hudElements(screen):
 
 
 def music(state):
-
     global pause
 
-    muteRect=Rect(400,400,80,80)
-    draw.rect(screen,RED,muteRect,1)
-    screen.blit(eigthNote,(400,400))
+    muteRect=Rect(420,20,50,50)
+    draw.rect(screen,BLACK,muteRect,2)
+    screen.blit(eigthNote,(420,22))
 
     mx,my=mouse.get_pos()
     mb=mouse.get_pressed()
     if state is not None:
         if state:
             if muteRect.collidepoint(mx, my) and pause == False:
-               pause=True
-               if pause:
-                    mixer.music.pause()
-                    screen.blit(mutePic,(400,400))
-        else:
-            if muteRect.collidepoint(mx,my) and pause == True:
+                pause=True
+                mixer.music.pause()
+            elif muteRect.collidepoint(mx,my) and pause == True:
                 pause = False
-                if not pause:
-                    mixer.music.pause()
+                mixer.music.unpause()
 
-    print(pause)
-
-
-
-
+    if pause:
+        screen.blit(mutePic, (422, 22))
     
 defC=None
 
@@ -323,21 +317,11 @@ def lev1():
             if evt.type==MOUSEBUTTONDOWN:
                 click=True
                 music(True)
-                # if muteRect.collidepoint(mx, my) and pause == False:
-                #     pause = True
-                #     if pause:
-                #         mixer.music.pause()
-                #         screen.blit(mutePic, (400, 400))
-                #
-                # elif muteRect.collidepoint(mx, my) and pause == True:
-                #     pause = False
-                #     if not pause:
-                #         mixer.music.pause()
+
 
             if evt.type==MOUSEBUTTONUP:
 
                 click=False
-                music(False)
         music(None)
         mx,my=mouse.get_pos()
         mb=mouse.get_pressed()
@@ -387,8 +371,10 @@ def lev2():
                 return "exit"
             if evt.type==MOUSEBUTTONDOWN:
                 click=True
+                music(True)
             if evt.type==MOUSEBUTTONUP:
                 click=False
+        music(None)
         mx,my=mouse.get_pos()
         mb=mouse.get_pressed()
 
@@ -428,8 +414,10 @@ def lev3():
                 return "exit"
             if evt.type==MOUSEBUTTONDOWN:
                 click=True
+                music(True)
             if evt.type==MOUSEBUTTONUP:
                 click=False
+        music(None)
         mx,my=mouse.get_pos()
         mb=mouse.get_pressed()
 
@@ -469,8 +457,10 @@ def lev4():
                 return "exit"
             if evt.type==MOUSEBUTTONDOWN:
                 click=True
+                music(True)
             if evt.type==MOUSEBUTTONUP:
                 click=False
+        music(None)
         mx,my=mouse.get_pos()
         mb=mouse.get_pressed()
 
@@ -510,8 +500,10 @@ def lev5():
                 return "exit"
             if evt.type==MOUSEBUTTONDOWN:
                 click=True
+                music(True)
             if evt.type==MOUSEBUTTONUP:
                 click=False
+        music(None)
         mx,my=mouse.get_pos()
         mb=mouse.get_pressed()
         print(mx,my)
@@ -622,13 +614,15 @@ def main():
                 return "exit"
             if evnt.type==MOUSEBUTTONDOWN:
                 click=True
+                music(True)
+
             if evnt.type==MOUSEBUTTONUP:
                 click=False
+        music(None)
         screen.blit(mainMenu,(0,0))
         backButton=Rect(950,650,50,50)
-        musicButton=Rect(870,650,50,50)
         draw.rect(screen,RED,backButton,3)
-        draw.rect(screen,RED,musicButton,3)
+
         screen.blit(crossPic,(960,660))
 
         for i in range(len(buttons)):
