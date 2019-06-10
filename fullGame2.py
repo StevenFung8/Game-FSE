@@ -167,8 +167,6 @@ activeDefenses=[]
 
 def prep(screen,towerPos):
     global defC
-    global ready
-    global activeDefenses
     global money
     readyRect=Rect(830,120,179,69)
     upgradeRect=Rect(750,662,70,30)
@@ -198,65 +196,91 @@ def prep(screen,towerPos):
 
     if readyRect.collidepoint(mx,my):
         draw.rect(screen,(255,255,0),readyRect,2)
-        if mb[0]==1:
+        if click:
             ready=True
 
     for i in range(len(buyRects)):
         if buyRects[i].collidepoint(mx,my):
             draw.rect(screen,YELLOW,buyRects[i],2)
-            if mb[0]==1:
+            if click:
                 defC=int(i)
 
     if defC!=None:
         draw.rect(screen,GREEN,buyRects[defC],2)
-        screen.blit(towerDescription[defC],(620,630))
-        txtUpgrade=txtFont2.render("UPGRADE?",True,BLACK)
-        txtuCost=txtFont2.render("$%2i"%(defenses[defC].uCost),True,BLACK)
+        screen.blit(towerDescription[defC],(620,630))      
         cancelRect=Rect(20,125,125,30)
-
-        screen.blit(txtUpgrade,(650,670))
-        screen.blit(txtuCost,(763,670))
         screen.blit(cancelPic,(20,125))
-        
-        if upgradeRect.collidepoint(mx,my):
-            draw.rect(screen,GREEN,upgradeRect,2)
-        else:
-            draw.rect(screen,BLACK,upgradeRect,2)
 
         for i in range(len(towerPos)):
             if towerPos[i][1]==False:
                 draw.rect(screen,RED,towerPos[i][0],3)
                 if towerPos[i][0].collidepoint(mx,my):
                     draw.rect(screen,YELLOW,towerPos[i][0],3)
-                    if mb[0]==1 and money-defenses[defC].price>=0:
-                        activeDefenses.append([defensePics[defC],towerPos[i][2],defenses[defC],towerPos[i][4],defenses[defC].damage])
+                    if click and money-defenses[defC].price>=0:
+                        activeDefenses.append([defensePics[defC],towerPos[i][2],defenses[defC],towerPos[i][4],int(defenses[defC].damage),defenses[defC].uCost])
                         money-=defenses[defC].price
                         towerPos[i][1]=True
+                        towerPos[i][5]=defC
                     
         if cancelRect.collidepoint(mx,my):
             draw.rect(screen,RED,cancelRect,2)
-            if mb[0]==1:
+            if click:
                 defC=None
 
     if defC==None:
+        select=True
         for i in towerPos:
             if i[0].collidepoint(mx,my) and i[1]==True:
                 draw.rect(screen,YELLOW,i[0],3)
-                if mb[0]==1:
+                if click:
                     i[3]=True
-            if i[3]==True:
+                    #select=False
+            if i[3]==True and select:
+                select=False
+                draw.rect(screen,GREEN,buyRects[i[5]],2)
+                screen.blit(towerDescription[i[5]],(620,630))
+                txtUpgrade=txtFont2.render("UPGRADE?",True,BLACK)
+                #txtuCost=txtFont2.render("$%i"%(defenses[i[5]].uCost),True,BLACK)
+                for a in activeDefenses:
+                    if a[1]==i[2]:
+                        if type(a[5])==int:
+                            txtuCost=txtFont2.render("$%i"%(a[5]),True,BLACK)
+                        else:
+                            txtuCost=txtFont2.render(a[5],True,BLACK)
+                cancelRect=Rect(20,125,125,30)
+
+                screen.blit(txtUpgrade,(650,670))
+                screen.blit(txtuCost,(763,670))
+                screen.blit(cancelPic,(20,125))
+                    
+                if upgradeRect.collidepoint(mx,my):
+                    if type(a[5])==int:
+                        draw.rect(screen,GREEN,upgradeRect,2)
+                    else:
+                        draw.rect(screen,BLACK,upgradeRect,2)
+                    if click:
+                        for a in activeDefenses:
+                            if a[1]==i[2]:
+                                if money-defenses[i[5]].uCost>=0:
+                                    money-=defenses[i[5]].uCost
+                                a[4]+=10*(i[5]+1)
+                                a[5]=None
+                else:
+                    draw.rect(screen,BLACK,upgradeRect,2)
+                    
                 deleteRect=Rect(20,125,125,30)
                 draw.rect(screen,GREEN,i[0],3)
                 screen.blit(deletePic,(20,125))
                 if deleteRect.collidepoint(mx,my):
                     draw.rect(screen,RED,deleteRect,2)
-                    if mb[0]==1:
+                    if click:
                         i[3]=False
                         i[1]=False
                         for a in activeDefenses:
                             if a[3]==i[4]:
                                 activeDefenses.remove(a)
                                 money+=a[2].refund
+                                print(activeDefenses)     
 '''                        
 def upgrade():
     global money
@@ -274,18 +298,19 @@ def lev1():
     global activeDefenses
     global money
     global score
+    global click
     running=True
     myclock=time.Clock()
     mixer.init()
     mixer.music.load("FSE-Assets/sound/bgMusic.mp3")
     mixer.music.play(-1)
     quitRect=Rect(260,25,150,40)
-                #rect, status, blit position, edit status, rect #
-    towerPos1=[[Rect(115,273,50,50),False,(115,273),False,1],[Rect(264,114,50,50),False,(264,114),False,2],
-               [Rect(319,242,50,50),False,(319,242),False,3],[Rect(217,529,50,50),False,(217,529),False,4],
-               [Rect(388,342,50,50),False,(388,342),False,5],[Rect(570,342,50,50),False,(570,342),False,6],
-               [Rect(750,342,50,50),False,(750,342),False,7],[Rect(418,503,50,50),False,(418,503),False,8],
-               [Rect(598,503,50,50),False,(598,503),False,9],[Rect(778,503,50,50),False,(778,503),False,10]]
+                #rect, status, blit position, edit status, rect, active tower #
+    towerPos1=[[Rect(115,273,50,50),False,(115,273),False,1,None],[Rect(264,114,50,50),False,(264,114),False,2,None],
+               [Rect(319,242,50,50),False,(319,242),False,3,None],[Rect(217,529,50,50),False,(217,529),False,4,None],
+               [Rect(388,342,50,50),False,(388,342),False,5,None],[Rect(570,342,50,50),False,(570,342),False,6,None],
+               [Rect(750,342,50,50),False,(750,342),False,7,None],[Rect(418,503,50,50),False,(418,503),False,8,None],
+               [Rect(598,503,50,50),False,(598,503),False,9,None],[Rect(778,503,50,50),False,(778,503),False,10,None]]
     while running:
         myclock.tick(60)
         drawScene1(screen)
@@ -300,6 +325,7 @@ def lev1():
                 return "exit"
             if evt.type==MOUSEBUTTONDOWN:
                 click=True
+                print(click)
             if evt.type==MOUSEBUTTONUP:
                 click=False
         mx,my=mouse.get_pos()
@@ -335,6 +361,7 @@ def lev2():
     global activeDefenses
     global money
     global score
+    global click
     running=True
     myclock=time.Clock()
     mixer.init()
@@ -389,6 +416,7 @@ def lev3():
     global activeDefenses
     global money
     global score
+    global click
     running=True
     myclock=time.Clock()
     mixer.init()
@@ -443,6 +471,7 @@ def lev4():
     global activeDefenses
     global money
     global score
+    global click
     running=True
     myclock=time.Clock()
     mixer.init()
@@ -497,6 +526,7 @@ def lev5():
     global activeDefenses
     global money
     global score
+    global click
     running=True
     myclock=time.Clock()
     mixer.init()
