@@ -93,7 +93,7 @@ infantry=enemyType('infantry',1.5,100,5)
 transport=enemyType('transport',1.7,400,10)
 motorcycle=enemyType('motorcycle',2,250,5)
 lightTank=enemyType('lightTank',1,700,15)
-heavyTank=enemyType('heavyTank',0.7,1000,20)
+heavyTank=enemyType('heavyTank',9,1000,20)
 tankDestroyer=enemyType('tankDestroyer',0.8,1100,25)
 
 class towerType:
@@ -215,6 +215,7 @@ activeDefenses=[]
 def prep(screen,towerPos):
     global defC
     global money
+    global ready 
     readyRect=Rect(830,120,179,69)
     upgradeRect=Rect(750,662,70,30)
     buyRects=[Rect(607,28,59,63),Rect(682,28,61,63),Rect(758,28,61,63),Rect(834,28,61,63),Rect(908,28,61,63),Rect(982,28,61,63)]
@@ -243,7 +244,7 @@ def prep(screen,towerPos):
 
     if readyRect.collidepoint(mx,my):
         draw.rect(screen,(255,255,0),readyRect,2)
-        if click:
+        if mb[0]==1:
             ready=True
 
     for i in range(len(buyRects)):
@@ -275,19 +276,16 @@ def prep(screen,towerPos):
                 defC=None
 
     if defC==None:
-        select=True
-        for i in towerPos1:
+        for i in towerPos:
             if i[0].collidepoint(mx,my) and i[1]==True:
                 draw.rect(screen,YELLOW,i[0],3)
                 if click:
                     i[3]=True
-                    #select=False
-            if i[3]==True and select:
-                select=False
+            if i[3]==True:
                 draw.rect(screen,GREEN,buyRects[i[5]],2)
                 screen.blit(towerDescription[i[5]],(620,630))
                 txtUpgrade=txtFont2.render("UPGRADE?",True,BLACK)
-                #txtuCost=txtFont2.render("$%i"%(defenses[i[5]].uCost),True,BLACK)
+                
                 for a in activeDefenses:
                     if a[1]==i[2]:
                         if type(a[5])==int:
@@ -295,7 +293,6 @@ def prep(screen,towerPos):
                         else:
                             txtuCost=txtFont2.render(a[5],True,BLACK)
                 cancelRect=Rect(20,125,125,30)
-
                 screen.blit(txtUpgrade,(650,670))
                 screen.blit(txtuCost,(763,670))
                 screen.blit(cancelPic,(20,125))
@@ -327,18 +324,8 @@ def prep(screen,towerPos):
                             if a[3]==i[4]:
                                 activeDefenses.remove(a)
                                 money+=a[2].refund
-                                print(activeDefenses)     
-'''                        
-def upgrade():
-    global money
-    for i in range(len(buyRects)):
-        if upgradeRect.collidepoint(mx,my):
-            if click:
-                money-=defenses[i].uCost
-                defenses[i].uCost = None
-                defenses[i].damage+=10*(i+1)
-'''
-
+                                print(activeDefenses)
+                                
 def prev1():
     running=True
     mixer.init()
@@ -369,6 +356,7 @@ def prev2():
     mixer.music.load("FSE-Assets/sound/menuMusic2.mp3")
     mixer.music.play(-1)
     pressRect=Rect(380,320,300,100)
+    click=False
     while running:
         screen.blit(pr2,(0,0))
         screen.blit(pressToStart,(380,320))
@@ -376,13 +364,17 @@ def prev2():
             if evt.type==QUIT:
                 running=False
                 return "exit"
+            if evt.type==MOUSEBUTTONDOWN:
+                click=True
+            if evt.type==MOUSEBUTTONUP:
+                click=False
             
         mx,my=mouse.get_pos()
         mb=mouse.get_pressed()
 
         if pressRect.collidepoint(mx,my):
             draw.rect(screen,RED,pressRect,3)
-            if mb[0]==1:
+            if mb[0]==1 and click==False:
                 return "lev2"
             
         display.flip()
@@ -467,7 +459,6 @@ def lev1():
     global score
 
     global click
-    global towerPos1
     global gameOver
 
     running=True
@@ -484,9 +475,7 @@ def lev1():
                [Rect(750,342,50,50),False,(750,342),False,7,None],[Rect(418,503,50,50),False,(418,503),False,8,None],
                [Rect(598,503,50,50),False,(598,503),False,9,None],[Rect(778,503,50,50),False,(778,503),False,10,None]]
 
-                
     enemy=[[-100,190,0,heavyTank],[-200,190,0,heavyTank],[-300,190,0,heavyTank],[-400,190,0,heavyTank],[-500,190,0,heavyTank]]
-
 
     while running:
         myclock.tick(60)
@@ -502,7 +491,6 @@ def lev1():
                 return "exit"
             if evt.type==MOUSEBUTTONDOWN:
                 click=True
-                print(click)
             if evt.type==MOUSEBUTTONUP:
                 click=False
         mx,my=mouse.get_pos()
@@ -553,7 +541,7 @@ def lev1():
                     return "lev1"
             if mainRect.collidepoint(mx,my):
                 draw.rect(screen,RED,mainRect,3)
-                if mb[0]==1:
+                if mb[0]==1 and click==False:
                     defC=None
                     editCond=False
                     activeDefenses=[]
@@ -562,6 +550,7 @@ def lev1():
                     gameOver=False
                     money=2000
                     score=0
+                    return "levelSelect"
         display.flip()
 
     return "levelSelect"
@@ -572,9 +561,7 @@ def lev2():
     global activeDefenses
     global money
     global score
-
     global click
-    global towerPos2
     global gameOver
 
     running=True
@@ -622,7 +609,6 @@ def lev2():
                 money=2000
                 score=0
                 return "levelSelect"
-        
         if ready==False:
             prep(screen,towerPos2)
 
@@ -630,7 +616,6 @@ def lev2():
             genEnemies(enemy)
             moveEnemy2(screen,enemy)
             baseHealth(enemy)
-
         if gameOver:
             endScreen=Surface((width,height),SRCALPHA)
             endScreen.fill((220,220,220,127))
@@ -662,6 +647,7 @@ def lev2():
                     gameOver=False
                     money=2000
                     score=0
+                    
         display.flip()
     return "levelSelect"
 
@@ -672,7 +658,7 @@ def lev3():
     global money
     global score
     global click
-    global towerPos3
+
     running=True
     myclock=time.Clock()
     mixer.init()
@@ -729,7 +715,7 @@ def lev4():
     global money
     global score
     global click
-    global towerPos4
+
     running=True
     myclock=time.Clock()
     mixer.init()
@@ -786,7 +772,7 @@ def lev5():
     global money
     global score
     global click
-    global towerPos5
+
     running=True
     myclock=time.Clock()
     mixer.init()
@@ -891,11 +877,16 @@ def levelSelect():
     levelRects=[Rect(122,260,240,160),Rect(407,262,250,160),Rect(696,262,250,160),Rect(257,493,240,160),Rect(564,492,240,160)]
     levels=["prev1","prev2","prev3","prev4","prev5"]
     running=True
+    click=False
     while running:
         for evnt in event.get():
             if evnt.type==QUIT:
                 running=False
                 return "exit"
+            if evnt.type==MOUSEBUTTONDOWN:
+                click=True
+            if evnt.type==MOUSEBUTTONUP:
+                click=False
         screen.blit(levelSelectMenu,(0,0))
         screen.blit(crossPic,(960,50))
         backButton=Rect(950,40,50,50)
@@ -910,7 +901,7 @@ def levelSelect():
         for i in range(len(levelRects)):
             if levelRects[i].collidepoint(mx,my):
                 draw.rect(screen,RED,levelRects[i],3)
-                if mb[0]==1:
+                if mb[0]==1 and click==False:
                     return levels[i]
         display.flip()
     return "main"
