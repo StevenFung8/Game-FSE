@@ -49,7 +49,7 @@ infantry=enemyType('infantry',1.5,200,5)
 transport=enemyType('transport',1.7,400,5)
 motorcycle=enemyType('motorcycle',2,250,10)
 lightTank=enemyType('lightTank',1,700,15)
-heavyTank=enemyType('heavyTank',0.7,1000,20)
+heavyTank=enemyType('heavyTank',0.7,900,20)
 
 #fonts
 
@@ -65,7 +65,6 @@ def genEnemies(enemy,enemyList):
         enemy.append(enemyList[0])
         enemyList.remove(enemyList[0])
         delay=30
-    print(delay)
     if delay>0:
         delay-=1
 
@@ -126,15 +125,15 @@ def baseHealth(enemy):
            
 def healthBars(enemy):
     for i in enemy:
-        draw.rect(screen,BLACK,(i[0]+14,i[1]-11,52,9),0)
-        draw.rect(screen,GREEN,(i[0]+15,i[1]-10,50,7),0)
+        draw.rect(screen,BLACK,(i[0]+14,i[1]-11,i[3].health/10+2,9),0)
+        draw.rect(screen,GREEN,(i[0]+15,i[1]-10,i[3].health/10,7),0)
         
 def drawScene(screen):
     screen.blit(map1,(0,0))
     
         #[x,y,FRAME,className]
 enemy=[]
-enemyList=[[-100,190,0,infantry],[-100,190,0,infantry],[-100,190,0,infantry]]
+enemyList=[[-100,190,0,infantry],[-200,190,0,infantry],[-300,190,0,infantry],[-450,190,0,heavyTank]]
 
 myclock=time.Clock()
 running=True

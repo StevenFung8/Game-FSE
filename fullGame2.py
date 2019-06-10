@@ -27,9 +27,20 @@ cancelPic=image.load("FSE-Assets/cancelRect.png")
 deletePic=image.load("FSE-Assets/deleteRect.png")
 mutePic=image.load("FSE-Assets/musicPicMUTE.png")
 eigthNote=image.load("FSE-Assets/musicPic.png")
+blackHeart=image.load("FSE-Assets/blackHeart.png")
+loseRect=image.load("FSE-Assets/loseRect.png")
+pressToStart=image.load("FSE-Assets/previews/pushtostart.png")
 
-txtFont=font.SysFont("Stencil",25)
+txtFont=font.SysFont("FSE-Assets/fonts/kremlin.ttf",25)
 txtFont2=font.SysFont("Stencil",17)
+txtFont3=font.SysFont("Stencil",20)
+
+#loading map previews
+pr1=image.load("FSE-Assets/previews/lvl1prev.jpg")
+pr2=image.load("FSE-Assets/previews/lvl2prev.jpg")
+pr3=image.load("FSE-Assets/previews/lvl3prev.jpg")
+pr4=image.load("FSE-Assets/previews/lvl4prev.jpg")
+pr5=image.load("FSE-Assets/previews/lvl5prev.jpg")
 
 #loading maps
 map1=image.load("FSE-Assets/Maps/map1.jpg")
@@ -44,10 +55,11 @@ hudRects=transform.scale(hudRect,(200,95))
 quitPic=transform.scale(quitP,(150,40))
 crossPic=transform.scale(cross,(30,30))
 dialoguePic=transform.scale(dialogueP,(400,110))
+blackHeart=transform.scale(blackHeart,(25,25))
 
-money=2000
+money=6000
 score=0
-
+'''
 class AirPods:
     value = float("-Inf")
     price = "Too high"
@@ -67,7 +79,7 @@ ryanAirPod = AirPods()
 chris = Asian("Chris")
 
 chris.checkItemValue(ryanAirPod)
-
+'''
 class enemyType:
 
     def __init__(self,name,speed,health,damage):
@@ -106,10 +118,10 @@ def genEnemies(enemy):
     pics=[]
     for i in enemy:
         img=[]
-        img.append(image.load(i[2].filename))
-        img.append(transform.rotate(image.load(i[2].filename),-90))
-        img.append(transform.rotate(image.load(i[2].filename),-270))
-        img.append(transform.rotate(image.load(i[2].filename),-180))
+        img.append(image.load(i[3].filename))
+        img.append(transform.rotate(image.load(i[3].filename),-90))
+        img.append(transform.rotate(image.load(i[3].filename),-270))
+        img.append(transform.rotate(image.load(i[3].filename),-180))
         pics.append(img)
     return pics
 
@@ -122,28 +134,62 @@ def moneyScore(screen):
     screen.blit(txtMoney,(100,30))
     screen.blit(txtScore,(110,84))
 
-def moveEnemy2(screen,enemyList,enemy):
-    frame=0
+def baseHealth(enemy):
+    global gameOver
+    screen.blit(blackHeart,(940,350))
+    bars=100
     count=0
+    draw.rect(screen,BLACK,(944,374,102,12),0)
+    for i in enemy:
+        if i[0]>=900:
+            bars-=i[3].damage
+            if bars<=0:
+                bars=0
+    
+    baseHealth=txtFont3.render(str(bars),True,BLACK)
+    screen.blit(baseHealth,(965,353))
+    draw.rect(screen,RED,(1044,375,bars-100,10),0)
+    draw.rect(screen,GREEN,(945,375,bars,10),0)
+
+    if bars==0:
+        gameOver=True
+
+def moveEnemy(screen,enemy):
+    count=-1
+    for i in enemy:
+        if i[0]<220:
+            i[0]+=i[3].speed
+            i[2]=0
+        if i[0]>=220 and i[1]<420:
+            i[1]+=i[3].speed
+            i[2]=1
+        if i[1]>=410:
+            i[0]+=i[3].speed
+            i[2]=0
+        count+=1
+        screen.blit(pics[count][i[2]],i[:2])
+
+def moveEnemy2(screen,enemy):
+    count=-1
     for i in enemy:
         if i[0]<315:
-            i[0]+=i[2].speed
-            frame=0
+            i[0]+=i[3].speed
+            i[2]=0
         if i[0]>=315 and i[1]>210:
-            i[1]-=i[2].speed
-            frame=2
+            i[1]-=i[3].speed
+            i[2]=2
         if i[1]<=210 and i[0]<720:
-            i[0]+=i[2].speed
-            frame=0
+            i[0]+=i[3].speed
+            i[2]=0
         if i[0]>=690 and i[1]<670:
-            i[1]+=i[2].speed*2
-            frame=1
+            i[1]+=i[3].speed*2
+            i[2]=1
         if i[1]>=670 and i[0]==690:
-            i[0]+=i[2].speed*2
-            frame=0
-
-        screen.blit(enemyList[count][int(frame)],(i[0],i[1]))
+            i[0]+=i[3].speed*2
+            i[2]=0
+            
         count+=1
+        screen.blit(pics[count][i[2]],i[:2])
 
 def drawScene1(screen):
     screen.blit(map1,(0,0))
@@ -163,6 +209,7 @@ def hudElements(screen):
 
 defC=None
 ready=False
+gameOver=False
 activeDefenses=[]
 
 def prep(screen,towerPos):
@@ -268,12 +315,133 @@ def upgrade():
                 defenses[i].damage+=10*(i+1)
 '''
 
+def prev1():
+    running=True
+    mixer.init()
+    mixer.music.load("FSE-Assets/sound/menuMusic2.mp3")
+    mixer.music.play(-1)
+    pressRect=Rect(380,320,300,100)
+    while running:
+        screen.blit(pr1,(0,0))
+        screen.blit(pressToStart,(380,320))
+        for evt in event.get():
+            if evt.type==QUIT:
+                running=False
+                return "exit"
+            
+        mx,my=mouse.get_pos()
+        mb=mouse.get_pressed()
+
+        if pressRect.collidepoint(mx,my):
+            draw.rect(screen,RED,pressRect,3)
+            if mb[0]==1:
+                return "lev1"
+            
+        display.flip()
+
+def prev2():
+    running=True
+    mixer.init()
+    mixer.music.load("FSE-Assets/sound/menuMusic2.mp3")
+    mixer.music.play(-1)
+    pressRect=Rect(380,320,300,100)
+    while running:
+        screen.blit(pr2,(0,0))
+        screen.blit(pressToStart,(380,320))
+        for evt in event.get():
+            if evt.type==QUIT:
+                running=False
+                return "exit"
+            
+        mx,my=mouse.get_pos()
+        mb=mouse.get_pressed()
+
+        if pressRect.collidepoint(mx,my):
+            draw.rect(screen,RED,pressRect,3)
+            if mb[0]==1:
+                return "lev2"
+            
+        display.flip()
+
+def prev3():
+    running=True
+    mixer.init()
+    mixer.music.load("FSE-Assets/sound/menuMusic2.mp3")
+    mixer.music.play(-1)
+    pressRect=Rect(380,320,300,100)
+    while running:
+        screen.blit(pr3,(0,0))
+        screen.blit(pressToStart,(380,320))
+        for evt in event.get():
+            if evt.type==QUIT:
+                running=False
+                return "exit"
+            
+        mx,my=mouse.get_pos()
+        mb=mouse.get_pressed()
+
+        if pressRect.collidepoint(mx,my):
+            draw.rect(screen,RED,pressRect,3)
+            if mb[0]==1:
+                return "lev3"
+            
+        display.flip()
+
+def prev4():
+    running=True
+    mixer.init()
+    mixer.music.load("FSE-Assets/sound/menuMusic2.mp3")
+    mixer.music.play(-1)
+    pressRect=Rect(380,320,300,100)
+    while running:
+        screen.blit(pr4,(0,0))
+        screen.blit(pressToStart,(380,320))
+        for evt in event.get():
+            if evt.type==QUIT:
+                running=False
+                return "exit"
+            
+        mx,my=mouse.get_pos()
+        mb=mouse.get_pressed()
+
+        if pressRect.collidepoint(mx,my):
+            draw.rect(screen,RED,pressRect,3)
+            if mb[0]==1:
+                return "lev4"
+            
+        display.flip()
+
+def prev5():
+    running=True
+    mixer.init()
+    mixer.music.load("FSE-Assets/sound/menuMusic2.mp3")
+    mixer.music.play(-1)
+    pressRect=Rect(380,320,300,100)
+    while running:
+        screen.blit(pr5,(0,0))
+        screen.blit(pressToStart,(380,320))
+        for evt in event.get():
+            if evt.type==QUIT:
+                running=False
+                return "exit"
+            
+        mx,my=mouse.get_pos()
+        mb=mouse.get_pressed()
+
+        if pressRect.collidepoint(mx,my):
+            draw.rect(screen,RED,pressRect,3)
+            if mb[0]==1:
+                return "lev5"
+            
+        display.flip()
+
 def lev1():
     global defC
     global ready
     global activeDefenses
     global money
     global score
+    global gameOver
     running=True
     myclock=time.Clock()
     mixer.init()
@@ -286,6 +454,8 @@ def lev1():
                [Rect(388,342,50,50),False,(388,342),False,5],[Rect(570,342,50,50),False,(570,342),False,6],
                [Rect(750,342,50,50),False,(750,342),False,7],[Rect(418,503,50,50),False,(418,503),False,8],
                [Rect(598,503,50,50),False,(598,503),False,9],[Rect(778,503,50,50),False,(778,503),False,10]]
+    enemy=[[-100,190,0,heavyTank],[-200,190,0,heavyTank],[-300,190,0,heavyTank],[-400,190,0,heavyTank],[-500,190,0,heavyTank]]
+
     while running:
         myclock.tick(60)
         drawScene1(screen)
@@ -316,18 +486,52 @@ def lev1():
                 activeDefenses=[]
                 running=False
                 ready=False
+                gameOver=False
                 money=2000
                 score=0
                 return "levelSelect"
         if ready==False:
             prep(screen,towerPos1)
-        if ready==True:
+            
+        if ready==True and gameOver==False:
             genEnemies(enemy)
-            moveEnemy(screen,pics,enemy)
+            moveEnemy(screen,enemy)
+            baseHealth(enemy)
 
+        if gameOver:
+            endScreen=Surface((width,height),SRCALPHA)
+            endScreen.fill((220,220,220,127))
+            screen.blit(endScreen,(0,0))
+            screen.blit(loseRect,(300,200))
+            retryRect=Rect(330,380,128,50)
+            mainRect=Rect(490,380,187,50)
+            draw.rect(screen,RED,(945,375,100,10),0)
+            if retryRect.collidepoint(mx,my):
+                draw.rect(screen,RED,retryRect,3)
+                if mb[0]==1:
+                    defC=None
+                    editCond=False
+                    activeDefenses=[]
+                    running=False
+                    ready=False
+                    gameOver=False
+                    money=2000
+                    score=0
+                    return "lev1"
+            if mainRect.collidepoint(mx,my):
+                draw.rect(screen,RED,mainRect,3)
+                if mb[0]==1:
+                    defC=None
+                    editCond=False
+                    activeDefenses=[]
+                    running=False
+                    ready=False
+                    gameOver=False
+                    money=2000
+                    score=0
         display.flip()
 
-    return "main"
+    return "levelSelect"
 
 def lev2():
     global defC
@@ -335,6 +539,7 @@ def lev2():
     global activeDefenses
     global money
     global score
+    global gameOver
     running=True
     myclock=time.Clock()
     mixer.init()
@@ -345,6 +550,7 @@ def lev2():
                [Rect(225,125,50,50),False,(225,125),False,4],[Rect(425,125,50,50),False,(425,125),False,5],
                 [Rect(600,125,50,50),False,(600,125),False,6],[Rect(425,300,50,50),False,(425,300),False,7],[Rect(600,300,50,50),False,(600,300),False,8],
                [Rect(750,275,50,50),False,(750,275),False,9],[Rect(825,375,50,50),False,(825,375),False,10]]
+    enemy=[[-100,500,0,heavyTank],[-200,500,0,heavyTank],[-300,500,0,heavyTank],[-400,500,0,heavyTank],[-500,500,0,heavyTank]]
     while running:
         myclock.tick(60)
         drawScene2(screen)
@@ -378,10 +584,48 @@ def lev2():
                 money=2000
                 score=0
                 return "levelSelect"
+        
         if ready==False:
             prep(screen,towerPos2)
+
+        if ready==True and gameOver==False:
+            genEnemies(enemy)
+            moveEnemy2(screen,enemy)
+            baseHealth(enemy)
+
+        if gameOver:
+            endScreen=Surface((width,height),SRCALPHA)
+            endScreen.fill((220,220,220,127))
+            screen.blit(endScreen,(0,0))
+            screen.blit(loseRect,(300,200))
+            retryRect=Rect(330,380,128,50)
+            mainRect=Rect(490,380,187,50)
+            draw.rect(screen,RED,(945,375,100,10),0)
+            if retryRect.collidepoint(mx,my):
+                draw.rect(screen,RED,retryRect,3)
+                if mb[0]==1:
+                    defC=None
+                    editCond=False
+                    activeDefenses=[]
+                    running=False
+                    ready=False
+                    gameOver=False
+                    money=2000
+                    score=0
+                    return "lev2"
+            if mainRect.collidepoint(mx,my):
+                draw.rect(screen,RED,mainRect,3)
+                if mb[0]==1:
+                    defC=None
+                    editCond=False
+                    activeDefenses=[]
+                    running=False
+                    ready=False
+                    gameOver=False
+                    money=2000
+                    score=0
         display.flip()
-    return "main"
+    return "levelSelect"
 
 def lev3():
     global defC
@@ -435,7 +679,7 @@ def lev3():
         if ready==False:
             prep(screen,towerPos3)
         display.flip()
-    return "main"
+    return "levelSelect"
 
 def lev4():
     global defC
@@ -489,7 +733,7 @@ def lev4():
         if ready==False:
             prep(screen,towerPos4)
         display.flip()
-    return "main"
+    return "levelSelect"
 
 def lev5():
     global defC
@@ -543,7 +787,7 @@ def lev5():
         if ready==False:
             prep(screen,towerPos5)
         display.flip()
-    return "main"
+    return "levelSelect"
 
 def creds():
     global mx,my
@@ -597,7 +841,7 @@ def levelSelect():
     mixer.music.load("FSE-Assets/sound/menuMusic2.mp3")
     mixer.music.play(-1)
     levelRects=[Rect(122,260,240,160),Rect(407,262,250,160),Rect(696,262,250,160),Rect(257,493,240,160),Rect(564,492,240,160)]
-    levels=["lev1","lev2","lev3","lev4","lev5"]
+    levels=["prev1","prev2","prev3","prev4","prev5"]
     running=True
     while running:
         for evnt in event.get():
@@ -668,6 +912,7 @@ running=True
 current="main"
 
 while current!="exit":
+    #menu
     if current=="main":
         current=main()
     if current=="levelSelect":
@@ -676,6 +921,18 @@ while current!="exit":
         current=instructions()
     if current=="credits":
         current=creds()
+    #previews
+    if current=="prev1":
+        current=prev1()
+    if current=="prev2":
+        current=prev2()
+    if current=="prev3":
+        current=prev3()
+    if current=="prev4":
+        current=prev4()
+    if current=="prev5":
+        current=prev5()
+    #levels
     if current=="lev1":
         current=lev1()
     if current=="lev2":
