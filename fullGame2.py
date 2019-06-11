@@ -90,11 +90,12 @@ chris.checkItemValue(ryanAirPod)
 '''
 class enemyType:
 
-    def __init__(self,name,speed,health,damage):
+    def __init__(self,name,speed,health,damage,prize):
         self.name=name
         self.speed=speed
         self.health=health
         self.damage=damage
+        self.prize=prize
         self.filename="FSE-Assets/Enemies/"+name+".png"
 
 infantry=enemyType('infantry',1.5,100,5)
@@ -258,6 +259,7 @@ def prep(screen,towerPos):
     global defC
     global money
     global ready
+    global click
     readyRect=Rect(830,120,179,69)
     upgradeRect=Rect(750,662,70,30)
     buyRects=[Rect(607,28,59,63),Rect(682,28,61,63),Rect(758,28,61,63),Rect(834,28,61,63),Rect(908,28,61,63),Rect(982,28,61,63)]
@@ -341,6 +343,7 @@ def prep(screen,towerPos):
                 draw.rect(screen,GREEN,buyRects[i[5]],2)
                 screen.blit(towerStats[i[5]],(620,630))
                 txtUpgrade=txtFont2.render("UPGRADE?",True,BLACK)
+                draw.rect(screen,BLACK,upgradeRect,2)
                 for a in activeDefenses:
                     if a[1]==i[2]:
                         damageDes=txtFont2.render("%i"%(a[4]),True,BLACK)
@@ -349,24 +352,24 @@ def prep(screen,towerPos):
                             txtuCost=txtFont2.render("$%i"%(a[5]),True,BLACK)
                         else:
                             txtuCost=txtFont2.render(a[5],True,BLACK)
+                            
+                        if upgradeRect.collidepoint(mx,my):
+                            if type(a[5])==int:
+                                draw.rect(screen,GREEN,upgradeRect,2)
+                                if click:
+                                    a[4]+=10*(i[5]+1)
+                                    a[5]=None
+                                    if money-defenses[i[5]].uCost>=0:
+                                        money-=defenses[i[5]].uCost
+                    
                 cancelRect=Rect(20,125,125,30)
 
                 screen.blit(txtUpgrade,(650,670))
                 screen.blit(txtuCost,(763,670))
                 screen.blit(cancelPic,(20,125))
-                draw.rect(screen,BLACK,upgradeRect,2)
                 
-                if upgradeRect.collidepoint(mx,my):
-                    draw.rect(screen,GREEN,upgradeRect,2)
-                    if click:
-                        for a in activeDefenses:
-                            if a[1]==i[2]:
-                                if money-defenses[i[5]].uCost>=0:
-                                    money-=defenses[i[5]].uCost
-                                a[4]+=10*(i[5]+1)
-                                a[5]=None
-                
-                    
+
+                                    
                 cancelRect=Rect(20,125,125,30)
                 deleteRect=Rect(150,125,125,30)
                 draw.rect(screen,GREEN,i[0],3)
@@ -396,8 +399,21 @@ def upgrade():
                 money-=defenses[i].uCost
                 defenses[i].uCost = None
                 defenses[i].damage+=10*(i+1)
+            
 '''
-
+def checkRange(enemy,defense):
+    global money
+    enemyRect=[Rect(int(enemy[i][X]),int(enemy[i][Y]),30,30) for i in range(len(enemy))]
+    for i in range(len(enemy)):
+        dist=sqrt((int(soldier[X])-(enemyRect[i][0]+enemyRect[i][2]//2))**2+(int(soldier[Y])-(enemyRect[i][1]+enemyRect[i][3]//2))**2)
+        #print(dist)
+        #print(enemy[i][HP])
+        if dist<=180:
+            enemy[i][HP]-=soldier[2]
+            if enemy[i][HP]<=0:
+                money+=enemy[i][PRIZE]
+                print(money)
+                del enemy[i]
 def prev1():
     running=True
     mixer.music.load("FSE-Assets/sound/startMusic2.mp3")
