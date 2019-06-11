@@ -221,6 +221,12 @@ def prep(screen,towerPos):
     buyRects=[Rect(607,28,59,63),Rect(682,28,61,63),Rect(758,28,61,63),Rect(834,28,61,63),Rect(908,28,61,63),Rect(982,28,61,63)]
     cancelRect=Rect(20,125,125,30)
 
+    ##generating defense images
+    defenses=[soldier,heavyMG,antiTank,bunker,fortress,heavyGun]
+    defensePics=[]
+    for i in defenses:
+        defensePics.append(image.load(i.filename))
+
     txtD1=txtFont2.render("Basic Soldier - Cost: $250, Damage: 25",True,BLACK)
     txtD2=txtFont2.render("Machine Gun - Cost: $500, Damage: 35",True,BLACK)
     txtD3=txtFont2.render("Anti-Tank Gun - Cost: $800, Damage: 80",True,BLACK)
@@ -228,14 +234,16 @@ def prep(screen,towerPos):
     txtD5=txtFont2.render("Fortress - Cost: $1250, Damage: 150",True,BLACK)
     txtD6=txtFont2.render("Heavy AT Gun - Cost: $1500, Damage: 200",True,BLACK)
 
+    txtS1=txtFont2.render("Basic Soldier - Damage:",True,BLACK)
+    txtS2=txtFont2.render("Machine Gun - Damage:",True,BLACK)
+    txtS3=txtFont2.render("Anti-Tank Gun - Damage:",True,BLACK)
+    txtS4=txtFont2.render("Bunker - Damage:",True,BLACK)
+    txtS5=txtFont2.render("Fortress - Damage:",True,BLACK)
+    txtS6=txtFont2.render("Heavy AT Gun - Damage:",True,BLACK)
+
     noMoney=txtFont2.render("Not enough money for this tower.",True,BLACK)
     towerDescription=[txtD1,txtD2,txtD3,txtD4,txtD5,txtD6]
-
-    ##generating defense images
-    defenses=[soldier,heavyMG,antiTank,bunker,fortress,heavyGun]
-    defensePics=[]
-    for i in defenses:
-        defensePics.append(image.load(i.filename))
+    towerStats=[txtS1,txtS2,txtS3,txtS4,txtS5,txtS6]
 
     draw.rect(screen,RED,readyRect,2)
     screen.blit(readyPic,(830,120))
@@ -283,10 +291,12 @@ def prep(screen,towerPos):
                     i[3]=True
             if i[3]==True:
                 draw.rect(screen,GREEN,buyRects[i[5]],2)
-                screen.blit(towerDescription[i[5]],(620,630))
+                screen.blit(towerStats[i[5]],(620,630))
                 txtUpgrade=txtFont2.render("UPGRADE?",True,BLACK)
                 for a in activeDefenses:
                     if a[1]==i[2]:
+                        damageDes=txtFont2.render("%i"%(a[4]),True,BLACK)
+                        screen.blit(damageDes,(850,630))
                         if type(a[5])==int:
                             txtuCost=txtFont2.render("$%i"%(a[5]),True,BLACK)
                         else:
