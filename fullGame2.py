@@ -232,10 +232,18 @@ def prep(screen,towerPos):
     txtD4=txtFont2.render("Bunker - Cost: $1000, Damage: 100",True,BLACK)
     txtD5=txtFont2.render("Fortress - Cost: $1250, Damage: 150",True,BLACK)
     txtD6=txtFont2.render("Heavy AT Gun - Cost: $1500, Damage: 200",True,BLACK)
+    
+    txtS1=txtFont2.render("Basic Soldier - Damage:",True,BLACK)
+    txtS2=txtFont2.render("Machine Gun - Damage:",True,BLACK)
+    txtS3=txtFont2.render("Anti-Tank Gun - Damage:",True,BLACK)
+    txtS4=txtFont2.render("Bunker - Damage:",True,BLACK)
+    txtS5=txtFont2.render("Fortress - Damage:",True,BLACK)
+    txtS6=txtFont2.render("Heavy AT Gun - Damage:",True,BLACK)
 
     noMoney=txtFont2.render("Not enough money for this tower.",True,BLACK)
     towerDescription=[txtD1,txtD2,txtD3,txtD4,txtD5,txtD6]
-
+    towerStats=[txtS1,txtS2,txtS3,txtS4,txtS5,txtS6]
+    
     ##generating defense images
     defenses=[soldier,heavyMG,antiTank,bunker,fortress,heavyGun]
     defensePics=[]
@@ -289,10 +297,12 @@ def prep(screen,towerPos):
                     i[3]=True
             if i[3]==True:
                 draw.rect(screen,GREEN,buyRects[i[5]],2)
-                screen.blit(towerDescription[i[5]],(620,630))
+                screen.blit(towerStats[i[5]],(620,630))
                 txtUpgrade=txtFont2.render("UPGRADE?",True,BLACK)
                 for a in activeDefenses:
                     if a[1]==i[2]:
+                        damageDes=txtFont2.render("%i"%(a[4]),True,BLACK)
+                        screen.blit(damageDes,(850,630))
                         if type(a[5])==int:
                             txtuCost=txtFont2.render("$%i"%(a[5]),True,BLACK)
                         else:
@@ -302,12 +312,10 @@ def prep(screen,towerPos):
                 screen.blit(txtUpgrade,(650,670))
                 screen.blit(txtuCost,(763,670))
                 screen.blit(cancelPic,(20,125))
-                    
+                draw.rect(screen,BLACK,upgradeRect,2)
+                
                 if upgradeRect.collidepoint(mx,my):
-                    if type(a[5])==int:
-                        draw.rect(screen,GREEN,upgradeRect,2)
-                    else:
-                        draw.rect(screen,BLACK,upgradeRect,2)
+                    draw.rect(screen,GREEN,upgradeRect,2)
                     if click:
                         for a in activeDefenses:
                             if a[1]==i[2]:
@@ -315,12 +323,14 @@ def prep(screen,towerPos):
                                     money-=defenses[i[5]].uCost
                                 a[4]+=10*(i[5]+1)
                                 a[5]=None
-                else:
-                    draw.rect(screen,BLACK,upgradeRect,2)
+                
                     
-                deleteRect=Rect(20,125,125,30)
+                cancelRect=Rect(20,125,125,30)
+                deleteRect=Rect(150,125,125,30)
                 draw.rect(screen,GREEN,i[0],3)
-                screen.blit(deletePic,(20,125))
+                screen.blit(cancelPic,(20,125))
+                screen.blit(deletePic,(150,125))
+                
                 if deleteRect.collidepoint(mx,my):
                     draw.rect(screen,RED,deleteRect,2)
                     if click:
@@ -329,7 +339,12 @@ def prep(screen,towerPos):
                         for a in activeDefenses:
                             if a[3]==i[4]:
                                 activeDefenses.remove(a)
-                                money+=a[2].refund 
+                                money+=a[2].refund
+                if cancelRect.collidepoint(mx,my):
+                    draw.rect(screen,RED,cancelRect,2)
+                    if click:
+                        i[3]=False
+                            
 '''                        
 def upgrade():
     global money
@@ -505,6 +520,7 @@ def lev1():
                 return "exit"
             if evt.type==MOUSEBUTTONDOWN:
                 click=True
+                print("True")
             if evt.type==MOUSEBUTTONUP:
                 click=False
 

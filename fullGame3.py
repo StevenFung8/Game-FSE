@@ -309,15 +309,18 @@ def prep(screen,towerPos):
                 if upgradeRect.collidepoint(mx,my):
                     if type(a[5])==int:
                         draw.rect(screen,GREEN,upgradeRect,2)
+                        if click:
+                            for a in activeDefenses:
+                                if a[1]==i[2]:
+                                    if money-defenses[i[5]].uCost>=0:
+                                        money-=defenses[i[5]].uCost
+                                    a[4]+=10*(i[5]+1)
+                                    a[5]=None
+                                    print(a[5])
+                        
                     else:
                         draw.rect(screen,BLACK,upgradeRect,2)
-                    if click:
-                        for a in activeDefenses:
-                            if a[1]==i[2]:
-                                if money-defenses[i[5]].uCost>=0:
-                                    money-=defenses[i[5]].uCost
-                                a[4]+=10*(i[5]+1)
-                                a[5]=None
+                    
                 else:
                     draw.rect(screen,BLACK,upgradeRect,2)
                     
