@@ -133,6 +133,11 @@ def genEnemies(enemy):
         pics.append(img)
     return pics
 
+def healthBars(enemy):
+    for i in enemy:
+        draw.rect(screen,BLACK,(i[0]+14,i[1]-11,i[3].health/10+2,9),0)
+        draw.rect(screen,GREEN,(i[0]+15,i[1]-10,i[3].health/10,7),0)
+
 def moneyScore(screen):
     global money
     global activeDefenses
@@ -167,9 +172,6 @@ def music(state):
     global pause
 
     muteRect = Rect(420, 25, 40, 40)
-
-
-
     screen.blit(eigthNote, (420, 27))
 
     mx, my = mouse.get_pos()
@@ -533,7 +535,7 @@ def lev1():
                [Rect(388,342,50,50),False,(388,342),False,5,None],[Rect(570,342,50,50),False,(570,342),False,6,None],
                [Rect(750,342,50,50),False,(750,342),False,7,None],[Rect(418,503,50,50),False,(418,503),False,8,None],
                [Rect(598,503,50,50),False,(598,503),False,9,None],[Rect(778,503,50,50),False,(778,503),False,10,None]]
-    enemy=[[-100,190,0,heavyTank],[-200,190,0,heavyTank],[-300,190,0,heavyTank],[-400,190,0,heavyTank],[-500,190,0,heavyTank]]
+    enemy=[[-100,190,0,heavyTank],[-250,190,0,heavyTank],[-400,190,0,heavyTank],[-650,190,0,heavyTank],[-800,190,0,heavyTank]]
 
     click=False
     while running:
@@ -578,6 +580,7 @@ def lev1():
             genEnemies(enemy)
             moveEnemy(screen,enemy)
             baseHealth(enemy)
+            healthBars(enemy)
 
         if gameOver:
             endScreen=Surface((width,height),SRCALPHA)
