@@ -186,7 +186,7 @@ def moveEnemy2(screen,enemy):
         if i[1]<=210 and i[0]<720:
             i[0]+=i[3].speed
             i[2]=0
-        if i[0]>=690 and i[1]<670:
+        if i[0]>=690 and i[1]<=670:
             i[1]+=i[3].speed*2
             i[2]=1
         if i[1]>=670 and i[0]==690:
@@ -358,7 +358,6 @@ def upgrade():
 
 def prev1():
     running=True
-    mixer.init()
     mixer.music.load("FSE-Assets/sound/startMusic2.mp3")
     mixer.music.play(-1)
     pressRect=Rect(380,320,300,100)
@@ -382,7 +381,6 @@ def prev1():
 
 def prev2():
     running=True
-    mixer.init()
     mixer.music.load("FSE-Assets/sound/startMusic1.mp3")
     mixer.music.play(-1)
     pressRect=Rect(380,320,300,100)
@@ -406,7 +404,6 @@ def prev2():
 
 def prev3():
     running=True
-    mixer.init()
     mixer.music.load("FSE-Assets/sound/startMusic2.mp3")
     mixer.music.play(-1)
     pressRect=Rect(380,320,300,100)
@@ -430,7 +427,6 @@ def prev3():
 
 def prev4():
     running=True
-    mixer.init()
     mixer.music.load("FSE-Assets/sound/startMusic1.mp3")
     mixer.music.play(-1)
     pressRect=Rect(380,320,300,100)
@@ -454,7 +450,6 @@ def prev4():
 
 def prev5():
     running=True
-    mixer.init()
     mixer.music.load("FSE-Assets/sound/startMusic2.mp3")
     mixer.music.play(-1)
     pressRect=Rect(380,320,300,100)
@@ -490,10 +485,6 @@ def lev1():
     myclock=time.Clock()
     mixer.music.load("FSE-Assets/sound/bgMusic.mp3")
     mixer.music.play(-1)
-
-    if gameOver:
-        mixer.music.load("FSE-Assets/sound/defeatTheme.mp3")
-        mixer.music.play(-1)
     quitRect=Rect(260,25,150,40)
 
                 #rect, status, blit position, edit status, rect, active tower #
@@ -548,14 +539,15 @@ def lev1():
             baseHealth(enemy)
 
         if gameOver:
-
             endScreen=Surface((width,height),SRCALPHA)
             endScreen.fill((220,220,220,127))
             screen.blit(endScreen,(0,0))
-            screen.blit(loseRect,(300,200))
+            screen.blit(loseRect,(320,225))
             retryRect=Rect(330,380,128,50)
             mainRect=Rect(490,380,187,50)
             draw.rect(screen,RED,(945,375,100,10),0)
+
+            mixer.music.stop()
 
             if retryRect.collidepoint(mx,my):
                 draw.rect(screen,RED,retryRect,3)
@@ -596,7 +588,6 @@ def lev2():
 
     running=True
     myclock=time.Clock()
-    mixer.init()
     mixer.music.load("FSE-Assets/sound/bgMusic.mp3")
     mixer.music.play(-1)
     quitRect=Rect(260,25,150,40)
@@ -691,7 +682,6 @@ def lev3():
     global click
     running=True
     myclock=time.Clock()
-    mixer.init()
     mixer.music.load("FSE-Assets/sound/bgMusic.mp3")
     mixer.music.play(-1)
     quitRect=Rect(260,25,150,40)
@@ -747,7 +737,6 @@ def lev4():
     global click
     running=True
     myclock=time.Clock()
-    mixer.init()
     mixer.music.load("FSE-Assets/sound/bgMusic.mp3")
     mixer.music.play(-1)
     quitRect=Rect(260,25,150,40)
@@ -803,7 +792,6 @@ def lev5():
     global click
     running=True
     myclock=time.Clock()
-    mixer.init()
     mixer.music.load("FSE-Assets/sound/bgMusic.mp3")
     mixer.music.play(-1)
     quitRect=Rect(260,25,150,40)
@@ -853,7 +841,6 @@ def lev5():
 
 def creds():
     global mx,my
-    mixer.init()
     mixer.music.load("FSE-Assets/sound/sovietTheme.mp3")
     mixer.music.play()
     running=True
@@ -876,7 +863,6 @@ def creds():
     return "main"
 
 def instructions():
-    mixer.init()
     mixer.music.load("FSE-Assets/sound/menuMusic2.mp3")
     mixer.music.play(-1)
     running=True
@@ -899,7 +885,6 @@ def instructions():
     return "main"
 
 def levelSelect():
-    mixer.init()
     mixer.music.load("FSE-Assets/sound/menuMusic2.mp3")
     mixer.music.play(-1)
     levelRects=[Rect(122,260,240,160),Rect(407,262,250,160),Rect(696,262,250,160),Rect(257,493,240,160),Rect(564,492,240,160)]
@@ -935,9 +920,8 @@ def levelSelect():
     return "main"
 
 def main():
-    mixer.init()
     mixer.music.load("FSE-Assets/sound/menuMusic.mp3")
-    mixer.music.set_volume(0.5)
+    #mixer.music.set_volume(0.5)
     mixer.music.play(-1)
     buttons=[Rect(57,294,210,47),Rect(57,370,270,49),Rect(57,448,170,49)]
     vals=["levelSelect","instructions","credits"]
