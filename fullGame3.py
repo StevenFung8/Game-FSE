@@ -215,6 +215,7 @@ activeDefenses=[]
 def prep(screen,towerPos):
     global defC
     global money
+    global click
     readyRect=Rect(830,120,179,69)
     upgradeRect=Rect(750,662,70,30)
     buyRects=[Rect(607,28,59,63),Rect(682,28,61,63),Rect(758,28,61,63),Rect(834,28,61,63),Rect(908,28,61,63),Rect(982,28,61,63)]
@@ -275,26 +276,21 @@ def prep(screen,towerPos):
                 defC=None
 
     if defC==None:
-        select=True
         for i in towerPos1:
-            if i[0].collidepoint(mx,my) and i[1]==True:
+            if i[0].collidepoint(mx,my) and i[1]==True and i[3]==False:
                 draw.rect(screen,YELLOW,i[0],3)
                 if click:
                     i[3]=True
-                    #select=False
-            if i[3]==True and select:
-                select=False
+            if i[3]==True:
                 draw.rect(screen,GREEN,buyRects[i[5]],2)
                 screen.blit(towerDescription[i[5]],(620,630))
                 txtUpgrade=txtFont2.render("UPGRADE?",True,BLACK)
-                #txtuCost=txtFont2.render("$%i"%(defenses[i[5]].uCost),True,BLACK)
                 for a in activeDefenses:
                     if a[1]==i[2]:
                         if type(a[5])==int:
                             txtuCost=txtFont2.render("$%i"%(a[5]),True,BLACK)
                         else:
                             txtuCost=txtFont2.render(a[5],True,BLACK)
-                cancelRect=Rect(20,125,125,30)
 
                 screen.blit(txtUpgrade,(650,670))
                 screen.blit(txtuCost,(763,670))
@@ -315,9 +311,11 @@ def prep(screen,towerPos):
                 else:
                     draw.rect(screen,BLACK,upgradeRect,2)
                     
-                deleteRect=Rect(20,125,125,30)
+                cancelRect=Rect(20,125,125,30)
+                deleteRect=Rect(150,125,125,30)
                 draw.rect(screen,GREEN,i[0],3)
-                screen.blit(deletePic,(20,125))
+                screen.blit(cancelPic,(20,125))
+                screen.blit(deletePic,(150,125))
                 if deleteRect.collidepoint(mx,my):
                     draw.rect(screen,RED,deleteRect,2)
                     if click:
@@ -327,8 +325,14 @@ def prep(screen,towerPos):
                             if a[3]==i[4]:
                                 activeDefenses.remove(a)
                                 money+=a[2].refund
-                                print(activeDefenses)     
-'''                        
+                                print(activeDefenses)
+                if cancelRect.collidepoint(mx,my):
+                    draw.rect(screen,RED,cancelRect,2)
+                    if click:
+                        i[3]=False
+                            
+                    
+            
 def upgrade():
     global money
     for i in range(len(buyRects)):
@@ -337,7 +341,6 @@ def upgrade():
                 money-=defenses[i].uCost
                 defenses[i].uCost = None
                 defenses[i].damage+=10*(i+1)
-'''
 
 def prev1():
     running=True
@@ -465,7 +468,6 @@ def lev1():
     global activeDefenses
     global money
     global score
-
     global click
     global towerPos1
     global gameOver
