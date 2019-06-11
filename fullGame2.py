@@ -90,12 +90,11 @@ chris.checkItemValue(ryanAirPod)
 '''
 class enemyType:
 
-    def __init__(self,name,speed,health,damage,prize):
+    def __init__(self,name,speed,health,damage):
         self.name=name
         self.speed=speed
         self.health=health
         self.damage=damage
-        self.prize=prize
         self.filename="FSE-Assets/Enemies/"+name+".png"
 
 infantry=enemyType('infantry',1.5,100,5)
@@ -171,7 +170,7 @@ def baseHealth(enemy):
 
 def music(state):
     global pause
-
+    global current
     muteRect = Rect(420, 25, 40, 40)
     screen.blit(eigthNote, (420, 27))
 
@@ -180,6 +179,7 @@ def music(state):
 
 
     if state is not None:
+
         if state:
             if muteRect.collidepoint(mx, my) and pause == False:
                 pause = True
@@ -187,6 +187,9 @@ def music(state):
             elif muteRect.collidepoint(mx, my) and pause == True:
                 pause = False
                 mixer.music.unpause()
+        if current=="main":
+            muteRect = Rect(200,200,200,200)
+            draw.rect(screen,BLACK,muteRect,3)
 
     if pause:
         screen.blit(mutePic, (421, 27))
@@ -195,6 +198,7 @@ def music(state):
         draw.rect(screen, YELLOW, muteRect, 2)
     else:
         draw.rect(screen, BLACK, muteRect, 2)
+
 
 
 def moveEnemy(screen,enemy):
@@ -1001,8 +1005,10 @@ def main():
                 return "exit"
             if evnt.type==MOUSEBUTTONDOWN:
                 click=True
+                music(True)
             if evnt.type==MOUSEBUTTONUP:
                 click=False
+        music(None)
         screen.blit(mainMenu,(0,0))
         backButton=Rect(950,650,50,50)
         musicButton=Rect(870,650,50,50)
