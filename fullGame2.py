@@ -56,6 +56,8 @@ quitPic=transform.scale(quitP,(150,40))
 crossPic=transform.scale(cross,(30,30))
 dialoguePic=transform.scale(dialogueP,(400,110))
 blackHeart=transform.scale(blackHeart,(25,25))
+mutePic=transform.scale(mutePic,(37,35))
+eigthNote=transform.scale(eigthNote,(37,35))
 
 #sounds
 mixer.init()
@@ -64,6 +66,7 @@ place_sound = mixer.Sound("FSE-Assets/sound/placeSound.wav")
 
 money=6000
 score=0
+pause=False
 '''
 class AirPods:
     value = float("-Inf")
@@ -159,6 +162,38 @@ def baseHealth(enemy):
     if bars==0:
         gameOver=True
 
+
+def music(state):
+    global pause
+
+    muteRect = Rect(420, 25, 40, 40)
+
+
+
+    screen.blit(eigthNote, (420, 27))
+
+    mx, my = mouse.get_pos()
+    mb = mouse.get_pressed()
+
+
+    if state is not None:
+        if state:
+            if muteRect.collidepoint(mx, my) and pause == False:
+                pause = True
+                mixer.music.pause()
+            elif muteRect.collidepoint(mx, my) and pause == True:
+                pause = False
+                mixer.music.unpause()
+
+    if pause:
+        screen.blit(mutePic, (421, 27))
+
+    if muteRect.collidepoint(mx,my):
+        draw.rect(screen, YELLOW, muteRect, 2)
+    else:
+        draw.rect(screen, BLACK, muteRect, 2)
+
+
 def moveEnemy(screen,enemy):
     count=-1
     for i in enemy:
@@ -240,7 +275,8 @@ def prep(screen,towerPos):
     txtS5=txtFont2.render("Fortress - Damage:",True,BLACK)
     txtS6=txtFont2.render("Heavy AT Gun - Damage:",True,BLACK)
 
-    noMoney=txtFont2.render("Not enough money for this tower.",True,BLACK)
+
+
     towerDescription=[txtD1,txtD2,txtD3,txtD4,txtD5,txtD6]
     towerStats=[txtS1,txtS2,txtS3,txtS4,txtS5,txtS6]
     
@@ -272,6 +308,7 @@ def prep(screen,towerPos):
         cancelRect=Rect(20,125,125,30)
         screen.blit(cancelPic,(20,125))
 
+        #money and stuff
         for i in range(len(towerPos)):
             if towerPos[i][1]==False:
                 draw.rect(screen,RED,towerPos[i][0],3)
@@ -283,6 +320,9 @@ def prep(screen,towerPos):
                         money-=defenses[defC].price
                         towerPos[i][1]=True
                         towerPos[i][5]=defC
+                    if money-defenses[defC].price<0:
+                        noMoney = txtFont2.render("You do not have enough money for this tower.", True, RED)
+                        screen.blit(noMoney,(620,660))
                     
         if cancelRect.collidepoint(mx,my):
             draw.rect(screen,RED,cancelRect,2)
@@ -521,9 +561,10 @@ def lev1():
             if evt.type==MOUSEBUTTONDOWN:
                 click=True
                 print("True")
+                music(True)
             if evt.type==MOUSEBUTTONUP:
                 click=False
-
+        music(None)
         for a in activeDefenses:
             screen.blit(a[0],a[1])
 
@@ -620,10 +661,12 @@ def lev2():
                 return "exit"
             if evt.type==MOUSEBUTTONDOWN:
                 click=True
+                music(True)
             if evt.type==MOUSEBUTTONUP:
                 click=False
         mx,my=mouse.get_pos()
         mb=mouse.get_pressed()
+        music(None)
 
         for a in activeDefenses:
             screen.blit(a[0],a[1])
@@ -714,10 +757,12 @@ def lev3():
                 return "exit"
             if evt.type==MOUSEBUTTONDOWN:
                 click=True
+                music(True)
             if evt.type==MOUSEBUTTONUP:
                 click=False
         mx,my=mouse.get_pos()
         mb=mouse.get_pressed()
+        music(None)
         
         for a in activeDefenses:
             screen.blit(a[0],a[1])
@@ -770,11 +815,12 @@ def lev4():
                 return "exit"
             if evt.type==MOUSEBUTTONDOWN:
                 click=True
+                music(True)
             if evt.type==MOUSEBUTTONUP:
                 click=False
         mx,my=mouse.get_pos()
         mb=mouse.get_pressed()
-
+        music(None)
         for a in activeDefenses:
             screen.blit(a[0],a[1])
 
@@ -827,11 +873,12 @@ def lev5():
                 return "exit"
             if evt.type==MOUSEBUTTONDOWN:
                 click=True
+                music(True)
             if evt.type==MOUSEBUTTONUP:
                 click=False
         mx,my=mouse.get_pos()
         mb=mouse.get_pressed()
-
+        music(None)
         for a in activeDefenses:
             screen.blit(a[0],a[1])
 
