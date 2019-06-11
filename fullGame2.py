@@ -90,20 +90,22 @@ chris.checkItemValue(ryanAirPod)
 '''
 class enemyType:
 
-    def __init__(self,name,speed,health,damage,prize):
+    def __init__(self,name,speed,health,damage,prize,x,y):
         self.name=name
         self.speed=speed
         self.health=health
         self.damage=damage
         self.prize=prize
+        self.x=x
+        self.y=y
         self.filename="FSE-Assets/Enemies/"+name+".png"
 
-infantry=enemyType('infantry',1.5,100,5)
-transport=enemyType('transport',1.7,400,10)
-motorcycle=enemyType('motorcycle',2,250,5)
-lightTank=enemyType('lightTank',1,700,15)
-heavyTank=enemyType('heavyTank',9,1000,20)
-tankDestroyer=enemyType('tankDestroyer',0.8,1100,25)
+infantry=enemyType('infantry',1.5,100,5,100,40,32)
+transport=enemyType('transport',1.7,400,10,250,121,65)
+motorcycle=enemyType('motorcycle',2,250,5,300,67,56)
+lightTank=enemyType('lightTank',1,700,15,450,95,57)
+heavyTank=enemyType('heavyTank',9,1000,20,500,135,78)
+tankDestroyer=enemyType('tankDestroyer',0.8,1100,25,800,130,61)
 
 class towerType:
 
@@ -399,19 +401,22 @@ def upgrade():
                 defenses[i].damage+=10*(i+1)
             
 '''
-def checkRange(enemy,defense):
+def checkRange(enemy,activeDefense):
     global money
-    enemyRect=[Rect(int(enemy[i][X]),int(enemy[i][Y]),30,30) for i in range(len(enemy))]
-    for i in range(len(enemy)):
-        dist=sqrt((int(soldier[X])-(enemyRect[i][0]+enemyRect[i][2]//2))**2+(int(soldier[Y])-(enemyRect[i][1]+enemyRect[i][3]//2))**2)
-        #print(dist)
-        #print(enemy[i][HP])
-        if dist<=180:
-            enemy[i][HP]-=soldier[2]
-            if enemy[i][HP]<=0:
-                money+=enemy[i][PRIZE]
-                print(money)
-                del enemy[i]
+    for i in towerPos:
+        for e in enemy:
+            dist=sqrt((int(i[1][0]))-(e[0]+)**2+(int(i[1][0])-(enemyRect[i][1]+enemyRect[i][3]//2))**2) 
+##    enemyRect=[Rect(int(enemy[i][X]),int(enemy[i][Y]),30,30) for i in range(len(enemy))]
+##    for i in range(len(enemy)):
+##        dist=sqrt((int(soldier[X])-(enemyRect[i][0]+enemyRect[i][2]//2))**2+(int(soldier[Y])-(enemyRect[i][1]+enemyRect[i][3]//2))**2)
+##        #print(dist)
+##        #print(enemy[i][HP])
+##        if dist<=180:
+##            enemy[i][HP]-=soldier[2]
+##            if enemy[i][HP]<=0:
+##                money+=enemy[i][PRIZE]
+##                print(money)
+##                del enemy[i]
 def prev1():
     running=True
     mixer.music.load("FSE-Assets/sound/startMusic2.mp3")
