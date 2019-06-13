@@ -64,7 +64,7 @@ mixer.init()
 place_sound = mixer.Sound("FSE-Assets/sound/placeSound.wav")
 #gun_sound = mixer.Sound(
 
-money=6000
+money=0
 score=0
 pause=False
 '''
@@ -90,19 +90,22 @@ chris.checkItemValue(ryanAirPod)
 '''
 class enemyType:
 
-    def __init__(self,name,speed,health,damage):
+    def __init__(self,name,speed,health,damage,prize,x,y):
         self.name=name
         self.speed=speed
         self.health=health
         self.damage=damage
+        self.prize=prize
+        self.x=x
+        self.y=y
         self.filename="FSE-Assets/Enemies/"+name+".png"
-
-infantry=enemyType('infantry',1.5,100,5)
-transport=enemyType('transport',1.7,400,10)
-motorcycle=enemyType('motorcycle',2,250,5)
-lightTank=enemyType('lightTank',1.2,700,15)
-heavyTank=enemyType('heavyTank',1,1000,20)
-tankDestroyer=enemyType('tankDestroyer',1,1100,25)
+        
+infantry=enemyType('infantry',1.5,100,5,100,40,32)
+transport=enemyType('transport',1.7,400,10,250,121,65)
+motorcycle=enemyType('motorcycle',2,250,5,300,67,56)
+lightTank=enemyType('lightTank',1,700,15,450,95,57)
+heavyTank=enemyType('heavyTank',9,1000,20,500,135,78)
+tankDestroyer=enemyType('tankDestroyer',0.8,1100,25,800,130,61)
 
 class towerType:
 
@@ -211,20 +214,75 @@ def moveEnemy(screen,enemy):
 def moveEnemy2(screen,enemy):
     count=-1
     for i in enemy:
-        if i[0]<315:
+        enemyRect=Rect(i[0],i[1],20,10)
+        draw.rect(screen,RED,enemyRect,2)
+
+    for i in enemy:
+        if i[0]<300:
             i[0]+=i[3].speed
             i[2]=0
-        if i[0]>=315 and i[1]>210:
+        if i[0]>=300 and i[1]>220:
             i[1]-=i[3].speed
             i[2]=2
-        if i[1]<=210 and i[0]<720:
+
+        count+=1
+        screen.blit(pics[count][i[2]],i[:2])
+
+def moveEnemy3(screen,enemy):
+    count=-1
+    for i in enemy:
+        if i[0]<370:
             i[0]+=i[3].speed
             i[2]=0
-        if i[0]>=690 and i[1]<=670:
-            i[1]+=i[3].speed*2
+        if i[0]>=370 and i[1]>210:
+            i[1]-=i[3].speed
+            i[2]=2
+        if i[1]<=210:
+            i[0]+=i[3].speed
+            i[2]=0
+            
+        count+=1
+        screen.blit(pics[count][i[2]],i[:2])
+
+def moveEnemy4(screen,enemy):
+    count=-1
+    for i in enemy:
+        if i[0]<300:
+            i[0]+=i[3].speed
+            i[2]=0
+        if i[0]>=300 and i[1]>210:
+            i[1]-=i[3].speed
+            i[2]=2
+        if i[0]<=670 and i[1]<=210:
+            i[0]+=i[3].speed
+            i[2]=0
+        if i[0]>=670 and i[1]<670:
+            i[1]+=i[3].speed
             i[2]=1
-        if i[1]>=670 and i[0]==690:
-            i[0]+=i[3].speed*2
+        if i[1]>=670 and i[0]==670:
+            i[0]+=i[3].speed
+            i[2]=0
+            
+        count+=1
+        screen.blit(pics[count][i[2]],i[:2])
+
+def moveEnemy5(screen,enemy):
+    count=-1
+    for i in enemy:
+        if i[0]<300:
+            i[0]+=i[3].speed
+            i[2]=0
+        if i[0]>=300 and i[1]>210:
+            i[1]-=i[3].speed
+            i[2]=2
+        if i[0]<=670 and i[1]<=210:
+            i[0]+=i[3].speed
+            i[2]=0
+        if i[0]>=670 and i[1]<670:
+            i[1]+=i[3].speed
+            i[2]=1
+        if i[1]>=670 and i[0]==670:
+            i[0]+=i[3].speed
             i[2]=0
             
         count+=1
@@ -273,7 +331,7 @@ def prep(screen,towerPos):
     txtS4=txtFont2.render("Bunker - Damage:",True,BLACK)
     txtS5=txtFont2.render("Fortress - Damage:",True,BLACK)
     txtS6=txtFont2.render("Heavy AT Gun - Damage:",True,BLACK)
-    
+
     towerDescription=[txtD1,txtD2,txtD3,txtD4,txtD5,txtD6]
     towerStats=[txtS1,txtS2,txtS3,txtS4,txtS5,txtS6]
     
@@ -361,7 +419,6 @@ def prep(screen,towerPos):
                                 a[4]+=10*(i[5]+1)
                                 a[5]=None
                 
-                    
                 cancelRect=Rect(20,125,125,30)
                 deleteRect=Rect(150,125,125,30)
                 draw.rect(screen,GREEN,i[0],3)
@@ -391,6 +448,25 @@ def upgrade():
                 money-=defenses[i].uCost
                 defenses[i].uCost = None
                 defenses[i].damage+=10*(i+1)
+'''
+
+'''
+def checkRange(enemy,activeDefense):
+    global money
+    for i in towerPos:
+        for e in enemy:
+            dist=sqrt((int(i[1][0]))-(e[0]+)**2+(int(i[1][0])-(enemyRect[i][1]+enemyRect[i][3]//2))**2) 
+##    enemyRect=[Rect(int(enemy[i][X]),int(enemy[i][Y]),30,30) for i in range(len(enemy))]
+##    for i in range(len(enemy)):
+##        dist=sqrt((int(soldier[X])-(enemyRect[i][0]+enemyRect[i][2]//2))**2+(int(soldier[Y])-(enemyRect[i][1]+enemyRect[i][3]//2))**2)
+##        #print(dist)
+##        #print(enemy[i][HP])
+##        if dist<=180:
+##            enemy[i][HP]-=soldier[2]
+##            if enemy[i][HP]<=0:
+##                money+=enemy[i][PRIZE]
+##                print(money)
+##                del enemy[i]
 '''
 
 def prev1():
@@ -518,6 +594,7 @@ def lev1():
     global click
     global gameOver
 
+    money=4500
     running=True
     myclock=time.Clock()
     mixer.music.load("FSE-Assets/sound/bgMusic.mp3")
@@ -582,8 +659,8 @@ def lev1():
             endScreen.fill((220,220,220,127))
             screen.blit(endScreen,(0,0))
             screen.blit(loseRect,(320,225))
-            retryRect=Rect(330,380,128,50)
-            mainRect=Rect(490,380,187,50)
+            retryRect=Rect(350,405,128,50)
+            mainRect=Rect(510,405,187,50)
             draw.rect(screen,RED,(945,375,100,10),0)
 
             mixer.music.stop()
@@ -625,15 +702,17 @@ def lev2():
     global click
     global gameOver
 
+    money=6000
+
     running=True
     myclock=time.Clock()
     mixer.music.load("FSE-Assets/sound/bgMusic.mp3")
     mixer.music.play(-1)
     quitRect=Rect(260,25,150,40)
-    towerPos2=[[Rect(75,430,50,50),False,(75,430),False,1,None],[Rect(225,430,50,50),False,(225,430),False,2,None],
-               [Rect(225,300,50,50),False,(225,300),False,3,None],[Rect(225,125,50,50),False,(225,125),False,4,None],
+    towerPos2=[[Rect(75,430,50,50),False,(75,430),False,1,None],[Rect(210,430,50,50),False,(210,430),False,2,None],
+               [Rect(210,300,50,50),False,(210,300),False,3,None],[Rect(225,125,50,50),False,(225,125),False,4,None],
                [Rect(425,125,50,50),False,(425,125),False,5,None],[Rect(600,125,50,50),False,(600,125),False,6,None],
-               [Rect(425,300,50,50),False,(425,300),False,7,None],[Rect(600,300,50,50),False,(600,300),False,8,None],
+               [Rect(425,300,50,50),False,(425,300),False,7,None],[Rect(560,300,50,50),False,(560,300),False,8,None],
                [Rect(750,275,50,50),False,(750,275),False,9,None],[Rect(825,375,50,50),False,(825,375),False,10,None]]
     enemy=[[-100,500,0,heavyTank],[-200,500,0,heavyTank],[-300,500,0,heavyTank],[-400,500,0,heavyTank],[-500,500,0,heavyTank]]
     while running:
@@ -684,9 +763,9 @@ def lev2():
             endScreen=Surface((width,height),SRCALPHA)
             endScreen.fill((220,220,220,127))
             screen.blit(endScreen,(0,0))
-            screen.blit(loseRect,(300,200))
-            retryRect=Rect(330,380,128,50)
-            mainRect=Rect(490,380,187,50)
+            screen.blit(loseRect,(320,225))
+            retryRect=Rect(350,405,128,50)
+            mainRect=Rect(510,405,187,50)
             draw.rect(screen,RED,(945,375,100,10),0)
             if retryRect.collidepoint(mx,my):
                 draw.rect(screen,RED,retryRect,3)
@@ -721,6 +800,9 @@ def lev3():
     global money
     global score
     global click
+    global gameOver
+
+    money=7000
     running=True
     myclock=time.Clock()
     mixer.music.load("FSE-Assets/sound/bgMusic.mp3")
@@ -731,6 +813,8 @@ def lev3():
                [Rect(274,136,50,50),False,(274,136),False,5,None],[Rect(450,136,50,50),False,(450,136),False,6,None],
                [Rect(474,325,50,50),False,(474,325),False,7,None],[Rect(630,305,50,50),False,(630,305),False,8,None],
                [Rect(700,136,50,50),False,(700,136),False,11,None]]
+
+    enemy=[[-100,480,0,heavyTank],[-250,480,0,heavyTank],[-400,480,0,heavyTank],[-650,480,0,heavyTank],[-800,480,0,heavyTank]]
     while running:
         myclock.tick(60)
         drawScene3(screen)
@@ -768,6 +852,44 @@ def lev3():
                 return "levelSelect"
         if ready==False:
             prep(screen,towerPos3)
+
+        if ready==True and gameOver==False:
+            genEnemies(enemy)
+            moveEnemy3(screen,enemy)
+            baseHealth(enemy)
+
+        if gameOver:
+            endScreen=Surface((width,height),SRCALPHA)
+            endScreen.fill((220,220,220,127))
+            screen.blit(endScreen,(0,0))
+            screen.blit(loseRect,(320,225))
+            retryRect=Rect(350,405,128,50)
+            mainRect=Rect(510,405,187,50)
+            draw.rect(screen,RED,(945,375,100,10),0)
+            if retryRect.collidepoint(mx,my):
+                draw.rect(screen,RED,retryRect,3)
+                if mb[0]==1:
+                    defC=None
+                    editCond=False
+                    activeDefenses=[]
+                    running=False
+                    ready=False
+                    gameOver=False
+                    money=2000
+                    score=0
+                    return "lev3"
+            if mainRect.collidepoint(mx,my):
+                draw.rect(screen,RED,mainRect,3)
+                if mb[0]==1:
+                    defC=None
+                    editCond=False
+                    activeDefenses=[]
+                    running=False
+                    ready=False
+                    gameOver=False
+                    money=7000
+                    score=0
+                    
         display.flip()
     return "levelSelect"
 
@@ -778,6 +900,9 @@ def lev4():
     global money
     global score
     global click
+    global gameOver
+
+    money=8500
     running=True
     myclock=time.Clock()
     mixer.music.load("FSE-Assets/sound/bgMusic.mp3")
@@ -824,6 +949,43 @@ def lev4():
                 return "levelSelect"
         if ready==False:
             prep(screen,towerPos4)
+
+        if ready==True and gameOver==False:
+            genEnemies(enemy)
+            moveEnemy3(screen,enemy)
+            baseHealth(enemy)
+
+        if gameOver:
+            endScreen=Surface((width,height),SRCALPHA)
+            endScreen.fill((220,220,220,127))
+            screen.blit(endScreen,(0,0))
+            screen.blit(loseRect,(320,225))
+            retryRect=Rect(350,405,128,50)
+            mainRect=Rect(510,405,187,50)
+            draw.rect(screen,RED,(945,375,100,10),0)
+            if retryRect.collidepoint(mx,my):
+                draw.rect(screen,RED,retryRect,3)
+                if mb[0]==1:
+                    defC=None
+                    editCond=False
+                    activeDefenses=[]
+                    running=False
+                    ready=False
+                    gameOver=False
+                    money=2000
+                    score=0
+                    return "lev4"
+            if mainRect.collidepoint(mx,my):
+                draw.rect(screen,RED,mainRect,3)
+                if mb[0]==1:
+                    defC=None
+                    editCond=False
+                    activeDefenses=[]
+                    running=False
+                    ready=False
+                    gameOver=False
+                    money=8500
+                    score=0
         display.flip()
     return "levelSelect"
 
@@ -834,6 +996,9 @@ def lev5():
     global money
     global score
     global click
+    global gameOver
+
+    money=10000
     running=True
     myclock=time.Clock()
     mixer.music.load("FSE-Assets/sound/bgMusic.mp3")
@@ -881,6 +1046,43 @@ def lev5():
                 return "levelSelect"
         if ready==False:
             prep(screen,towerPos5)
+
+        if ready==True and gameOver==False:
+            genEnemies(enemy)
+            moveEnemy5(screen,enemy)
+            baseHealth(enemy)
+
+        if gameOver:
+            endScreen=Surface((width,height),SRCALPHA)
+            endScreen.fill((220,220,220,127))
+            screen.blit(endScreen,(0,0))
+            screen.blit(loseRect,(320,225))
+            retryRect=Rect(350,405,128,50)
+            mainRect=Rect(510,405,187,50)
+            draw.rect(screen,RED,(945,375,100,10),0)
+            if retryRect.collidepoint(mx,my):
+                draw.rect(screen,RED,retryRect,3)
+                if mb[0]==1:
+                    defC=None
+                    editCond=False
+                    activeDefenses=[]
+                    running=False
+                    ready=False
+                    gameOver=False
+                    money=2000
+                    score=0
+                    return "lev5"
+            if mainRect.collidepoint(mx,my):
+                draw.rect(screen,RED,mainRect,3)
+                if mb[0]==1:
+                    defC=None
+                    editCond=False
+                    activeDefenses=[]
+                    running=False
+                    ready=False
+                    gameOver=False
+                    money=10000
+                    score=0
         display.flip()
     return "levelSelect"
 
