@@ -173,39 +173,45 @@ def baseHealth(enemy):
 
 
 def music(state):
-    print("yeah")
-     global pause
-     global current
-     muteRect = Rect(420, 25, 40, 40)
-     screen.blit(eigthNote, (420, 27))
 
-     mx, my = mouse.get_pos()
-     mb = mouse.get_pressed()
-
-
-     if state is not None:
-
-         if state:
-             if muteRect.collidepoint(mx, my) and pause == False:
-                 pause = True
-                 mixer.music.pause()
-             elif muteRect.collidepoint(mx, my) and pause == True:
-                 pause = False
-                 mixer.music.unpause()
-         if current=="main":
-             muteRect = Rect(200,200,200,200)
-             draw.rect(screen,BLACK,muteRect,3)
-
-     if pause:
-         screen.blit(mutePic, (421, 27))
-
-     if muteRect.collidepoint(mx,my):
-         draw.rect(screen, YELLOW, muteRect, 2)
-     else:
-         draw.rect(screen, BLACK, muteRect, 2)
+    global pause
+    global current
+    if current=="main":
+        muteRect=Rect(870,650,50,50)
+        screen.blit(eigthNote, (870, 652))
+    else:
+        muteRect = Rect(420, 25, 40, 40)
+        screen.blit(eigthNote, (420, 27))
 
 
-d
+    mx, my = mouse.get_pos()
+    mb = mouse.get_pressed()
+
+
+    if state is not None:
+
+        if state:
+            if muteRect.collidepoint(mx, my) and pause == False:
+                pause = True
+                mixer.music.pause()
+            elif muteRect.collidepoint(mx, my) and pause == True:
+                pause = False
+                mixer.music.unpause()
+
+
+    if pause:
+        if current=="main":
+            screen.blit(mutePic,(870,652))
+        else:
+            screen.blit(mutePic, (421, 27))
+
+    if muteRect.collidepoint(mx,my):
+        draw.rect(screen, YELLOW, muteRect, 3)
+    else:
+        draw.rect(screen, RED, muteRect, 3)
+    print("ryan is a big ass vagina")
+
+
 
 def moveEnemy(screen,enemy):
     count=-1
@@ -1169,13 +1175,12 @@ def main():
                 music(True)
             if evnt.type==MOUSEBUTTONUP:
                 click=False
-        music(None)
+
         screen.blit(mainMenu,(0,0))
         backButton=Rect(950,650,50,50)
-        musicButton=Rect(870,650,50,50)
         draw.rect(screen,RED,backButton,3)
-        draw.rect(screen,RED,musicButton,3)
         screen.blit(crossPic,(960,660))
+        music(None)
 
         for i in range(len(buttons)):
             if buttons[i].collidepoint(mx,my):
