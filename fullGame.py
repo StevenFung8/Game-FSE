@@ -1255,5 +1255,5 @@ while current!="exit":
     if current=="lev5":
         current=lev5()
 print("fr tho you really dumb dumb like my god")
-
+print("sometimes i really wonder what im doign in my life ")
 quit()
