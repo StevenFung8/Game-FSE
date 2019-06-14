@@ -67,7 +67,7 @@ place_sound = mixer.Sound("FSE-Assets/sound/placeSound.wav")
 money=0
 score=0
 pause=False
-'''
+
 class AirPods:
     value = float("-Inf")
     price = "Too high"
@@ -87,7 +87,7 @@ ryanAirPod = AirPods()
 chris = Asian("Chris")
 
 chris.checkItemValue(ryanAirPod)
-'''
+
 class enemyType:
 
     def __init__(self,name,speed,health,damage,prize,x,y):
@@ -231,7 +231,7 @@ def moveEnemy2(screen,enemy):
 def moveEnemy3(screen,enemy):
     count=-1
     for i in enemy:
-        if i[0]<370:
+        if i[0]<=370:
             i[0]+=i[3].speed
             i[2]=0
         if i[0]>=370 and i[1]>210:
@@ -240,7 +240,6 @@ def moveEnemy3(screen,enemy):
         if i[1]<=210:
             i[0]+=i[3].speed
             i[2]=0
-            
         count+=1
         screen.blit(pics[count][i[2]],i[:2])
 
@@ -384,12 +383,14 @@ def prep(screen,towerPos):
             if click:
                 defC=None
 
+    select=False
     if defC==None:
         for i in towerPos:
-            if i[0].collidepoint(mx,my) and i[1]==True:
+            if i[0].collidepoint(mx,my) and i[1]==True and select==False:
                 draw.rect(screen,YELLOW,i[0],3)
                 if click:
                     i[3]=True
+                    select=True
             if i[3]==True:
                 draw.rect(screen,GREEN,buyRects[i[5]],2)
                 screen.blit(towerStats[i[5]],(620,630))
@@ -438,17 +439,6 @@ def prep(screen,towerPos):
                     draw.rect(screen,RED,cancelRect,2)
                     if click:
                         i[3]=False
-                            
-'''                        
-def upgrade():
-    global money
-    for i in range(len(buyRects)):
-        if upgradeRect.collidepoint(mx,my):
-            if click:
-                money-=defenses[i].uCost
-                defenses[i].uCost = None
-                defenses[i].damage+=10*(i+1)
-'''
 
 '''
 def checkRange(enemy,activeDefense):
@@ -1011,6 +1001,7 @@ def lev5():
                [Rect(525,262,50,50),False,(525,262),False,7,None],[Rect(525,409,50,50),False,(525,409),False,8,None],
                [Rect(645,409,50,50),False,(645,409),False,9,None],[Rect(459,589,50,50),False,(459,589),False,10,None],
                [Rect(815,409,50,50),False,(815,409),False,11,None]]
+    
     while running:
         myclock.tick(60)
         drawScene5(screen)
