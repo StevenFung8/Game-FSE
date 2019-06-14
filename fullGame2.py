@@ -90,22 +90,23 @@ chris.checkItemValue(ryanAirPod)
 '''
 class enemyType:
 
-    def __init__(self,name,speed,health,damage,prize,x,y):
+    def __init__(self,name,speed,health,damage,prize,l,w):
         self.name=name
         self.speed=speed
         self.health=health
         self.damage=damage
         self.prize=prize
-        self.x=x
-        self.y=y
+        self.length=l
+        self.width=w
         self.filename="FSE-Assets/Enemies/"+name+".png"
-        
-infantry=enemyType('infantry',1.5,100,5,100,40,32)
-transport=enemyType('transport',1.7,400,10,250,121,65)
-motorcycle=enemyType('motorcycle',2,250,5,300,67,56)
-lightTank=enemyType('lightTank',1,700,15,450,95,57)
-heavyTank=enemyType('heavyTank',5,1000,20,500,135,78)
-tankDestroyer=enemyType('tankDestroyer',0.8,1100,25,800,130,61)
+
+                                                       # l and w
+infantry=enemyType('infantry',1.5,100,5,100,             40,32)
+transport=enemyType('transport',1.7,400,10,250,          121,65)
+motorcycle=enemyType('motorcycle',2,250,5,300,           67,56)
+lightTank=enemyType('lightTank',1,700,15,450,            95,57)
+heavyTank=enemyType('heavyTank',5,1000,20,500,           135,78)
+tankDestroyer=enemyType('tankDestroyer',0.8,1100,25,800, 130,61)
 
 class towerType:
 
@@ -459,36 +460,38 @@ def prep(screen,towerPos):
                     if click:
                         i[3]=False
                         select=True
-                            
-'''                        
-def upgrade():
-    global money
-    for i in range(len(buyRects)):
-        if upgradeRect.collidepoint(mx,my):
-            if click:
-                money-=defenses[i].uCost
-                defenses[i].uCost = None
-                defenses[i].damage+=10*(i+1)
-'''
 
-'''
-def checkRange(enemy,activeDefense):
+activeEnemies=[]
+##def activeE(enemy):
+##    global activeEnemies
+##    for e in enemy:
+##                            #coordinates   Health    Length,width of graphic
+##        activeEnemies.append([e[0],e[1],int(e[3].health),(e[3].length,e[3].width)])
+##
+
+def checkRange(enemy,activeDefenses):
     global money
-    for i in towerPos:
-        for e in enemy:
-            dist=sqrt((int(i[1][0]))-(e[0]+)**2+(int(i[1][0])-(enemyRect[i][1]+enemyRect[i][3]//2))**2) 
-##    enemyRect=[Rect(int(enemy[i][X]),int(enemy[i][Y]),30,30) for i in range(len(enemy))]
-##    for i in range(len(enemy)):
-##        dist=sqrt((int(soldier[X])-(enemyRect[i][0]+enemyRect[i][2]//2))**2+(int(soldier[Y])-(enemyRect[i][1]+enemyRect[i][3]//2))**2)
-##        #print(dist)
-##        #print(enemy[i][HP])
-##        if dist<=180:
-##            enemy[i][HP]-=soldier[2]
-##            if enemy[i][HP]<=0:
-##                money+=enemy[i][PRIZE]
-##                print(money)
-##                del enemy[i]
-'''
+    global activeEnemies
+    for e in enemy:
+                            #coordinates   Health    Length,width of graphic
+        activeEnemies.append([e[0],e[1],int(e[3].health),(e[3].length,e[3].width)])
+    for a in activeDefenses:
+        for e in activeEnemies:
+            dist=sqrt((int(a[1][0])-(e[0]+e[3][0]//2))**2+(int(a[1][1])-(e[1]+e[3][1]//2))**2)
+            if dist<=200:
+                health=e[2]-a[4]
+                print(health)
+##                if e[2]<=0:
+##                    try:
+##                        del e
+##                        del enemy[list.index(e)]
+##                    except:
+##                        pass
+##            if dist>200:
+##                print(":p")
+        
+
+
 
 def prev1():
     running=True
@@ -609,6 +612,7 @@ def lev1():
     global defC
     global ready
     global activeDefenses
+    global activeEnemies
     global money
     global score
 
@@ -629,7 +633,11 @@ def lev1():
                [Rect(750,342,50,50),False,(750,342),False,7,None],[Rect(418,503,50,50),False,(418,503),False,8,None],
                [Rect(598,503,50,50),False,(598,503),False,9,None],[Rect(778,503,50,50),False,(778,503),False,10,None]]
     enemy=[[-100,190,0,heavyTank],[-250,190,0,heavyTank],[-400,190,0,heavyTank],[-550,190,0,heavyTank],[-700,190,0,heavyTank]]
-
+##    activeEnemies=[]    
+##    for e in enemy:
+##                            #coordinates   Health    Length,width of graphic
+##        activeEnemies.append([e[0],e[1],int(e[3].health),(e[3].length,e[3].width)])
+                            
     click=False
     while running:
         myclock.tick(60)
@@ -646,7 +654,6 @@ def lev1():
                 return "exit"
             if evt.type==MOUSEBUTTONDOWN:
                 click=True
-                print("True")
                 music(True)
             if evt.type==MOUSEBUTTONUP:
                 click=False
@@ -674,6 +681,7 @@ def lev1():
             moveEnemy(screen,enemy)
             baseHealth(enemy)
             healthBars(enemy)
+            checkRange(enemy,activeDefenses)
 
         if gameOver:
             endScreen=Surface((width,height),SRCALPHA)
@@ -934,7 +942,7 @@ def lev4():
                [Rect(457,472,50,50),False,(457,472),False,5,None],[Rect(241,647,50,50),False,(241,647),False,6,None],
                [Rect(689,429,50,50),False,(689,429),False,7,None],[Rect(495,260,50,50),False,(495,260),False,8,None],
                [Rect(686,240,50,50),False,(686,240),False,9,None],[Rect(820,409,50,50),False,(820,409),False,10,None]]
-    enemy=[[-100,280,0,heavyTank],[-250,280,0,heavyTank],[-400,280,0,heavyTank],[-650,280,0,heavyTank],[-800,280,0,heavyTank]]
+
     
     while running:
         myclock.tick(60)
