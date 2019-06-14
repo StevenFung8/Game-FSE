@@ -1254,7 +1254,6 @@ while current!="exit":
         current=lev4()
     if current=="lev5":
         current=lev5()
-print("Chris is a dumbass")
-print("no way bro say word")
+print("fr tho you really dumb dumb like my god")
 
 quit()
