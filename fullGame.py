@@ -1209,5 +1209,5 @@ while current!="exit":
         current=lev4()
     if current=="lev5":
         current=lev5()
-
+print("Chris is fuckign gay")
 quit()
