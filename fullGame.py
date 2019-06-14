@@ -450,35 +450,7 @@ def prep(screen,towerPos):
                     if click:
                         i[3]=False
                             
-'''                        
-def upgrade():
-    global money
-    for i in range(len(buyRects)):
-        if upgradeRect.collidepoint(mx,my):
-            if click:
-                money-=defenses[i].uCost
-                defenses[i].uCost = None
-                defenses[i].damage+=10*(i+1)
-            
-'''
-'''
-def checkRange(enemy,activeDefense):
-    global money
-    for i in towerPos:
-        for e in enemy:
-            dist=sqrt((int(i[1][0]))-(e[0]+)**2+(int(i[1][0])-(enemyRect[i][1]+enemyRect[i][3]//2))**2) 
-##    enemyRect=[Rect(int(enemy[i][X]),int(enemy[i][Y]),30,30) for i in range(len(enemy))]
-##    for i in range(len(enemy)):
-##        dist=sqrt((int(soldier[X])-(enemyRect[i][0]+enemyRect[i][2]//2))**2+(int(soldier[Y])-(enemyRect[i][1]+enemyRect[i][3]//2))**2)
-##        #print(dist)
-##        #print(enemy[i][HP])
-##        if dist<=180:
-##            enemy[i][HP]-=soldier[2]
-##            if enemy[i][HP]<=0:
-##                money+=enemy[i][PRIZE]
-##                print(money)
-##                del enemy[i]
-'''
+
 def prev1():
     running=True
     mixer.music.load("FSE-Assets/sound/startMusic2.mp3")
@@ -612,11 +584,13 @@ def lev1():
     quitRect=Rect(260,25,150,40)
 
                 #rect, status, blit position, edit status, rect, active tower #
-    towerPos1=[[Rect(115,273,50,50),False,(115,273),False,1,None],[Rect(264,114,50,50),False,(264,114),False,2,None],
-               [Rect(319,242,50,50),False,(319,242),False,3,None],[Rect(217,529,50,50),False,(217,529),False,4,None],
-               [Rect(388,342,50,50),False,(388,342),False,5,None],[Rect(570,342,50,50),False,(570,342),False,6,None],
-               [Rect(750,342,50,50),False,(750,342),False,7,None],[Rect(418,503,50,50),False,(418,503),False,8,None],
-               [Rect(598,503,50,50),False,(598,503),False,9,None],[Rect(778,503,50,50),False,(778,503),False,10,None]]
+                # subtract 91 from x,y, make 212 the length and width
+    towerPos1=[[Rect(115,273,50,50),False,(115,273),False,1,None,Rect(21,162,212,212)],[Rect(264,114,50,50),False,(264,114),False,2,None,Rect(173,23,212,212)],
+               [Rect(319,242,50,50),False,(319,242),False,3,None,Rect(228,131,212,212)],[Rect(217,529,50,50),False,(217,529),False,4,None,Rect(126,438,212,212)],
+               [Rect(388,342,50,50),False,(388,342),False,5,None,Rect(297,251,212,212)],[Rect(570,342,50,50),False,(570,342),False,6,None,Rect(479,251,212,212)],
+               [Rect(750,342,50,50),False,(750,342),False,7,None,Rect(659,251,212,212)],[Rect(418,503,50,50),False,(418,503),False,8,None,Rect(327,412,212,212)],
+               [Rect(598,503,50,50),False,(598,503),False,9,None,Rect(507,412,212,212)],[Rect(778,503,50,50),False,(778,503),False,10,None,Rect(688,412,212,212)]]
+
     enemy=[[-100,190,0,heavyTank],[-250,190,0,heavyTank],[-400,190,0,heavyTank],[-650,190,0,heavyTank],[-800,190,0,heavyTank]]
 
     click=False
@@ -1254,6 +1228,5 @@ while current!="exit":
         current=lev4()
     if current=="lev5":
         current=lev5()
-print("fr tho you really dumb dumb like my god")
-print("sometimes i really wonder what im doign in my life ")
+print("Chris is fukcing gay")
 quit()
