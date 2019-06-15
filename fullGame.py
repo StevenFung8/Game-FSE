@@ -550,7 +550,7 @@ def prev1():
         if pressRect.collidepoint(mx,my):
             draw.rect(screen,RED,pressRect,3)
             if mb[0]==1:
-                return "victory"
+                return "lev1"
 
         display.flip()
 
