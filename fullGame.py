@@ -1385,4 +1385,8 @@ while current!="exit":
     if current=="lev5":
         current=lev5()
 
+    #final victory
+    if current=="victory":
+        current=victory()
+
 quit()
