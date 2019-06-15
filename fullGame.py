@@ -2,9 +2,9 @@
 from pygame import *
 from math import *
 from random import *
-from datetime import datetime
-#besic colours
-RED=(255,0,0)
+
+#basic colours
+RED=(255,0,40)
 GREEN=(0,255,0)
 BLUE=(0,0,255)
 BLACK=(0,0,0)
@@ -128,7 +128,7 @@ def genEnemies(enemy):
         img=[]
         if i[3]==infantry:
             img.append(dead)
-            img.append(transform.rotate(dead,-90))
+            img.append(transforfm.rotate(dead,-90))
             img.append(transform.rotate(dead,-270))
             img.append(transform.rotate(dead,-180))
             deadPics.append(img)
@@ -352,10 +352,7 @@ gameOver=False
 activeDefenses=[]
 
 def prep(screen,towerPos):
-    global defC
-    global money
-    global ready
-    global click
+    global defC,click,ready,money
     readyRect=Rect(830,120,179,69)
     upgradeRect=Rect(750,662,70,30)
     buyRects=[Rect(607,28,59,63),Rect(682,28,61,63),Rect(758,28,61,63),Rect(834,28,61,63),Rect(908,28,61,63),Rect(982,28,61,63)]
@@ -639,7 +636,7 @@ def lev1():
                [Rect(750,342,50,50),False,(750,342),False,6,None,Rect(659,251,212,212)],[Rect(418,503,50,50),False,(418,503),False,7,None,Rect(327,412,212,212)],
                [Rect(598,503,50,50),False,(598,503),False,8,None,Rect(507,412,212,212)],[Rect(778,503,50,50),False,(778,503),False,9,None,Rect(688,412,212,212)]]
             #x,y,frame,enemy type,health,death status
-    enemy=[[0,190,0,transport,transport.health,False],[100,190,0,transport,transport.health,False],[-100,190,0,heavyTank,heavyTank.health,False],[-250,190,0,heavyTank,heavyTank.health,False],[-400,190,0,heavyTank,heavyTank.health,False],[-650,190,0,heavyTank,heavyTank.health,False],[-800,190,0,heavyTank,heavyTank.health,False]]
+    enemy=[[0,190,0,transport,transport.health,False]]#[100,190,0,transport,transport.health,False],[-100,190,0,heavyTank,heavyTank.health,False],[-250,190,0,heavyTank,heavyTank.health,False],[-400,190,0,heavyTank,heavyTank.health,False],[-650,190,0,heavyTank,heavyTank.health,False],[-800,190,0,heavyTank,heavyTank.health,False]]
 
     click=False
     while running:
@@ -652,6 +649,7 @@ def lev1():
         draw.rect(screen,BLACK,quitRect,2)
         mx,my=mouse.get_pos()
         mb=mouse.get_pressed()
+
         for evt in event.get():
             if evt.type==QUIT:
                 running=False
@@ -746,8 +744,21 @@ def lev1():
                 endScreen.fill((220,220,220,127))
                 screen.blit(endScreen,(0,0))
                 screen.blit(victoryRect,(320,225))
-                retryRect=Rect(350,405,128,50)
-                mainRect=Rect(510,405,187,50)
+                redoRect=Rect(445,353,150,40)
+                nextRect=Rect(410,404,217,40)
+                if redoRect.collidepoint(mx,my):
+                    draw.rect(screen,RED,redoRect,3)
+                    if click:
+                        return "prev1"
+                if nextRect.collidepoint(mx,my):
+                    draw.rect(screen,RED,nextRect,3)
+                    if click:
+                        defC=None
+                        editCond=False
+                        activeDefenses=[]
+                        ready=False
+                        running=False
+                        return "prev2"
                 
         display.flip()
 
@@ -770,7 +781,8 @@ def lev2():
                [Rect(425,300,50,50),False,(425,300),False,7,None,Rect(334,209,212,212)],[Rect(560,300,50,50),False,(560,300),False,8,None,Rect(469,209,212,212)],
                [Rect(750,275,50,50),False,(750,275),False,9,None,Rect(659,184,212,212)],[Rect(825,375,50,50),False,(825,375),False,10,None,Rect(734,284,212,212)]]
 
-    enemy=[[-100,510,0,heavyTank,heavyTank.health,True],[-250,510,0,heavyTank,heavyTank.health,True],[-400,510,0,heavyTank,heavyTank.health,True],[-550,510,0,heavyTank,heavyTank.health,True],[-700,510,0,heavyTank,heavyTank.health,True]]
+    enemy=[[-100,510,0,heavyTank,heavyTank.health,False],[-250,510,0,heavyTank,heavyTank.health,False],[-400,510,0,heavyTank,heavyTank.health,False],
+           [-550,510,0,heavyTank,heavyTank.health,False],[-700,510,0,heavyTank,heavyTank.health,False]]
     while running:
         myclock.tick(60)
         drawScene2(screen)
@@ -834,6 +846,8 @@ def lev2():
             baseHealth(enemy)
             healthBars(enemy)
             damageEnemies(enemy,activeDefenses,towerPos2)
+            for i in towerPos2:
+                draw.rect(screen,RED,i[6],2)
 
         if gameOver:
             endScreen=Surface((width,height),SRCALPHA)
@@ -886,7 +900,8 @@ def lev3():
                [Rect(474,325,50,50),False,(474,325),False,7,None],[Rect(630,305,50,50),False,(630,305),False,8,None],
                [Rect(700,136,50,50),False,(700,136),False,11,None]]
 
-    enemy=[[-100,480,0,heavyTank],[-250,480,0,heavyTank],[-400,480,0,heavyTank],[-650,480,0,heavyTank],[-800,480,0,heavyTank]]
+    enemy=[[-100,480,0,heavyTank,heavyTank.health,False],[-250,480,0,heavyTank,heavyTank.health,False],
+           [-400,480,0,heavyTank,heavyTank.health,False],[-650,480,0,heavyTank,heavyTank.health,False],[-800,480,0,heavyTank,heavyTank.health,False]]
     while running:
         myclock.tick(60)
         drawScene3(screen)
@@ -1000,7 +1015,8 @@ def lev4():
                [Rect(457,472,50,50),False,(457,472),False,5,None],[Rect(241,647,50,50),False,(241,647),False,6,None],
                [Rect(689,429,50,50),False,(689,429),False,7,None],[Rect(495,260,50,50),False,(495,260),False,8,None],
                [Rect(686,240,50,50),False,(686,240),False,9,None],[Rect(820,409,50,50),False,(820,409),False,10,None]]
-    enemy=[[-100,280,0,heavyTank],[-250,280,0,heavyTank],[-400,280,0,heavyTank],[-650,280,0,heavyTank],[-800,280,0,heavyTank]]
+    enemy=[[-100,280,0,heavyTank,heavyTank.health,False],[-250,280,0,heavyTank,heavyTank.health,False],[-400,280,0,heavyTank],
+           [-650,280,0,heavyTank,heavyTank.health,False],[-800,280,0,heavyTank,heavyTank.health,False]]
     while running:
         myclock.tick(60)
         drawScene4(screen)
@@ -1113,7 +1129,8 @@ def lev5():
                [Rect(525,262,50,50),False,(525,262),False,7,None],[Rect(525,409,50,50),False,(525,409),False,8,None],
                [Rect(645,409,50,50),False,(645,409),False,9,None],[Rect(459,589,50,50),False,(459,589),False,10,None],
                [Rect(815,409,50,50),False,(815,409),False,11,None]]
-    enemy=[[130,-100,0,heavyTank],[130,-250,0,heavyTank],[130,-400,0,heavyTank],[130,-650,0,heavyTank],[130,-800,0,heavyTank]]
+    enemy=[[130,-100,0,heavyTank,heavyTank.health,False],[130,-250,0,heavyTank,heavyTank.health,False],[130,-400,0,heavyTank,heavyTank.health,False],
+           [130,-650,0,heavyTank,heavyTank.health,False],[130,-800,0,heavyTank,heavyTank.health,False]]
     while running:
         myclock.tick(60)
         drawScene5(screen)
