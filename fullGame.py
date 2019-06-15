@@ -503,6 +503,33 @@ def damageEnemies(enemy,activeDefenses,towerPos):
             if e[4]<=0:
                 e[5]=True
 
+def victory(score):
+    running=True
+    mixer.music.load("FSE-Assets/sound/sovietTheme.mp3")
+    mixer.music.play(-1)
+    mainMenuRect=Rect(560,603,400,50)
+    click=False
+    while running:
+        mx,my=mouse.get_pos()
+        mb=mouse.get_pressed()
+        screen.blit(finalLevel,(0,0))
+        for evt in event.get():
+            if evt.type==QUIT:
+                running=False
+                return "exit"
+            if evt.type==MOUSEBUTTONDOWN:
+                click=True
+            if evt.type==MOUSEBUTTONUP:
+                click=False
+
+        if mainMenuRect.collidepoint(mx,my):
+            draw.rect(screen,BLACK,mainMenuRect,3)
+            if mb[0]==1 and click==False:
+                running=False
+
+        display.flip()
+    return "levelSelect"
+
 
 def prev1():
     running=True
@@ -523,7 +550,7 @@ def prev1():
         if pressRect.collidepoint(mx,my):
             draw.rect(screen,RED,pressRect,3)
             if mb[0]==1:
-                return "lev1"
+                return "victory"
 
         display.flip()
 
@@ -1370,6 +1397,6 @@ while current!="exit":
 
     #final victory
     if current=="victory":
-        current=victory()
+        current=victory(score)
 
 quit()
