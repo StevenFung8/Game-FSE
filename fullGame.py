@@ -163,8 +163,9 @@ def baseHealth(enemy):
     count=0
     draw.rect(screen,BLACK,(944,374,102,12),0)
     for i in enemy:
-        if i[0]>=900 and i[5]==False:
-            bars-=i[3].damage
+        if i[0]>=900:
+            if i[5]==False:
+                bars-=i[3].damage
             if bars<=0:
                 bars=0
     
@@ -502,6 +503,7 @@ def damageEnemies(enemy,activeDefenses,towerPos):
             if e[4]<=0:
                 e[5]=True
 
+                
 def prev1():
     running=True
     mixer.music.load("FSE-Assets/sound/startMusic2.mp3")
@@ -761,12 +763,14 @@ def lev2():
     mixer.music.load("FSE-Assets/sound/bgMusic.mp3")
     mixer.music.play(-1)
     quitRect=Rect(260,25,150,40)
-    towerPos2=[[Rect(75,430,50,50),False,(75,430),False,1,None],[Rect(210,430,50,50),False,(210,430),False,2,None],
-               [Rect(210,300,50,50),False,(210,300),False,3,None],[Rect(225,125,50,50),False,(225,125),False,4,None],
-               [Rect(425,125,50,50),False,(425,125),False,5,None],[Rect(600,125,50,50),False,(600,125),False,6,None],
-               [Rect(425,300,50,50),False,(425,300),False,7,None],[Rect(560,300,50,50),False,(560,300),False,8,None],
-               [Rect(750,275,50,50),False,(750,275),False,9,None],[Rect(825,375,50,50),False,(825,375),False,10,None]]
-    enemy=[[-100,510,0,heavyTank],[-250,510,0,heavyTank],[-400,510,0,heavyTank],[-550,510,0,heavyTank],[-700,510,0,heavyTank]]
+                # subtract 91 from x,y, make 212 the length and width
+    towerPos2=[[Rect(75,430,50,50),False,(75,430),False,1,None,Rect(-26,339,212,212)],[Rect(210,430,50,50),False,(210,430),False,2,None,Rect(119,339,212,212)],
+               [Rect(210,300,50,50),False,(210,300),False,3,None,Rect(119,209,212,212)],[Rect(225,125,50,50),False,(225,125),False,4,None,Rect(134,34,212,212)],
+               [Rect(425,125,50,50),False,(425,125),False,5,None,Rect(334,34,212,212)],[Rect(600,125,50,50),False,(600,125),False,6,None,Rect(509,34,212,212)],
+               [Rect(425,300,50,50),False,(425,300),False,7,None,Rect(334,209,212,212)],[Rect(560,300,50,50),False,(560,300),False,8,None,Rect(469,209,212,212)],
+               [Rect(750,275,50,50),False,(750,275),False,9,None,Rect(659,184,212,212)],[Rect(825,375,50,50),False,(825,375),False,10,None,Rect(734,284,212,212)]]
+
+    enemy=[[-100,510,0,heavyTank,heavyTank.health,True],[-250,510,0,heavyTank,heavyTank.health,True],[-400,510,0,heavyTank,heavyTank.health,True],[-550,510,0,heavyTank,heavyTank.health,True],[-700,510,0,heavyTank,heavyTank.health,True]]
     while running:
         myclock.tick(60)
         drawScene2(screen)
@@ -828,6 +832,8 @@ def lev2():
             genEnemies(enemy)
             moveEnemy2(screen,enemy)
             baseHealth(enemy)
+            healthBars(enemy)
+            damageEnemies(enemy,activeDefenses,towerPos2)
 
         if gameOver:
             endScreen=Surface((width,height),SRCALPHA)
@@ -873,6 +879,7 @@ def lev3():
     mixer.music.load("FSE-Assets/sound/bgMusic.mp3")
     mixer.music.play(-1)
     quitRect=Rect(260,25,150,40)
+                # subtract 91 from x,y, make 212 the length and width
     towerPos3=[[Rect(52,391,50,50),False,(52,391),False,1,None],[Rect(200,391,50,50),False,(200,391),False,2,None],
                [Rect(190,563,50,50),False,(190,563),False,3,None],[Rect(274,294,50,50),False,(274,294),False,4,None],
                [Rect(274,136,50,50),False,(274,136),False,5,None],[Rect(450,136,50,50),False,(450,136),False,6,None],
@@ -987,6 +994,7 @@ def lev4():
     mixer.music.load("FSE-Assets/sound/bgMusic.mp3")
     mixer.music.play(-1)
     quitRect=Rect(260,25,150,40)
+                # subtract 91 from x,y, make 212 the length and width
     towerPos4=[[Rect(107,355,50,50),False,(107,355),False,1,None],[Rect(193,190,50,50),False,(193,190),False,2,None],
                [Rect(331,298,50,50),False,(331,298),False,3,None],[Rect(331,423,50,50),False,(331,423),False,4,None],
                [Rect(457,472,50,50),False,(457,472),False,5,None],[Rect(241,647,50,50),False,(241,647),False,6,None],
@@ -1098,6 +1106,7 @@ def lev5():
     mixer.music.load("FSE-Assets/sound/bgMusic.mp3")
     mixer.music.play(-1)
     quitRect=Rect(260,25,150,40)
+                # subtract 91 from x,y, make 212 the length and width
     towerPos5=[[Rect(30,197,50,50),False,(30,197),False,1,None],[Rect(232,173,50,50),False,(232,173),False,2,None],
                [Rect(382,173,50,50),False,(382,173),False,3,None],[Rect(228,337,50,50),False,(228,337),False,4,None],
                [Rect(332,379,50,50),False,(332,379),False,5,None],[Rect(332,520,50,50),False,(332,520),False,6,None],
