@@ -71,29 +71,29 @@ place_sound = mixer.Sound("FSE-Assets/sound/placeSound.wav")
 gun_sound = mixer.Sound("FSE-Assets/sound/gunShot.wav")
 cannon_sound = mixer.Sound("FSE-Assets/sound/gunShotCannon.wav")
 
-money=0
-score=0
-pause=False
+money=0 #the starting amount of money you have 
+score=0 #your starting score 
+pause=False #if the music is paused or not, starts off paused.
 
-#this is the first class which is stupid gay shit
+#this is the first class which defines all the characteristics of each enemy troop
 class enemyType:
 
     def __init__(self,name,speed,health,damage,prize):
-        self.name=name
-        self.speed=speed
-        self.health=health
-        self.damage=damage
-        self.prize=prize
-        self.filename="FSE-Assets/Enemies/"+name+".png"
+        self.name=name #name of the enemy troop 
+        self.speed=speed #the speed at which the enemy troop travel downs the path 
+        self.health=health #the health of the enemy 
+        self.damage=damage #the amount of damage the troop does to the base when it reaches the end of the path  
+        self.prize=prize #the amount of money you get when you kill a enemy troop 
+        self.filename="FSE-Assets/Enemies/"+name+".png" #the name to load the picture into the game 
 
-infantry=enemyType('infantry',1.5,100,5,100)
-transport=enemyType('transport',1.7,400,10,175)
+infantry=enemyType('infantry',1.5,100,5,100) #so these are all the properties of the troops 
+transport=enemyType('transport',1.7,400,10,175) #for example, 'transport' has a speed of 1.7, 400 health, does 10 damage to the base, and you get 175 dollars if you kill it 
 motorcycle=enemyType('motorcycle',2,250,5,150)
 lightTank=enemyType('lightTank',1,700,15,200)
 heavyTank=enemyType('heavyTank',1,1000,20,250)
 tankDestroyer=enemyType('tankDestroyer',0.8,1100,25,300)
 
-class towerType:
+class towerType: #this is the class that defines all the properties for the towers 
 
     def __init__(self,name,damage,price,uCost,refund,delay):
         self.name=name
