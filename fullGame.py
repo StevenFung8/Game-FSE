@@ -3,7 +3,7 @@ from pygame import *
 from math import *
 from random import *
 from datetime import datetime
-#besic colours
+#bAsic colours
 RED=(255,0,0)
 GREEN=(0,255,0)
 BLUE=(0,0,255)
@@ -75,34 +75,35 @@ money=0
 score=0
 pause=False
 
-#this is the first class which
+#this is the first class which defines all the properties of the enemy troops
+
 class enemyType:
 
     def __init__(self,name,speed,health,damage,prize):
-        self.name=name
-        self.speed=speed
-        self.health=health
-        self.damage=damage
-        self.prize=prize
-        self.filename="FSE-Assets/Enemies/"+name+".png"
+        self.name=name #name of the troop (ie."heavyTank")
+        self.speed=speed #how fast each eney troop moves down the path
+        self.health=health #the health of each enemy troop
+        self.damage=damage #the damage that each troop does to the base when it reaches the end
+        self.prize=prize #the amount of money you get when you kill the enemy
+        self.filename="FSE-Assets/Enemies/"+name+".png" #name of the image you need to load in
 
-infantry=enemyType('infantry',1.5,100,5,100)
+infantry=enemyType('infantry',1.5,100,5,100) #these are all the atrributes of infantry (ie, infantry has a speed of 1,5, 100 health, 5 danamge to base, 100 dollors if you kill it")
 transport=enemyType('transport',1.7,400,10,175)
 motorcycle=enemyType('motorcycle',2,250,5,150)
 lightTank=enemyType('lightTank',1,700,15,200)
 heavyTank=enemyType('heavyTank',1,1000,20,250)
 tankDestroyer=enemyType('tankDestroyer',0.8,1100,25,300)
 
-class towerType:
+class towerType: #this is the class that defines all the properties of the towers
 
     def __init__(self,name,damage,price,uCost,refund,delay):
-        self.name=name
-        self.damage=damage
-        self.price=price
-        self.uCost=uCost
-        self.refund=refund
-        self.delay=delay
-        self.filename="FSE-Assets/Defenses/"+name+".png"
+        self.name=name #name of the tower (ie, "antiTank")
+        self.damage=damage #damage that each tower inflicts on the enemy troops
+        self.price=price #price to purchase the tower
+        self.uCost=uCost #cost to upgrade the tower
+        self.refund=refund #the amount of money you get back if you refund the tower
+        self.delay=delay #rate that it fires
+        self.filename="FSE-Assets/Defenses/"+name+".png" #file name to load the image in
 
 antiTank=towerType('antiTank',80,800,350,400,60)
 bunker=towerType('bunker',100,1000,450,500,10)
@@ -111,17 +112,17 @@ heavyGun=towerType('heavyGun',200,1500,700,750,60)
 heavyMG=towerType('heavyMG',5,500,200,250,5)
 soldier=towerType('soldier',25,250,100,125,25)
 
-def genEnemies(enemy):
-    global pics
-    global deadPics
+def genEnemies(enemy): #this makes all the enemy images for each level
+    global pics #gloal variable pics
+    global deadPics #pics for all the dead enemies
     pics=[]
     deadPics=[]
-    for i in enemy:
+    for i in enemy: #for all the enemies in the level
         img=[]
-        img.append(image.load(i[3].filename))
-        img.append(transform.rotate(image.load(i[3].filename),-90))
-        img.append(transform.rotate(image.load(i[3].filename),-270))
-        img.append(transform.rotate(image.load(i[3].filename),-180))
+        img.append(image.load(i[3].filename))  #load the image for the specific tower, (i[3] is the name of the tower) and appends it to the pics list
+        img.append(transform.rotate(image.load(i[3].filename),-90)) #for the image when it goes down
+        img.append(transform.rotate(image.load(i[3].filename),-270)) #for the image when it goes up
+        img.append(transform.rotate(image.load(i[3].filename),-180)) #when the image goes right
         pics.append(img)
     '''
     for i in enemy:
@@ -139,13 +140,13 @@ def genEnemies(enemy):
             img.append(transform.rotate(wreck,-180))
             deadPics.append(img)
     '''    
-    return pics
+    return pics #sends out the pics list for each level
 
-def healthBars(enemy):
-    for i in enemy:
-        if i[5]==False:
-            draw.rect(screen,BLACK,(i[0]+14,i[1]-11,i[3].health/10+2,9),0)
-            draw.rect(screen,GREEN,(i[0]+15,i[1]-10,i[4]/10,7),0)
+def healthBars(enemy): #this is the function to make
+    for i in enemy: #for all enemies
+        if i[5]==False: # if they are not dead
+            draw.rect(screen,BLACK,(i[0]+14,i[1]-11,i[3].health/10+2,9),0) #outline of the healthbar, taken by taking the size of the
+            draw.rect(screen,GREEN,(i[0]+15,i[1]-10,i[4]/10,7),0) #the actual part of the health, the gre
 
 def moneyScore(screen):
     global money
@@ -183,6 +184,7 @@ def music(state):
     global pause
     global current
     if current=="main":
+
         muteRect=Rect(870,650,50,50)
         screen.blit(eigthNote, (875,655))
     else:
