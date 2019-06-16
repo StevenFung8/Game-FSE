@@ -456,47 +456,52 @@ def prep(screen,towerPos):
             if click:
                 defC=None
 
-    select=False
-    if defC==None:
-        select=True
+    #This is the tower edit program - selecting, upgrade, delete
+
+    select=False #select checks if a tower is already selected. If a tower is selected already, select prohibits the player from choosing another tower
+    if defC==None: #no tower is selected
+        select=True #the played can select a tower while true
         for i in towerPos:
-            if i[0].collidepoint(mx,my) and i[1]==True and select==True:
-                draw.rect(screen,YELLOW,i[0],3)
-                if click:
-                    i[3]=True
-            if i[3]==True:
-                select=False
-                draw.rect(screen,GREEN,buyRects[i[5]],2)
-                screen.blit(towerStats[i[5]],(620,630))
+            if i[0].collidepoint(mx,my) and i[1]==True and select==True: #if the player hovers over a tower space,there is a tower, and the player has not
+                print(i[1],select)
+                draw.rect(screen,YELLOW,i[0],3)                          #selected a tower yet, the space will be highlighted
+                if click:   
+                    i[3]=True   #the tower can be edited if the player clicks on it.
+                    
+            if i[3]:
+                select=False  #while a tower is selected, the player cannot select another until they choose cancel
+                draw.rect(screen,GREEN,buyRects[i[5]],2) #highlights the tower
+                screen.blit(towerStats[i[5]],(620,630)) #this will blit the individual tower's damage
+                draw.rect(screen,RED,i[6],2) #displays the tower's attack range
                 txtUpgrade=txtFont2.render("UPGRADE?",True,BLACK)
                 draw.rect(screen,BLACK,upgradeRect,2)
-                for a in activeDefenses:
-                    if a[1]==i[2]:
-                        damageDes=txtFont2.render("%i"%(a[4]),True,BLACK)
+                for a in activeDefenses: #checks all active towers
+                    if a[1]==i[2]: #checks which active tower is on the selected tower space
+                        damageDes=txtFont2.render("%i"%(a[4]),True,BLACK) #the individual tower's attack is a[4]
                         screen.blit(damageDes,(850,630))
-                        if type(a[5])==int:
-                            txtuCost=txtFont2.render("$%i"%(a[5]),True,BLACK)
+                        if type(a[5])==int: #if upgraded, a[5] will be None - not an int value
+                            txtuCost=txtFont2.render("$%i"%(a[5]),True,BLACK) #price of upgrade
                         else:
-                            txtuCost=txtFont2.render(a[5],True,BLACK)
+                            txtuCost=txtFont2.render(a[5],True,BLACK) #will blit nothing
 
-                        if upgradeRect.collidepoint(mx,my):
+                        if upgradeRect.collidepoint(mx,my): 
                             if type(a[5])==int:
-                                draw.rect(screen,GREEN,upgradeRect,2)
+                                draw.rect(screen,GREEN,upgradeRect,2) #will highlight upgradeRect when hovered over and if the tower has not been upgraded
                                 if click:
                                     mixer.Sound.play(place_sound)
-                                    a[4]+=10*(i[5]+1)
-                                    a[5]=None
-                                    if money-defenses[i[5]].uCost>=0:
+                                    a[4]+=10*(i[5]+1) #increasing the attack
+                                    a[5]=None  #once upgraded, the upgrade cost will be nothing
+                                    if money-defenses[i[5]].uCost>=0: #will only upgrade if the player has enough money
                                         money-=defenses[i[5]].uCost
 
                 cancelRect=Rect(20,125,125,30)
-
+                
                 screen.blit(txtUpgrade,(650,670))
                 screen.blit(txtuCost,(763,670))
                 screen.blit(cancelPic,(20,125))
 
-                cancelRect=Rect(20,125,125,30)
-                deleteRect=Rect(20,160,125,30)
+                cancelRect=Rect(20,125,125,30) #rect for cancelling a tower selection
+                deleteRect=Rect(20,160,125,30) #rect for deleting an active tower
                 draw.rect(screen,GREEN,i[0],3)
                 screen.blit(cancelPic,(20,125))
                 screen.blit(deletePic,(20,160))
@@ -505,18 +510,19 @@ def prep(screen,towerPos):
                     draw.rect(screen,RED,deleteRect,2)
                     if click:
                         mixer.Sound.play(remove_sound)
-                        i[3]=False
-                        i[1]=False
+                        i[3]=False #when deleted, tower edit status reverts
+                        i[1]=False #when deleted, the tower space goes empty
                         for a in activeDefenses:
-                            if a[3]==i[4]:
-                                activeDefenses.remove(a)
-                                money+=a[2].refund
-                        select=True
+                            if a[3]==i[4]: #checks which active tower was on the selected tower space
+                                activeDefenses.remove(a) #deletes the tower from the active list
+                                money+=a[2].refund #give back money 
+                        #select=True #player can select a tower again
+                        
                 if cancelRect.collidepoint(mx,my):
                     draw.rect(screen,RED,cancelRect,2)
                     if click:
-                        i[3]=False
-                        select=True
+                        i[3]=False #tower edit status reverts
+                        #select=True #player can select a tower again
 
 def damageEnemies(enemy,activeDefenses,towerPos):
     global money,score
