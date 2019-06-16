@@ -122,7 +122,8 @@ def genEnemies(enemy): #this function loads all the images for the enemy troops 
         img.append(transform.rotate(image.load(i[3].filename),-90)) #the picture but rotated 90 degress for when its going down the path
         img.append(transform.rotate(image.load(i[3].filename),-270)) #the picture but rotated 270 for when its going up the path 
         img.append(transform.rotate(image.load(i[3].filename),-180))#the picture but rotated 180 for when its going left of the path 
-        pics.append(img) #append the list into the pics list to make a 2D list 
+        pics.append(img) #append the list into the pics list to make a 2D list
+        #this makes it so that the first index of img is the image facing the right, second is down, third is up, and fourth is left
     '''
     for i in enemy:
         img=[]
@@ -183,69 +184,69 @@ def music(state): #this function is used to toggle the music (mute and unmute)
 
     global pause #the variable to control the toggle
     global current #to determine what screen is on right now 
-    if current=="main": #if its the main menu 
+    if current=="main": #if its the main menu, the position of the mute rect is different
         muteRect=Rect(870,650,50,50)
         screen.blit(eigthNote, (875,655))
-    else:
+    else: #if its not the main menu, its at another spot
         muteRect = Rect(420, 25, 40, 40)
         screen.blit(eigthNote, (420, 27))
 
     mx, my = mouse.get_pos()
     mb = mouse.get_pressed()
 
-    if state is not None:
+    if state is not None: #this only starts if mouse is being pressed down
 
-        if state:
-            if muteRect.collidepoint(mx, my) and pause == False:
+        if state: #if state is true
+            if muteRect.collidepoint(mx, my) and pause == False: #if i press it and music is playing, it would pause it
                 pause = True
                 mixer.music.pause()
-            elif muteRect.collidepoint(mx, my) and pause == True:
+            elif muteRect.collidepoint(mx, my) and pause == True: #if i press it and the music is paused, it woudl play it again
                 pause = False
                 mixer.music.unpause()
 
 
-    if pause:
-        if current=="main":
+    if pause: #if the music is paused, it needs to blit the paused music image
+        if current=="main": #main menu location is different from the position in the levels 
             screen.blit(mutePic,(875,655))
         else:
             screen.blit(mutePic, (421, 27))
 
-    if muteRect.collidepoint(mx,my):
+    if muteRect.collidepoint(mx,my): #if the mouse is over the rect, highlight it yellow
         draw.rect(screen, YELLOW, muteRect, 3)
     else:
         draw.rect(screen, RED, muteRect, 3)
 
-def moveEnemy(screen,enemy):
-    count=-1
+def moveEnemy(screen,enemy): #for each level, when a enemy troop reaches the end of a path, it needs to know to turn, and this is what the function is used for 
+    count=-1 #counter for number of enemies in the list
     for i in enemy:
-        if i[0]<220:
+        if i[0]<220: #for the first section of the path, if it doesn't hit the end of the path, the enemy troop will move at a constant speed defined in the enemyType class
             i[0]+=i[3].speed
-            i[2]=0
-        if i[0]>=220 and i[1]<420:
+            i[2]=0 # i[2] is the 'frame' part of the 2D list, and it defines the frame that is needed for this section of the path. I this case, the frame needed is the troop facing right
+        if i[0]>=220 and i[1]<420: #this is the second section of the path, the path that goes down, and it will move at a constant speed 
             i[1]+=i[3].speed
-            i[2]=1
-        if i[1]>=410:
+            i[2]=1 #the frame needed here is the one that faces down, so i[2] changes to 1 
+        if i[1]>=410: #third section of the path, and it will travel at a constant speed
             i[0]+=i[3].speed
-            i[2]=0
-        count+=1
-        if i[5]==False:
-            screen.blit(pics[count][i[2]],i[:2])
+            i[2]=0 #the frame changes back to the troop facing to the right 
+        count+=1 #counter for each enemy in the enemy list, and adds one for each enemy
+        if i[5]==False: #if troops are not dead
+            screen.blit(pics[count][i[2]],i[:2]) #blits all the pictures needed, pics[count][i[2]] is the image and what rotation is needed, and i[:2] is the point at where you shoudl blit it
         '''    
         if i[5]==True:
             screen.blit(deadPics[count][i[2]],i[:2])
         '''
 
-def moveEnemy2(screen,enemy):
-    count=-1
+def moveEnemy2(screen,enemy): #this is for the second level, because the path is different for each level, enemies must move different 
+    count=-1 #counter for number of eneimes in the list 
 
-    check1=Rect(300,220,65,350)
+    check1=Rect(300,220,65,350) #each section of the path has a rect, so when the enemy troop collides with the rect, it will turn the enemy troop 
     check2=Rect(300,155,365,65)
     check3=Rect(665,210,65,230)
     check4=Rect(665,440,900,65)
 
     for i in enemy:
         #if i[5]==False:
-        if i[0]<300:
+        if i[0]<300: #while 
             i[0]+=i[3].speed
             i[2]=0
         if check1.collidepoint(i[0],i[1]):
