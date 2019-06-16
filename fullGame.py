@@ -87,12 +87,12 @@ class enemyType:
         self.prize=prize #the amount of money you get when you kill a enemy troop 
         self.filename="FSE-Assets/Enemies/"+name+".png" #the name to load the picture into the game 
 
-infantry=enemyType('infantry',1.5,100,5,100) #so these are all the properties of the troops 
-transport=enemyType('transport',1.7,400,10,175) #for example, 'transport' has a speed of 1.7, 400 health, does 10 damage to the base, and you get 175 dollars if you kill it 
-motorcycle=enemyType('motorcycle',2.3,250,5,150)
-lightTank=enemyType('lightTank',1,700,15,200)
-heavyTank=enemyType('heavyTank',1,1000,20,250)
-tankDestroyer=enemyType('tankDestroyer',0.8,1100,25,300)
+infantry=enemyType('infantry',2,100,5,100) #so these are all the properties of the troops 
+transport=enemyType('transport',2.5,400,10,175) #for example, 'transport' has a speed of 1.7, 400 health, does 10 damage to the base, and you get 175 dollars if you kill it 
+motorcycle=enemyType('motorcycle',3,250,5,150)
+lightTank=enemyType('lightTank',1.7,700,15,200)
+heavyTank=enemyType('heavyTank',1.5,1000,20,250)
+tankDestroyer=enemyType('tankDestroyer',1.3,1100,25,300)
 
 class towerType: #this is the class that defines all the properties for the towers 
 
@@ -106,10 +106,10 @@ class towerType: #this is the class that defines all the properties for the towe
         self.filename="FSE-Assets/Defenses/"+name+".png" #the file path to load the picture into the game 
  
 antiTank=towerType('antiTank',80,800,350,400,60) #so these are all the properties for the towers 
-bunker=towerType('bunker',100,1000,450,500,10) #for example the 'bunker' would deal 100 damage to troops, cost 1000 dollars, cost 450 to upgrade, you get 500 if you refund it, and it fires every 10 ticks 
+bunker=towerType('bunker',40,1000,450,500,10) #for example the 'bunker' would deal 100 damage to troops, cost 1000 dollars, cost 450 to upgrade, you get 500 if you refund it, and it fires every 10 ticks 
 fortress=towerType('fortress',150,1250,600,625,50)
 heavyGun=towerType('heavyGun',200,1500,700,750,60)
-heavyMG=towerType('heavyMG',7,500,200,250,5)
+heavyMG=towerType('heavyMG',6,500,200,250,5)
 soldier=towerType('soldier',25,250,100,125,25)
 
 def genEnemies(enemy): #this function loads all the images for the enemy troops for each level 
@@ -166,10 +166,14 @@ def baseHealth(enemy):
     draw.rect(screen,BLACK,(944,374,102,12),0) #draws the outline of the health bar 
     for i in enemy: #for every enemy in the level
         if i[0]>=900: #if the enemy reaches the base
-            if i[5]==False or i[5]==None: #If they are not dead
+            if i[5]==False: #If they are not dead
                 bars-=i[3].damage #subtract the health of the base by the damage that they deal (defined in the enemyType class)
+            if i[5]==True and i[0]>=1100: #makes sure if the enemy is off the screen and becomes "dead" in-game, the damage done to the base is still applied
+                bars-=i[3].damage
             if bars<=0: #if it goes negative, set it back to zero
                 bars=0
+        if i[0]>=1100: #if the enemy passes through the base, its job is done, so it becomes "dead", though it was never killed by a tower
+            i[5]=True
 
     baseHealth=txtFont3.render(str(bars),True,BLACK) #renders the health beside the black heart
     screen.blit(baseHealth,(965,353))
@@ -219,7 +223,8 @@ def music(state): #this function is used to toggle the music (mute and unmute)
 def moveEnemy(screen,enemy):
     count=-1
     for i in enemy:
-        if i[5]==False:
+        i[7]-=1
+        if i[5]==False and i[7]<=0:
             if i[0]<220:
                 i[0]+=i[3].speed
                 i[2]=0
@@ -231,9 +236,9 @@ def moveEnemy(screen,enemy):
                 i[2]=0
 
         count+=1
-        if i[5]==False and i[0]>=-100:
+        if i[5]==False and i[7]<=0:
             screen.blit(pics[count][i[2]],i[:2])
-        if i[5]==True:
+        if i[5]==True and i[0]<=1100:
             screen.blit(deadPics[count][i[2]],(i[0],i[1]+15))
 
 def moveEnemy2(screen,enemy):
@@ -245,7 +250,7 @@ def moveEnemy2(screen,enemy):
     check4=Rect(665,440,900,65)
 
     for i in enemy:
-        if i[5]==False:
+        if i[5]==False and i[7]<=0:
             if i[0]<300:
                 i[0]+=i[3].speed
                 i[2]=0
@@ -263,15 +268,15 @@ def moveEnemy2(screen,enemy):
                 i[2]=0
 
         count+=1
-        if i[5]==False:
+        if i[5]==False and i[7]<=0:
             screen.blit(pics[count][i[2]],i[:2])
-        if i[5]==True:
+        if i[5]==True and i[0]<=1100:
             screen.blit(deadPics[count][i[2]],(i[0],i[1]+15))
 
 def moveEnemy3(screen,enemy):
     count=-1
     for i in enemy:
-        if i[5]==False:
+        if i[5]==False and i[7]<=0:
             if i[0]<370:
                 i[0]+=i[3].speed
                 i[2]=0
@@ -283,9 +288,9 @@ def moveEnemy3(screen,enemy):
                 i[2]=0
 
         count+=1
-        if i[5]==False:
+        if i[5]==False and i[7]<=0:
             screen.blit(pics[count][i[2]],i[:2])
-        if i[5]==True:
+        if i[5]==True and i[0]<=1100:
             screen.blit(deadPics[count][i[2]],(i[0],i[1]+15))
 
 def moveEnemy4(screen,enemy):
@@ -297,7 +302,7 @@ def moveEnemy4(screen,enemy):
     check4=Rect(590,270,900,60)
 
     for i in enemy:
-        if i[5]==False:
+        if i[5]==False and i[7]<=0:
             if i[0]<230:
                 i[0]+=i[3].speed
                 i[2]=0
@@ -315,11 +320,11 @@ def moveEnemy4(screen,enemy):
                 i[2]=0
 
         count+=1
-        if i[5]==False:
+        if i[5]==False and i[7]<=0:
             screen.blit(pics[count][i[2]],i[:2])
-        if i[5]==True:
+        if i[5]==True and i[0]<=1100:
             screen.blit(deadPics[count][i[2]],(i[0],i[1]+15))
-
+            
 def moveEnemy5(screen,enemy):
     count=-1
     check1=Rect(100,260,327,50)
@@ -327,7 +332,7 @@ def moveEnemy5(screen,enemy):
     check3=Rect(427,495,900,50)
 
     for i in enemy:
-        if i[5]==False:
+        if i[5]==False and i[7]<=0:
             if i[1]<260:
                 i[1]+=i[3].speed
                 i[2]=1
@@ -342,9 +347,9 @@ def moveEnemy5(screen,enemy):
                 i[2]=0
 
         count+=1
-        if i[5]==False:
+        if i[5]==False and i[7]<=0:
             screen.blit(pics[count][i[2]],i[:2])
-        if i[5]==True:
+        if i[5]==True and i[0]<=1100:
             screen.blit(deadPics[count][i[2]],(i[0],i[1]+15))
 
 def drawScene1(screen):
@@ -689,10 +694,16 @@ def lev1():
                [Rect(388,342,50,50),False,(388,342),False,4,None,Rect(297,251,212,212)],[Rect(570,342,50,50),False,(570,342),False,5,None,Rect(479,251,212,212)],
                [Rect(750,342,50,50),False,(750,342),False,6,None,Rect(659,251,212,212)],[Rect(418,503,50,50),False,(418,503),False,7,None,Rect(327,412,212,212)],
                [Rect(598,503,50,50),False,(598,503),False,8,None,Rect(507,412,212,212)],[Rect(778,503,50,50),False,(778,503),False,9,None,Rect(688,412,212,212)]]
-            #x,y,frame,enemy type,health,death status, prize
-    enemy=[[-100,190,0,motorcycle,motorcycle.health,False,motorcycle.prize],[-250,190,0,motorcycle,motorcycle.health,False,motorcycle.prize],[-400,190,0,motorcycle,motorcycle.health,False,motorcycle.prize]]
-           #[-650,190,0,motorcycle,motorcycle.health,False,motorcycle.prize],[-800,190,0,motorcycle,motorcycle.health,False,motorcycle.prize],[-950,190,0,motorcycle,motorcycle.health,False,motorcycle.prize],
-           #[-1100,190,0,motorcycle,motorcycle.health,False,motorcycle.prize]]#[-1250,190,0,transport,transport.health,False,transport.prize],[-1400,190,0,transport,transport.health,False,transport.prize]]
+            #x,y,frame,enemy type,health,death status, prize, delay
+    
+    enemy=[[-100,190,0,motorcycle,motorcycle.health,False,motorcycle.prize,30],[-100,190,0,motorcycle,motorcycle.health,False,motorcycle.prize,90],[-100,190,0,motorcycle,motorcycle.health,False,motorcycle.prize,150],
+           [-100,190,0,motorcycle,motorcycle.health,False,motorcycle.prize,210],[-100,190,0,motorcycle,motorcycle.health,False,motorcycle.prize,270],[-100,190,0,motorcycle,motorcycle.health,False,motorcycle.prize,330],
+           [-100,190,0,motorcycle,motorcycle.health,False,motorcycle.prize,390],[-100,190,0,transport,transport.health,False,transport.prize,450],[-100,190,0,transport,transport.health,False,transport.prize,530],
+           [-100,190,0,transport,transport.health,False,transport.prize,610],[-100,190,0,transport,transport.health,False,transport.prize,700],[-100,190,0,transport,transport.health,False,transport.prize,780],
+           [-100,190,0,infantry,infantry.health,False,infantry.prize,820],[-100,190,0,infantry,infantry.health,False,infantry.prize,880],[-100,190,0,infantry,infantry.health,False,infantry.prize,940],[-100,190,0,infantry,infantry.health,False,infantry.prize,1000],
+           [-100,190,0,infantry,infantry.health,False,infantry.prize,1060],[-100,190,0,infantry,infantry.health,False,infantry.prize,1120],[-100,190,0,lightTank,lightTank.health,False,lightTank.prize,1200],
+           [-100,190,0,lightTank,lightTank.health,False,lightTank.prize,1320],[-100,190,0,lightTank,lightTank.health,False,lightTank.prize,1440],[-100,190,0,lightTank,lightTank.health,False,lightTank.prize,1560]]
+
     '''
     enemy2=[[0,190,0,transport,transport.health,False],[100,190,0,transport,transport.health,False],[-100,190,0,heavyTank,heavyTank.health,False],
            [-250,190,0,heavyTank,heavyTank.health,False],[-400,190,0,heavyTank,heavyTank.health,False],[-650,190,0,heavyTank,heavyTank.health,False],[-800,190,0,heavyTank,heavyTank.health,False]]
