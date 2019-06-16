@@ -124,12 +124,11 @@ def genEnemies(enemy): #this function loads all the images for the enemy troops 
         img.append(transform.rotate(image.load(i[3].filename),-270)) #the picture but rotated 270 for when its going up the path 
         img.append(transform.rotate(image.load(i[3].filename),-180))#the picture but rotated 180 for when its going left of the path 
         pics.append(img) #append the list into the pics list to make a 2D list
-<<<<<<< HEAD
         #this makes it so that the first index of img is the image facing the right, second is down, third is up, and fourth is left
-    '''
-=======
+    
+
         
->>>>>>> 29b2777c0da41d2d8b9e6b1bd2bf6664b4456eb5
+
     for i in enemy:
         img=[]
         if i[3]==infantry:
@@ -228,7 +227,7 @@ def music(state): #this function is used to toggle the music (mute and unmute)
 def moveEnemy(screen,enemy): #for each level, when a enemy troop reaches the end of a path, it needs to know to turn, and this is what the function is used for 
     count=-1 #counter for number of enemies in the list
     for i in enemy:
-<<<<<<< HEAD
+
         if i[0]<220: #for the first section of the path, if it doesn't hit the end of the path, the enemy troop will move at a constant speed defined in the enemyType class
             i[0]+=i[3].speed
             i[2]=0 # i[2] is the 'frame' part of the 2D list, and it defines the frame that is needed for this section of the path. I this case, the frame needed is the troop facing right
@@ -241,11 +240,10 @@ def moveEnemy(screen,enemy): #for each level, when a enemy troop reaches the end
         count+=1 #counter for each enemy in the enemy list, and adds one for each enemy
         if i[5]==False: #if troops are not dead
             screen.blit(pics[count][i[2]],i[:2]) #blits all the pictures needed, pics[count][i[2]] is the image and what rotation is needed, and i[:2] is the point at where you shoudl blit it
-        '''    
+        
         if i[5]==True:
             screen.blit(deadPics[count][i[2]],i[:2])
-        '''
-=======
+
         i[7]-=1
         if i[5]==False and i[7]<=0:
             if i[0]<220:
@@ -263,7 +261,7 @@ def moveEnemy(screen,enemy): #for each level, when a enemy troop reaches the end
             screen.blit(pics[count][i[2]],i[:2])
         if i[5]==True and i[0]<=1100:
             screen.blit(deadPics[count][i[2]],(i[0],i[1]+15))
->>>>>>> 29b2777c0da41d2d8b9e6b1bd2bf6664b4456eb5
+
 
 def moveEnemy2(screen,enemy): #this is for the second level, because the path is different for each level, enemies must move different 
     count=-1 #counter for number of eneimes in the list 
@@ -273,25 +271,23 @@ def moveEnemy2(screen,enemy): #this is for the second level, because the path is
     check3=Rect(665,210,65,230)
     check4=Rect(665,440,900,65)
 
+##        #if i[5]==False:
+##        if i[0]<300: #while 
+##            i[0]+=i[3].speed
+##            i[2]=0
+##        if check1.collidepoint(i[0],i[1]):
+##            i[1]-=i[3].speed
+##            i[2]=2
+##        if check2.collidepoint(i[0],i[1]):
+##            i[0]+=i[3].speed
+##            i[2]=0
+##        if check3.collidepoint(i[0],i[1]):
+##            i[1]+=i[3].speed
+##            i[2]=1
+##        if check4.collidepoint(i[0],i[1]):
+##            i[0]+=i[3].speed
+##            i[2]=
     for i in enemy:
-<<<<<<< HEAD
-        #if i[5]==False:
-        if i[0]<300: #while 
-            i[0]+=i[3].speed
-            i[2]=0
-        if check1.collidepoint(i[0],i[1]):
-            i[1]-=i[3].speed
-            i[2]=2
-        if check2.collidepoint(i[0],i[1]):
-            i[0]+=i[3].speed
-            i[2]=0
-        if check3.collidepoint(i[0],i[1]):
-            i[1]+=i[3].speed
-            i[2]=1
-        if check4.collidepoint(i[0],i[1]):
-            i[0]+=i[3].speed
-            i[2]=0
-=======
         if i[5]==False and i[7]<=0:
             if i[0]<300:
                 i[0]+=i[3].speed
@@ -308,7 +304,7 @@ def moveEnemy2(screen,enemy): #this is for the second level, because the path is
             if check4.collidepoint(i[0],i[1]):
                 i[0]+=i[3].speed
                 i[2]=0
->>>>>>> 29b2777c0da41d2d8b9e6b1bd2bf6664b4456eb5
+
 
         count+=1
         if i[5]==False and i[7]<=0:
