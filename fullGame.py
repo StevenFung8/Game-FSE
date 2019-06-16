@@ -122,8 +122,8 @@ def genEnemies(enemy): #this function loads all the images for the enemy troops 
         img.append(transform.rotate(image.load(i[3].filename),-90)) #the picture but rotated 90 degress for when its going down the path
         img.append(transform.rotate(image.load(i[3].filename),-270)) #the picture but rotated 270 for when its going up the path 
         img.append(transform.rotate(image.load(i[3].filename),-180))#the picture but rotated 180 for when its going left of the path 
-        pics.append(img) #append the list into the pics list to make a 2D list 
-    '''
+        pics.append(img) #append the list into the pics list to make a 2D list
+        
     for i in enemy:
         img=[]
         if i[3]==infantry:
@@ -138,7 +138,7 @@ def genEnemies(enemy): #this function loads all the images for the enemy troops 
             img.append(transform.rotate(wreck,-270))
             img.append(transform.rotate(wreck,-180))
             deadPics.append(img)
-    '''
+
     return pics #outputs the pics list 
 
 def healthBars(enemy):
@@ -230,7 +230,7 @@ def moveEnemy(screen,enemy):
         count+=1
         if i[5]==False:
             screen.blit(pics[count][i[2]],i[:2])
-        '''    
+        '''
         if i[5]==True:
             screen.blit(deadPics[count][i[2]],i[:2])
         '''
@@ -262,7 +262,8 @@ def moveEnemy2(screen,enemy):
             i[2]=0
 
         count+=1
-        screen.blit(pics[count][i[2]],i[:2])
+        if i[5]==False:
+            screen.blit(pics[count][i[2]],i[:2])
 
 def moveEnemy3(screen,enemy):
     count=-1
@@ -278,7 +279,8 @@ def moveEnemy3(screen,enemy):
             i[2]=0
 
         count+=1
-        screen.blit(pics[count][i[2]],i[:2])
+        if i[5]==False:
+            screen.blit(pics[count][i[2]],i[:2])
 
 def moveEnemy4(screen,enemy):
     count=-1
@@ -306,7 +308,8 @@ def moveEnemy4(screen,enemy):
             i[2]=0
 
         count+=1
-        screen.blit(pics[count][i[2]],i[:2])
+        if i[5]==False:
+            screen.blit(pics[count][i[2]],i[:2])
 
 def moveEnemy5(screen,enemy):
     count=-1
@@ -329,7 +332,8 @@ def moveEnemy5(screen,enemy):
             i[2]=0
 
         count+=1
-        screen.blit(pics[count][i[2]],i[:2])
+        if i[5]==False:
+            screen.blit(pics[count][i[2]],i[:2])
 
 def drawScene1(screen):
     screen.blit(map1,(0,0))
@@ -667,7 +671,10 @@ def lev1():
                [Rect(750,342,50,50),False,(750,342),False,6,None,Rect(659,251,212,212)],[Rect(418,503,50,50),False,(418,503),False,7,None,Rect(327,412,212,212)],
                [Rect(598,503,50,50),False,(598,503),False,8,None,Rect(507,412,212,212)],[Rect(778,503,50,50),False,(778,503),False,9,None,Rect(688,412,212,212)]]
             #x,y,frame,enemy type,health,death status
-    enemy=[[0,190,0,transport,transport.health,False],[100,190,0,transport,transport.health,False],[-100,190,0,heavyTank,heavyTank.health,False],[-250,190,0,heavyTank,heavyTank.health,False],[-400,190,0,heavyTank,heavyTank.health,False],[-650,190,0,heavyTank,heavyTank.health,False],[-800,190,0,heavyTank,heavyTank.health,False]]
+    enemy=[[0,190,0,transport,transport.health,False]]#[100,190,0,transport,transport.health,False],[-100,190,0,heavyTank,heavyTank.health,False],
+           #[-250,190,0,heavyTank,heavyTank.health,False],[-400,190,0,heavyTank,heavyTank.health,False],[-650,190,0,heavyTank,heavyTank.health,False],[-800,190,0,heavyTank,heavyTank.health,False]]
+    enemy2=[[0,190,0,transport,transport.health,False],[100,190,0,transport,transport.health,False],[-100,190,0,heavyTank,heavyTank.health,False],
+           [-250,190,0,heavyTank,heavyTank.health,False],[-400,190,0,heavyTank,heavyTank.health,False],[-650,190,0,heavyTank,heavyTank.health,False],[-800,190,0,heavyTank,heavyTank.health,False]]
 
     click=False
     while running:
@@ -764,6 +771,14 @@ def lev1():
                     gameOver=False
                     money=2000
                     score=0
+        '''
+        count=0
+        for i in enemy:
+            if i[5]==True:
+                count+=1
+            if count==len(enemy):
+                prep(screen,towerPos1)
+        '''
         count=0
         for i in enemy:
             if i[5]==True:
@@ -808,13 +823,13 @@ def lev2():
     mixer.music.play(-1)
     quitRect=Rect(260,25,150,40)
                 # subtract 91 from x,y, make 212 the length and width
-    towerPos2=[[Rect(75,430,50,50),False,(75,430),False,1,None,Rect(-26,339,212,212)],[Rect(210,430,50,50),False,(210,430),False,2,None,Rect(119,339,212,212)],
-               [Rect(210,300,50,50),False,(210,300),False,3,None,Rect(119,209,212,212)],[Rect(225,125,50,50),False,(225,125),False,4,None,Rect(134,34,212,212)],
-               [Rect(425,125,50,50),False,(425,125),False,5,None,Rect(334,34,212,212)],[Rect(600,125,50,50),False,(600,125),False,6,None,Rect(509,34,212,212)],
-               [Rect(425,300,50,50),False,(425,300),False,7,None,Rect(334,209,212,212)],[Rect(560,300,50,50),False,(560,300),False,8,None,Rect(469,209,212,212)],
-               [Rect(750,275,50,50),False,(750,275),False,9,None,Rect(659,184,212,212)],[Rect(825,375,50,50),False,(825,375),False,10,None,Rect(734,284,212,212)]]
+    towerPos2=[[Rect(75,430,50,50),False,(75,430),False,0,None,Rect(-26,339,212,212)],[Rect(210,430,50,50),False,(210,430),False,1,None,Rect(119,339,212,212)],
+               [Rect(210,300,50,50),False,(210,300),False,2,None,Rect(119,209,212,212)],[Rect(225,125,50,50),False,(225,125),False,3,None,Rect(134,34,212,212)],
+               [Rect(425,125,50,50),False,(425,125),False,4,None,Rect(334,34,212,212)],[Rect(600,125,50,50),False,(600,125),False,5,None,Rect(509,34,212,212)],
+               [Rect(425,300,50,50),False,(425,300),False,6,None,Rect(334,209,212,212)],[Rect(560,300,50,50),False,(560,300),False,7,None,Rect(469,209,212,212)],
+               [Rect(750,275,50,50),False,(750,275),False,8,None,Rect(659,184,212,212)],[Rect(825,375,50,50),False,(825,375),False,9,None,Rect(734,284,212,212)]]
 
-    enemy=[[-100,510,0,heavyTank,heavyTank.health,True],[-250,510,0,heavyTank,heavyTank.health,True],[-400,510,0,heavyTank,heavyTank.health,True],[-550,510,0,heavyTank,heavyTank.health,True],[-700,510,0,heavyTank,heavyTank.health,True]]
+    enemy=[[-100,510,0,heavyTank,heavyTank.health,False],[-250,510,0,heavyTank,heavyTank.health,False],[-400,510,0,heavyTank,heavyTank.health,False],[-550,510,0,heavyTank,heavyTank.health,False],[-700,510,0,heavyTank,heavyTank.health,False]]
     while running:
         myclock.tick(60)
         drawScene2(screen)
@@ -910,6 +925,37 @@ def lev2():
                     gameOver=False
                     money=2000
                     score=0
+
+        count=0
+        for i in enemy:
+            if i[5]==True:
+                count+=1
+            if count==len(enemy):
+                endScreen=Surface((width,height),SRCALPHA)
+                endScreen.fill((220,220,220,127))
+                screen.blit(endScreen,(0,0))
+                screen.blit(victoryRect,(320,225))
+                redoRect=Rect(445,353,150,40)
+                nextRect=Rect(410,404,217,40)
+                if redoRect.collidepoint(mx,my):
+                    draw.rect(screen,RED,redoRect,3)
+                    if mb[0]==1 and click==False:
+                        defC=None
+                        editCond=False
+                        activeDefenses=[]
+                        ready=False
+                        running=False
+                        return "prev2"
+                if nextRect.collidepoint(mx,my):
+                    draw.rect(screen,RED,nextRect,3)
+                    if mb[0]==1 and click==False:
+                        defC=None
+                        editCond=False
+                        activeDefenses=[]
+                        ready=False
+                        running=False
+                        return "prev3"
+                    
         display.flip()
     return "levelSelect"
 
@@ -924,13 +970,13 @@ def lev3():
     mixer.music.play(-1)
     quitRect=Rect(260,25,150,40)
                 # subtract 91 from x,y, make 212 the length and width
-    towerPos3=[[Rect(52,391,50,50),False,(52,391),False,1,None],[Rect(200,391,50,50),False,(200,391),False,2,None],
-               [Rect(190,563,50,50),False,(190,563),False,3,None],[Rect(274,294,50,50),False,(274,294),False,4,None],
-               [Rect(274,136,50,50),False,(274,136),False,5,None],[Rect(450,136,50,50),False,(450,136),False,6,None],
+    towerPos3=[[Rect(52,391,50,50),False,(52,391),False,0,None],[Rect(200,391,50,50),False,(200,391),False,1,None],
+               [Rect(190,563,50,50),False,(190,563),False,2,None],[Rect(274,294,50,50),False,(274,294),False,3,None],
+               [Rect(274,136,50,50),False,(274,136),False,4,None],[Rect(450,136,50,50),False,(450,136),False,5,None],[Rect(575,136,50,50),False,(575,136),False,6,None],
                [Rect(474,325,50,50),False,(474,325),False,7,None],[Rect(630,305,50,50),False,(630,305),False,8,None],
-               [Rect(700,136,50,50),False,(700,136),False,11,None]]
+               [Rect(700,136,50,50),False,(700,136),False,9,None],[Rect(755,305,50,50),False,(630,305),False,8,None]]
 
-    enemy=[[-100,480,0,heavyTank],[-250,480,0,heavyTank],[-400,480,0,heavyTank],[-650,480,0,heavyTank],[-800,480,0,heavyTank]]
+    enemy=[[-100,480,0,heavyTank,heavyTank.health,False],[-250,480,0,heavyTank,heavyTank.health,False],[-400,480,0,heavyTank,heavyTank.health,False],[-650,480,0,heavyTank,heavyTank.health,False],[-800,480,0,heavyTank,heavyTank.health,False]]
     while running:
         myclock.tick(60)
         drawScene3(screen)
@@ -992,6 +1038,8 @@ def lev3():
             genEnemies(enemy)
             moveEnemy3(screen,enemy)
             baseHealth(enemy)
+            healthBars(enemy)
+            #damageEnemies(enemy,activeDefenses,towerPos3)
 
         if gameOver:
             endScreen=Surface((width,height),SRCALPHA)
@@ -1039,12 +1087,12 @@ def lev4():
     mixer.music.play(-1)
     quitRect=Rect(260,25,150,40)
                 # subtract 91 from x,y, make 212 the length and width
-    towerPos4=[[Rect(107,355,50,50),False,(107,355),False,1,None],[Rect(193,190,50,50),False,(193,190),False,2,None],
-               [Rect(331,298,50,50),False,(331,298),False,3,None],[Rect(331,423,50,50),False,(331,423),False,4,None],
-               [Rect(457,472,50,50),False,(457,472),False,5,None],[Rect(241,647,50,50),False,(241,647),False,6,None],
-               [Rect(689,429,50,50),False,(689,429),False,7,None],[Rect(495,260,50,50),False,(495,260),False,8,None],
-               [Rect(686,240,50,50),False,(686,240),False,9,None],[Rect(820,409,50,50),False,(820,409),False,10,None]]
-    enemy=[[-100,280,0,heavyTank],[-250,280,0,heavyTank],[-400,280,0,heavyTank],[-650,280,0,heavyTank],[-800,280,0,heavyTank]]
+    towerPos4=[[Rect(107,355,50,50),False,(107,355),False,0,None],[Rect(193,190,50,50),False,(193,190),False,1,None],
+               [Rect(331,298,50,50),False,(331,298),False,2,None],[Rect(331,423,50,50),False,(331,423),False,3,None],
+               [Rect(457,472,50,50),False,(457,472),False,4,None],[Rect(241,647,50,50),False,(241,647),False,5,None],
+               [Rect(689,429,50,50),False,(689,429),False,6,None],[Rect(495,260,50,50),False,(495,260),False,7,None],
+               [Rect(686,240,50,50),False,(686,240),False,8,None],[Rect(820,409,50,50),False,(820,409),False,9,None]]
+    enemy=[[-100,280,0,heavyTank,heavyTank.health,False],[-250,280,0,heavyTank,heavyTank.health,False],[-400,280,0,heavyTank,heavyTank.health,False],[-650,280,0,heavyTank,heavyTank.health,False],[-800,280,0,heavyTank,heavyTank.health,False]]
     while running:
         myclock.tick(60)
         drawScene4(screen)
@@ -1105,6 +1153,8 @@ def lev4():
             genEnemies(enemy)
             moveEnemy4(screen,enemy)
             baseHealth(enemy)
+            healthBars(enemy)
+            #damageEnemies(enemy,activeDefenses,towerPos4)
 
         if gameOver:
             endScreen=Surface((width,height),SRCALPHA)
@@ -1151,13 +1201,13 @@ def lev5():
     mixer.music.play(-1)
     quitRect=Rect(260,25,150,40)
                 # subtract 91 from x,y, make 212 the length and width
-    towerPos5=[[Rect(30,197,50,50),False,(30,197),False,1,None],[Rect(232,173,50,50),False,(232,173),False,2,None],
-               [Rect(382,173,50,50),False,(382,173),False,3,None],[Rect(228,337,50,50),False,(228,337),False,4,None],
-               [Rect(332,379,50,50),False,(332,379),False,5,None],[Rect(332,520,50,50),False,(332,520),False,6,None],
-               [Rect(525,262,50,50),False,(525,262),False,7,None],[Rect(525,409,50,50),False,(525,409),False,8,None],
-               [Rect(645,409,50,50),False,(645,409),False,9,None],[Rect(459,589,50,50),False,(459,589),False,10,None],
-               [Rect(815,409,50,50),False,(815,409),False,11,None]]
-    enemy=[[130,-100,0,heavyTank],[130,-250,0,heavyTank],[130,-400,0,heavyTank],[130,-650,0,heavyTank],[130,-800,0,heavyTank]]
+    towerPos5=[[Rect(30,197,50,50),False,(30,197),False,0,None],[Rect(232,173,50,50),False,(232,173),False,1,None],
+               [Rect(382,173,50,50),False,(382,173),False,2,None],[Rect(228,337,50,50),False,(228,337),False,3,None],
+               [Rect(332,379,50,50),False,(332,379),False,4,None],[Rect(332,520,50,50),False,(332,520),False,5,None],
+               [Rect(525,262,50,50),False,(525,262),False,6,None],[Rect(525,409,50,50),False,(525,409),False,7,None],
+               [Rect(645,409,50,50),False,(645,409),False,8,None],[Rect(459,589,50,50),False,(459,589),False,9,None],
+               [Rect(815,409,50,50),False,(815,409),False,10,None]]
+    enemy=[[130,-100,0,heavyTank,heavyTank.health,False],[130,-250,0,heavyTank,heavyTank.health,False],[130,-400,0,heavyTank,heavyTank.health,False],[130,-650,0,heavyTank,heavyTank.health,False],[130,-800,0,heavyTank,heavyTank.health,False]]
     while running:
         myclock.tick(60)
         drawScene5(screen)
@@ -1220,6 +1270,8 @@ def lev5():
             hudElements(screen)
             moneyScore(screen)
             baseHealth(enemy)
+            healthBars(enemy)
+            #damageEnemies(enemy,activeDefenses,towerPos5)
 
         if gameOver:
             endScreen=Surface((width,height),SRCALPHA)
