@@ -218,22 +218,22 @@ def music(state): #this function is used to toggle the music (mute and unmute)
 def moveEnemy(screen,enemy):
     count=-1
     for i in enemy:
-        if i[0]<220:
-            i[0]+=i[3].speed
-            i[2]=0
-        if i[0]>=220 and i[1]<420:
-            i[1]+=i[3].speed
-            i[2]=1
-        if i[1]>=410:
-            i[0]+=i[3].speed
-            i[2]=0
+        if i[5]==False:
+            if i[0]<220:
+                i[0]+=i[3].speed
+                i[2]=0
+            if i[0]>=220 and i[1]<420:
+                i[1]+=i[3].speed
+                i[2]=1
+            if i[1]>=410:
+                i[0]+=i[3].speed
+                i[2]=0
+
         count+=1
         if i[5]==False:
             screen.blit(pics[count][i[2]],i[:2])
-        '''
         if i[5]==True:
-            screen.blit(deadPics[count][i[2]],i[:2])
-        '''
+            screen.blit(deadPics[count][i[2]],(i[0],i[1]+15))
 
 def moveEnemy2(screen,enemy):
     count=-1
@@ -244,26 +244,28 @@ def moveEnemy2(screen,enemy):
     check4=Rect(665,440,900,65)
 
     for i in enemy:
-        #if i[5]==False:
-        if i[0]<300:
-            i[0]+=i[3].speed
-            i[2]=0
-        if check1.collidepoint(i[0],i[1]):
-            i[1]-=i[3].speed
-            i[2]=2
-        if check2.collidepoint(i[0],i[1]):
-            i[0]+=i[3].speed
-            i[2]=0
-        if check3.collidepoint(i[0],i[1]):
-            i[1]+=i[3].speed
-            i[2]=1
-        if check4.collidepoint(i[0],i[1]):
-            i[0]+=i[3].speed
-            i[2]=0
+        if i[5]==False:
+            if i[0]<300:
+                i[0]+=i[3].speed
+                i[2]=0
+            if check1.collidepoint(i[0],i[1]):
+                i[1]-=i[3].speed
+                i[2]=2
+            if check2.collidepoint(i[0],i[1]):
+                i[0]+=i[3].speed
+                i[2]=0
+            if check3.collidepoint(i[0],i[1]):
+                i[1]+=i[3].speed
+                i[2]=1
+            if check4.collidepoint(i[0],i[1]):
+                i[0]+=i[3].speed
+                i[2]=0
 
         count+=1
         if i[5]==False:
             screen.blit(pics[count][i[2]],i[:2])
+        if i[5]==True:
+            screen.blit(deadPics[count][i[2]],i[:2])
 
 def moveEnemy3(screen,enemy):
     count=-1
@@ -671,8 +673,8 @@ def lev1():
                [Rect(750,342,50,50),False,(750,342),False,6,None,Rect(659,251,212,212)],[Rect(418,503,50,50),False,(418,503),False,7,None,Rect(327,412,212,212)],
                [Rect(598,503,50,50),False,(598,503),False,8,None,Rect(507,412,212,212)],[Rect(778,503,50,50),False,(778,503),False,9,None,Rect(688,412,212,212)]]
             #x,y,frame,enemy type,health,death status
-    enemy=[[0,190,0,transport,transport.health,False]]#[100,190,0,transport,transport.health,False],[-100,190,0,heavyTank,heavyTank.health,False],
-           #[-250,190,0,heavyTank,heavyTank.health,False],[-400,190,0,heavyTank,heavyTank.health,False],[-650,190,0,heavyTank,heavyTank.health,False],[-800,190,0,heavyTank,heavyTank.health,False]]
+    enemy=[[0,190,0,infantry,infantry.health,False],[100,190,0,transport,transport.health,False],[-100,190,0,heavyTank,heavyTank.health,False],
+           [-250,190,0,heavyTank,heavyTank.health,False],[-400,190,0,heavyTank,heavyTank.health,False],[-650,190,0,heavyTank,heavyTank.health,False],[-800,190,0,heavyTank,heavyTank.health,False]]
     enemy2=[[0,190,0,transport,transport.health,False],[100,190,0,transport,transport.health,False],[-100,190,0,heavyTank,heavyTank.health,False],
            [-250,190,0,heavyTank,heavyTank.health,False],[-400,190,0,heavyTank,heavyTank.health,False],[-650,190,0,heavyTank,heavyTank.health,False],[-800,190,0,heavyTank,heavyTank.health,False]]
 
