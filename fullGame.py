@@ -243,22 +243,22 @@ def moveEnemy2(screen,enemy):
     check4=Rect(665,440,900,65)
 
     for i in enemy:
-        if i[5]==False:
-            if i[0]<300:
-                i[0]+=i[3].speed
-                i[2]=0
-            if check1.collidepoint(i[0],i[1]):
-                i[1]-=i[3].speed
-                i[2]=2
-            if check2.collidepoint(i[0],i[1]):
-                i[0]+=i[3].speed
-                i[2]=0
-            if check3.collidepoint(i[0],i[1]):
-                i[1]+=i[3].speed
-                i[2]=1
-            if check4.collidepoint(i[0],i[1]):
-                i[0]+=i[3].speed
-                i[2]=0
+        #if i[5]==False:
+        if i[0]<300:
+            i[0]+=i[3].speed
+            i[2]=0
+        if check1.collidepoint(i[0],i[1]):
+            i[1]-=i[3].speed
+            i[2]=2
+        if check2.collidepoint(i[0],i[1]):
+            i[0]+=i[3].speed
+            i[2]=0
+        if check3.collidepoint(i[0],i[1]):
+            i[1]+=i[3].speed
+            i[2]=1
+        if check4.collidepoint(i[0],i[1]):
+            i[0]+=i[3].speed
+            i[2]=0
 
         count+=1
         screen.blit(pics[count][i[2]],i[:2])
@@ -670,7 +670,6 @@ def lev1():
 
     click=False
     while running:
-
         myclock.tick(60)
         drawScene1(screen)
         hudElements(screen)
@@ -773,11 +772,28 @@ def lev1():
                 endScreen.fill((220,220,220,127))
                 screen.blit(endScreen,(0,0))
                 screen.blit(victoryRect,(320,225))
-                retryRect=Rect(350,405,128,50)
-                mainRect=Rect(510,405,187,50)
+                redoRect=Rect(445,353,150,40)
+                nextRect=Rect(410,404,217,40)
+                if redoRect.collidepoint(mx,my):
+                    draw.rect(screen,RED,redoRect,3)
+                    if mb[0]==1 and click==False:
+                        defC=None
+                        editCond=False
+                        activeDefenses=[]
+                        ready=False
+                        running=False
+                        return "prev1"
+                if nextRect.collidepoint(mx,my):
+                    draw.rect(screen,RED,nextRect,3)
+                    if mb[0]==1 and click==False:
+                        defC=None
+                        editCond=False
+                        activeDefenses=[]
+                        ready=False
+                        running=False
+                        return "prev2"
 
         display.flip()
-
     return "levelSelect"
 
 def lev2():
