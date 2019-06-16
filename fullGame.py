@@ -471,7 +471,7 @@ def prep(screen,towerPos):
                 select=False  #while a tower is selected, the player cannot select another until they choose cancel
                 draw.rect(screen,GREEN,buyRects[i[5]],2) #highlights the tower
                 screen.blit(towerStats[i[5]],(620,630)) #this will blit the individual tower's damage
-                draw.rect(screen,RED,i[6],2) #displays the tower's attack range
+                
                 txtUpgrade=txtFont2.render("UPGRADE?",True,BLACK)
                 draw.rect(screen,BLACK,upgradeRect,2)
                 for a in activeDefenses: #checks all active towers
