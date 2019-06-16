@@ -40,6 +40,7 @@ finalLevel=image.load("FSE-Assets/finalLevel.png")
 txtFont=font.SysFont("FSE-Assets/fonts/kremlin.ttf",25)
 txtFont2=font.SysFont("Stencil",17)
 txtFont3=font.SysFont("Stencil",20)
+txtFont4=font.SysFont("Stencil",35)
 
 #loading map previews
 pr1=image.load("FSE-Assets/previews/lvl1prev.jpg")
@@ -88,7 +89,7 @@ class enemyType:
 
 infantry=enemyType('infantry',1.5,100,5,100) #so these are all the properties of the troops 
 transport=enemyType('transport',1.7,400,10,175) #for example, 'transport' has a speed of 1.7, 400 health, does 10 damage to the base, and you get 175 dollars if you kill it 
-motorcycle=enemyType('motorcycle',2,250,5,150)
+motorcycle=enemyType('motorcycle',2.3,250,5,150)
 lightTank=enemyType('lightTank',1,700,15,200)
 heavyTank=enemyType('heavyTank',1,1000,20,250)
 tankDestroyer=enemyType('tankDestroyer',0.8,1100,25,300)
@@ -108,7 +109,7 @@ antiTank=towerType('antiTank',80,800,350,400,60) #so these are all the propertie
 bunker=towerType('bunker',100,1000,450,500,10) #for example the 'bunker' would deal 100 damage to troops, cost 1000 dollars, cost 450 to upgrade, you get 500 if you refund it, and it fires every 10 ticks 
 fortress=towerType('fortress',150,1250,600,625,50)
 heavyGun=towerType('heavyGun',200,1500,700,750,60)
-heavyMG=towerType('heavyMG',5,500,200,250,5)
+heavyMG=towerType('heavyMG',7,500,200,250,5)
 soldier=towerType('soldier',25,250,100,125,25)
 
 def genEnemies(enemy): #this function loads all the images for the enemy troops for each level 
@@ -165,7 +166,7 @@ def baseHealth(enemy):
     draw.rect(screen,BLACK,(944,374,102,12),0) #draws the outline of the health bar 
     for i in enemy: #for every enemy in the level
         if i[0]>=900: #if the enemy reaches the base
-            if i[5]==False: #If they are not dead
+            if i[5]==False or i[5]==None: #If they are not dead
                 bars-=i[3].damage #subtract the health of the base by the damage that they deal (defined in the enemyType class)
             if bars<=0: #if it goes negative, set it back to zero
                 bars=0
@@ -230,7 +231,7 @@ def moveEnemy(screen,enemy):
                 i[2]=0
 
         count+=1
-        if i[5]==False:
+        if i[5]==False and i[0]>=-100:
             screen.blit(pics[count][i[2]],i[:2])
         if i[5]==True:
             screen.blit(deadPics[count][i[2]],(i[0],i[1]+15))
@@ -518,6 +519,11 @@ def damageEnemies(enemy,activeDefenses,towerPos):
                     a[6]-=1
             if e[4]<=0:
                 e[5]=True
+            if e[5]==True:
+                money+=e[6]
+                score+=e[6]
+                e[6]=0
+
 
 def victory(score):
     running=True
@@ -525,10 +531,12 @@ def victory(score):
     mixer.music.play(-1)
     mainMenuRect=Rect(573,620,400,50)
     click=False
+    finalScore = txtFont4.render(str(score), True, BLACK)
     while running:
         mx,my=mouse.get_pos()
         mb=mouse.get_pressed()
         screen.blit(finalLevel,(13,17))
+        screen.blit(finalScore,(830,302))
         for evt in event.get():
             if evt.type==QUIT:
                 running=False
@@ -681,11 +689,14 @@ def lev1():
                [Rect(388,342,50,50),False,(388,342),False,4,None,Rect(297,251,212,212)],[Rect(570,342,50,50),False,(570,342),False,5,None,Rect(479,251,212,212)],
                [Rect(750,342,50,50),False,(750,342),False,6,None,Rect(659,251,212,212)],[Rect(418,503,50,50),False,(418,503),False,7,None,Rect(327,412,212,212)],
                [Rect(598,503,50,50),False,(598,503),False,8,None,Rect(507,412,212,212)],[Rect(778,503,50,50),False,(778,503),False,9,None,Rect(688,412,212,212)]]
-            #x,y,frame,enemy type,health,death status
-    enemy=[[0,190,0,infantry,infantry.health,False],[100,190,0,transport,transport.health,False],[-100,190,0,heavyTank,heavyTank.health,False],
-           [-250,190,0,heavyTank,heavyTank.health,False],[-400,190,0,heavyTank,heavyTank.health,False],[-650,190,0,heavyTank,heavyTank.health,False],[-800,190,0,heavyTank,heavyTank.health,False]]
+            #x,y,frame,enemy type,health,death status, prize
+    enemy=[[-100,190,0,motorcycle,motorcycle.health,False,motorcycle.prize],[-250,190,0,motorcycle,motorcycle.health,False,motorcycle.prize],[-400,190,0,motorcycle,motorcycle.health,False,motorcycle.prize]]
+           #[-650,190,0,motorcycle,motorcycle.health,False,motorcycle.prize],[-800,190,0,motorcycle,motorcycle.health,False,motorcycle.prize],[-950,190,0,motorcycle,motorcycle.health,False,motorcycle.prize],
+           #[-1100,190,0,motorcycle,motorcycle.health,False,motorcycle.prize]]#[-1250,190,0,transport,transport.health,False,transport.prize],[-1400,190,0,transport,transport.health,False,transport.prize]]
+    '''
     enemy2=[[0,190,0,transport,transport.health,False],[100,190,0,transport,transport.health,False],[-100,190,0,heavyTank,heavyTank.health,False],
            [-250,190,0,heavyTank,heavyTank.health,False],[-400,190,0,heavyTank,heavyTank.health,False],[-650,190,0,heavyTank,heavyTank.health,False],[-800,190,0,heavyTank,heavyTank.health,False]]
+    '''
 
     click=False
     while running:
