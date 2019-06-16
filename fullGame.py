@@ -687,7 +687,7 @@ def prev5():
 
 def lev1():
     global defC,ready,ready2,activeDefenses,money,score,click,gameOver,wave
-
+    
     money=4500
     pause=False
     running=True
@@ -796,8 +796,7 @@ def lev1():
             moveEnemy(screen,enemy2)
             baseHealth(enemy2)
             healthBars(enemy2)
-            damageEnemies(enemy2,activeDefenses,towerPos1)
-                
+            damageEnemies(enemy2,activeDefenses,towerPos1)    
 
         if gameOver:
             endScreen=Surface((width,height),SRCALPHA)
@@ -880,7 +879,7 @@ def lev1():
     return "levelSelect"
 
 def lev2():
-    global defC,ready,activeDefenses,money,score,click,gameOver
+    global defC,ready,ready2,activeDefenses,money,score,click,gameOver,wave
     money=6000
 
     running=True
@@ -897,6 +896,8 @@ def lev2():
                [Rect(750,275,50,50),False,(750,275),False,8,None,Rect(659,184,212,212)],[Rect(825,375,50,50),False,(825,375),False,9,None,Rect(734,284,212,212)]]
 
     enemy=[[-100,510,0,heavyTank,heavyTank.health,False],[-250,510,0,heavyTank,heavyTank.health,False],[-400,510,0,heavyTank,heavyTank.health,False],[-550,510,0,heavyTank,heavyTank.health,False],[-700,510,0,heavyTank,heavyTank.health,False]]
+    wave="first"
+    click=False
     while running:
         myclock.tick(60)
         drawScene2(screen)
@@ -904,7 +905,6 @@ def lev2():
         moneyScore(screen)
         screen.blit(quitPic,(260,25))
         draw.rect(screen,BLACK,quitRect,2)
-        click=False
         for evt in event.get():
             if evt.type==QUIT:
                 running=False
@@ -946,29 +946,40 @@ def lev2():
                     activeDefenses=[]
                     running=False
                     ready=False
+                    ready2=False
                     gameOver=False
-                    money=6000
                     score=0
                     return "levelSelect"
 
-        if ready==False and pause==False:
+        if ready==False and pause==False and wave=="first": #checks if either ready variable is false, so it calls the prep functions
             prep(screen,towerPos2)
+        if ready2==False and pause==False and wave=="second":
+            prep(screen,towerPos2)
+            
 
-        if ready==True and gameOver==False and pause==False:
-            genEnemies(enemy)
-            moveEnemy2(screen,enemy)
-            baseHealth(enemy)
-            healthBars(enemy)
-            damageEnemies(enemy,activeDefenses,towerPos2)
+        if ready==True and gameOver==False and pause==False: #if the first ready variable is true, it will call the functions for the first enemy list
+            genEnemies(enemy) #generating enemies
+            moveEnemy(screen,enemy) #move
+            baseHealth(enemy) #base health
+            healthBars(enemy)  #health bars
+            damageEnemies(enemy,activeDefenses,towerPos2) #damage
+
+        if ready2==True and gameOver==False and pause==False: #if the 2nd ready variable becomes true, it will call the game functions for the second enemy list
+            genEnemies(enemy2)
+            moveEnemy(screen,enemy2)
+            baseHealth(enemy2)
+            healthBars(enemy2)
+            damageEnemies(enemy2,activeDefenses,towerPos2)    
 
         if gameOver:
             endScreen=Surface((width,height),SRCALPHA)
             endScreen.fill((220,220,220,127))
             screen.blit(endScreen,(0,0))
-            screen.blit(loseRect,(320,225))
+            screen.blit(loseRect,(335,235))
             retryRect=Rect(365,415,128,50)
             mainRect=Rect(525,415,187,50)
             draw.rect(screen,RED,(945,375,100,10),0)
+
             if retryRect.collidepoint(mx,my):
                 draw.rect(screen,RED,retryRect,3)
                 if mb[0]==1:
@@ -977,27 +988,39 @@ def lev2():
                     activeDefenses=[]
                     running=False
                     ready=False
+                    ready2=False
                     gameOver=False
                     money=2000
                     score=0
-                    return "lev2"
+                    return "prev2"
             if mainRect.collidepoint(mx,my):
                 draw.rect(screen,RED,mainRect,3)
-                if mb[0]==1:
+                if mb[0]==1 and click==False:
                     defC=None
                     editCond=False
                     activeDefenses=[]
                     running=False
                     ready=False
+                    ready2=False
                     gameOver=False
                     money=2000
                     score=0
-
-        count=0
-        for i in enemy:
-            if i[5]==True:
+        
+        count=0 #counter for the first enemy list
+        for i in enemy: 
+            if i[5]==True: #for each "dead" or enemy that passed through the base, the count will go up
                 count+=1
-            if count==len(enemy):
+            if count==len(enemy): #if the counter is the same as the length of the enemy list, it means all the enemies have either died
+            #or passed over the base, signalling the end of the wave
+                wave="second"  #changes the wave variable to the second wave
+                ready=False #makes the first ready variable false
+
+        #there are only 2 waves per level, so this is the final wave
+        count2=0
+        for i in enemy2:
+            if i[5]==True:
+                count2+=1
+            if count2==len(enemy2): #signals the end of the game (all 2 waves cleared)
                 endScreen=Surface((width,height),SRCALPHA)
                 endScreen.fill((220,220,220,127))
                 screen.blit(endScreen,(0,0))
@@ -1011,6 +1034,7 @@ def lev2():
                         editCond=False
                         activeDefenses=[]
                         ready=False
+                        ready2=False
                         running=False
                         return "prev2"
                 if nextRect.collidepoint(mx,my):
@@ -1020,14 +1044,15 @@ def lev2():
                         editCond=False
                         activeDefenses=[]
                         ready=False
+                        ready2=False
                         running=False
                         return "prev3"
-                    
+
         display.flip()
     return "levelSelect"
 
 def lev3():
-    global defC,ready,activeDefenses,money,score,click,gameOver
+    global defC,ready,ready2,activeDefenses,money,score,click,gameOver,wave
 
     money=7000
     pause=False
@@ -1044,6 +1069,8 @@ def lev3():
                [Rect(700,136,50,50),False,(700,136),False,9,None],[Rect(755,305,50,50),False,(630,305),False,8,None]]
 
     enemy=[[-100,480,0,heavyTank,heavyTank.health,False],[-250,480,0,heavyTank,heavyTank.health,False],[-400,480,0,heavyTank,heavyTank.health,False],[-650,480,0,heavyTank,heavyTank.health,False],[-800,480,0,heavyTank,heavyTank.health,False]]
+    wave="first"
+    click=False
     while running:
         myclock.tick(60)
         drawScene3(screen)
@@ -1051,7 +1078,6 @@ def lev3():
         moneyScore(screen)
         screen.blit(quitPic,(260,25))
         draw.rect(screen,BLACK,quitRect,2)
-        click=False
         for evt in event.get():
             if evt.type==QUIT:
                 running=False
@@ -1093,29 +1119,40 @@ def lev3():
                     activeDefenses=[]
                     running=False
                     ready=False
+                    ready2=False
                     gameOver=False
-                    money=2000
                     score=0
                     return "levelSelect"
 
-        if ready==False and pause==False:
+        if ready==False and pause==False and wave=="first": #checks if either ready variable is false, so it calls the prep functions
             prep(screen,towerPos3)
+        if ready2==False and pause==False and wave=="second":
+            prep(screen,towerPos3)
+            
 
-        if ready==True and gameOver==False and pause==False:
-            genEnemies(enemy)
-            moveEnemy3(screen,enemy)
-            baseHealth(enemy)
-            healthBars(enemy)
-            #damageEnemies(enemy,activeDefenses,towerPos3)
+        if ready==True and gameOver==False and pause==False: #if the first ready variable is true, it will call the functions for the first enemy list
+            genEnemies(enemy) #generating enemies
+            moveEnemy(screen,enemy) #move
+            baseHealth(enemy) #base health
+            healthBars(enemy)  #health bars
+            damageEnemies(enemy,activeDefenses,towerPos3) #damage
+
+        if ready2==True and gameOver==False and pause==False: #if the 2nd ready variable becomes true, it will call the game functions for the second enemy list
+            genEnemies(enemy2)
+            moveEnemy(screen,enemy2)
+            baseHealth(enemy2)
+            healthBars(enemy2)
+            damageEnemies(enemy2,activeDefenses,towerPos3)    
 
         if gameOver:
             endScreen=Surface((width,height),SRCALPHA)
             endScreen.fill((220,220,220,127))
             screen.blit(endScreen,(0,0))
-            screen.blit(loseRect,(320,225))
+            screen.blit(loseRect,(335,235))
             retryRect=Rect(365,415,128,50)
             mainRect=Rect(525,415,187,50)
             draw.rect(screen,RED,(945,375,100,10),0)
+
             if retryRect.collidepoint(mx,my):
                 draw.rect(screen,RED,retryRect,3)
                 if mb[0]==1:
@@ -1124,27 +1161,39 @@ def lev3():
                     activeDefenses=[]
                     running=False
                     ready=False
+                    ready2=False
                     gameOver=False
-                    money=7000
+                    money=2000
                     score=0
-                    return "lev3"
+                    return "prev3"
             if mainRect.collidepoint(mx,my):
                 draw.rect(screen,RED,mainRect,3)
-                if mb[0]==1:
+                if mb[0]==1 and click==False:
                     defC=None
                     editCond=False
                     activeDefenses=[]
                     running=False
                     ready=False
+                    ready2=False
                     gameOver=False
-                    money=7000
+                    money=2000
                     score=0
-
-        count=0
-        for i in enemy:
-            if i[5]==True:
+        
+        count=0 #counter for the first enemy list
+        for i in enemy: 
+            if i[5]==True: #for each "dead" or enemy that passed through the base, the count will go up
                 count+=1
-            if count==len(enemy):
+            if count==len(enemy): #if the counter is the same as the length of the enemy list, it means all the enemies have either died
+            #or passed over the base, signalling the end of the wave
+                wave="second"  #changes the wave variable to the second wave
+                ready=False #makes the first ready variable false
+
+        #there are only 2 waves per level, so this is the final wave
+        count2=0
+        for i in enemy2:
+            if i[5]==True:
+                count2+=1
+            if count2==len(enemy2): #signals the end of the game (all 2 waves cleared)
                 endScreen=Surface((width,height),SRCALPHA)
                 endScreen.fill((220,220,220,127))
                 screen.blit(endScreen,(0,0))
@@ -1158,6 +1207,7 @@ def lev3():
                         editCond=False
                         activeDefenses=[]
                         ready=False
+                        ready2=False
                         running=False
                         return "prev3"
                 if nextRect.collidepoint(mx,my):
@@ -1167,6 +1217,7 @@ def lev3():
                         editCond=False
                         activeDefenses=[]
                         ready=False
+                        ready2=False
                         running=False
                         return "prev4"
 
@@ -1174,7 +1225,7 @@ def lev3():
     return "levelSelect"
 
 def lev4():
-    global defC,ready,activeDefenses,money,score,click,gameOver
+    global defC,ready,ready2,activeDefenses,money,score,click,gameOver,wave
 
     money=8500
     pause=False
@@ -1189,7 +1240,9 @@ def lev4():
                [Rect(457,472,50,50),False,(457,472),False,4,None],[Rect(241,647,50,50),False,(241,647),False,5,None],
                [Rect(689,429,50,50),False,(689,429),False,6,None],[Rect(495,260,50,50),False,(495,260),False,7,None],
                [Rect(686,240,50,50),False,(686,240),False,8,None],[Rect(820,409,50,50),False,(820,409),False,9,None]]
+
     enemy=[[-100,280,0,heavyTank,heavyTank.health,False],[-250,280,0,heavyTank,heavyTank.health,False],[-400,280,0,heavyTank,heavyTank.health,False],[-650,280,0,heavyTank,heavyTank.health,False],[-800,280,0,heavyTank,heavyTank.health,False]]
+    wave="first"
     while running:
         myclock.tick(60)
         drawScene4(screen)
@@ -1238,29 +1291,40 @@ def lev4():
                     activeDefenses=[]
                     running=False
                     ready=False
+                    ready2=False
                     gameOver=False
-                    money=8500
                     score=0
                     return "levelSelect"
 
-        if ready==False and pause==False:
+        if ready==False and pause==False and wave=="first": #checks if either ready variable is false, so it calls the prep functions
             prep(screen,towerPos4)
+        if ready2==False and pause==False and wave=="second":
+            prep(screen,towerPos4)
+            
 
-        if ready==True and gameOver==False and pause==False:
-            genEnemies(enemy)
-            moveEnemy4(screen,enemy)
-            baseHealth(enemy)
-            healthBars(enemy)
-            #damageEnemies(enemy,activeDefenses,towerPos4)
+        if ready==True and gameOver==False and pause==False: #if the first ready variable is true, it will call the functions for the first enemy list
+            genEnemies(enemy) #generating enemies
+            moveEnemy(screen,enemy) #move
+            baseHealth(enemy) #base health
+            healthBars(enemy)  #health bars
+            damageEnemies(enemy,activeDefenses,towerPos4) #damage
+
+        if ready2==True and gameOver==False and pause==False: #if the 2nd ready variable becomes true, it will call the game functions for the second enemy list
+            genEnemies(enemy2)
+            moveEnemy(screen,enemy2)
+            baseHealth(enemy2)
+            healthBars(enemy2)
+            damageEnemies(enemy2,activeDefenses,towerPos4)    
 
         if gameOver:
             endScreen=Surface((width,height),SRCALPHA)
             endScreen.fill((220,220,220,127))
             screen.blit(endScreen,(0,0))
-            screen.blit(loseRect,(320,225))
+            screen.blit(loseRect,(335,235))
             retryRect=Rect(365,415,128,50)
             mainRect=Rect(525,415,187,50)
             draw.rect(screen,RED,(945,375,100,10),0)
+
             if retryRect.collidepoint(mx,my):
                 draw.rect(screen,RED,retryRect,3)
                 if mb[0]==1:
@@ -1269,27 +1333,39 @@ def lev4():
                     activeDefenses=[]
                     running=False
                     ready=False
+                    ready2=False
                     gameOver=False
                     money=2000
                     score=0
-                    return "lev4"
+                    return "prev4"
             if mainRect.collidepoint(mx,my):
                 draw.rect(screen,RED,mainRect,3)
-                if mb[0]==1:
+                if mb[0]==1 and click==False:
                     defC=None
                     editCond=False
                     activeDefenses=[]
                     running=False
                     ready=False
+                    ready2=False
                     gameOver=False
-                    money=8500
+                    money=2000
                     score=0
-
-        count=0
-        for i in enemy:
-            if i[5]==True:
+        
+        count=0 #counter for the first enemy list
+        for i in enemy: 
+            if i[5]==True: #for each "dead" or enemy that passed through the base, the count will go up
                 count+=1
-            if count==len(enemy):
+            if count==len(enemy): #if the counter is the same as the length of the enemy list, it means all the enemies have either died
+            #or passed over the base, signalling the end of the wave
+                wave="second"  #changes the wave variable to the second wave
+                ready=False #makes the first ready variable false
+
+        #there are only 2 waves per level, so this is the final wave
+        count2=0
+        for i in enemy2:
+            if i[5]==True:
+                count2+=1
+            if count2==len(enemy2): #signals the end of the game (all 2 waves cleared)
                 endScreen=Surface((width,height),SRCALPHA)
                 endScreen.fill((220,220,220,127))
                 screen.blit(endScreen,(0,0))
@@ -1303,6 +1379,7 @@ def lev4():
                         editCond=False
                         activeDefenses=[]
                         ready=False
+                        ready2=False
                         running=False
                         return "prev4"
                 if nextRect.collidepoint(mx,my):
@@ -1312,14 +1389,15 @@ def lev4():
                         editCond=False
                         activeDefenses=[]
                         ready=False
+                        ready2=False
                         running=False
                         return "prev5"
-                    
+
         display.flip()
     return "levelSelect"
 
 def lev5():
-    global defC,ready,activeDefenses,money,score,click,gameOver
+    global defC,ready,ready2,activeDefenses,money,score,click,gameOver,wave
 
     money=10000
     running=True
@@ -1336,6 +1414,7 @@ def lev5():
                [Rect(645,409,50,50),False,(645,409),False,8,None],[Rect(459,589,50,50),False,(459,589),False,9,None],
                [Rect(815,409,50,50),False,(815,409),False,10,None]]
     enemy=[[130,-100,0,heavyTank,heavyTank.health,False]]#[130,-250,0,heavyTank,heavyTank.health,False],[130,-400,0,heavyTank,heavyTank.health,False],[130,-650,0,heavyTank,heavyTank.health,False],[130,-800,0,heavyTank,heavyTank.health,False]]
+    wave="first"
     while running:
         myclock.tick(60)
         drawScene5(screen)
@@ -1384,31 +1463,40 @@ def lev5():
                     activeDefenses=[]
                     running=False
                     ready=False
+                    ready2=False
                     gameOver=False
-                    money=10000
                     score=0
                     return "levelSelect"
-                
-        if ready==False and pause==False:
+
+        if ready==False and pause==False and wave=="first": #checks if either ready variable is false, so it calls the prep functions
+            prep(screen,towerPos5)
+        if ready2==False and pause==False and wave=="second":
             prep(screen,towerPos5)
             
-        if ready==True and gameOver==False and pause==False:
-            genEnemies(enemy)
-            moveEnemy5(screen,enemy)
-            hudElements(screen)
-            moneyScore(screen)
-            baseHealth(enemy)
-            healthBars(enemy)
-            #damageEnemies(enemy,activeDefenses,towerPos5)
+
+        if ready==True and gameOver==False and pause==False: #if the first ready variable is true, it will call the functions for the first enemy list
+            genEnemies(enemy) #generating enemies
+            moveEnemy(screen,enemy) #move
+            baseHealth(enemy) #base health
+            healthBars(enemy)  #health bars
+            damageEnemies(enemy,activeDefenses,towerPos5) #damage
+
+        if ready2==True and gameOver==False and pause==False: #if the 2nd ready variable becomes true, it will call the game functions for the second enemy list
+            genEnemies(enemy2)
+            moveEnemy(screen,enemy2)
+            baseHealth(enemy2)
+            healthBars(enemy2)
+            damageEnemies(enemy2,activeDefenses,towerPos5)    
 
         if gameOver:
             endScreen=Surface((width,height),SRCALPHA)
             endScreen.fill((220,220,220,127))
             screen.blit(endScreen,(0,0))
-            screen.blit(loseRect,(320,225))
+            screen.blit(loseRect,(335,235))
             retryRect=Rect(365,415,128,50)
             mainRect=Rect(525,415,187,50)
             draw.rect(screen,RED,(945,375,100,10),0)
+
             if retryRect.collidepoint(mx,my):
                 draw.rect(screen,RED,retryRect,3)
                 if mb[0]==1:
@@ -1417,27 +1505,39 @@ def lev5():
                     activeDefenses=[]
                     running=False
                     ready=False
+                    ready2=False
                     gameOver=False
                     money=2000
                     score=0
-                    return "lev5"
+                    return "prev5"
             if mainRect.collidepoint(mx,my):
                 draw.rect(screen,RED,mainRect,3)
-                if mb[0]==1:
+                if mb[0]==1 and click==False:
                     defC=None
                     editCond=False
                     activeDefenses=[]
                     running=False
                     ready=False
+                    ready2=False
                     gameOver=False
-                    money=10000
+                    money=2000
                     score=0
-
-        count=0
-        for i in enemy:
-            if i[5]==True:
+        
+        count=0 #counter for the first enemy list
+        for i in enemy: 
+            if i[5]==True: #for each "dead" or enemy that passed through the base, the count will go up
                 count+=1
-            if count==len(enemy):
+            if count==len(enemy): #if the counter is the same as the length of the enemy list, it means all the enemies have either died
+            #or passed over the base, signalling the end of the wave
+                wave="second"  #changes the wave variable to the second wave
+                ready=False #makes the first ready variable false
+
+        #there are only 2 waves per level, so this is the final wave
+        count2=0
+        for i in enemy2:
+            if i[5]==True:
+                count2+=1
+            if count2==len(enemy2): #signals the end of the game (all 2 waves cleared)
                 endScreen=Surface((width,height),SRCALPHA)
                 endScreen.fill((220,220,220,127))
                 screen.blit(endScreen,(0,0))
@@ -1451,6 +1551,7 @@ def lev5():
                         editCond=False
                         activeDefenses=[]
                         ready=False
+                        ready2=False
                         running=False
                         return "prev5"
                 if nextRect.collidepoint(mx,my):
@@ -1460,9 +1561,10 @@ def lev5():
                         editCond=False
                         activeDefenses=[]
                         ready=False
+                        ready2=False
                         running=False
                         return "victory"
-                    
+
         display.flip()
     return "levelSelect"
 
