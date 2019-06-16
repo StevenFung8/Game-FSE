@@ -87,11 +87,11 @@ class enemyType:
         self.prize=prize #the amount of money you get when you kill a enemy troop 
         self.filename="FSE-Assets/Enemies/"+name+".png" #the name to load the picture into the game 
 
-infantry=enemyType('infantry',2,100,5,100) #so these are all the properties of the troops 
-transport=enemyType('transport',2.5,400,10,175) #for example, 'transport' has a speed of 1.7, 400 health, does 10 damage to the base, and you get 175 dollars if you kill it 
-motorcycle=enemyType('motorcycle',3,250,5,150)
-lightTank=enemyType('lightTank',1.7,700,15,200)
-heavyTank=enemyType('heavyTank',1.5,1000,20,250)
+infantry=enemyType('infantry',2,200,5,40) #so these are all the properties of the troops 
+transport=enemyType('transport',2.5,400,10,50) #for example, 'transport' has a speed of 1.7, 400 health, does 10 damage to the base, and you get 175 dollars if you kill it 
+motorcycle=enemyType('motorcycle',3,250,10,75)
+lightTank=enemyType('lightTank',1.7,700,15,100)
+heavyTank=enemyType('heavyTank',1.5,1000,20,200)
 tankDestroyer=enemyType('tankDestroyer',1.3,1100,25,300)
 
 class towerType: #this is the class that defines all the properties for the towers 
@@ -105,9 +105,9 @@ class towerType: #this is the class that defines all the properties for the towe
         self.delay=delay #the rate of fire of the tower (ie. the heaveMG would attack faster than the antitank)
         self.filename="FSE-Assets/Defenses/"+name+".png" #the file path to load the picture into the game 
  
-antiTank=towerType('antiTank',80,800,350,400,60) #so these are all the properties for the towers 
-bunker=towerType('bunker',40,1000,450,500,10) #for example the 'bunker' would deal 100 damage to troops, cost 1000 dollars, cost 450 to upgrade, you get 500 if you refund it, and it fires every 10 ticks 
-fortress=towerType('fortress',150,1250,600,625,50)
+antiTank=towerType('antiTank',80,800,350,400,50) #so these are all the properties for the towers 
+bunker=towerType('bunker',30,1000,450,500,10) #for example the 'bunker' would deal 100 damage to troops, cost 1000 dollars, cost 450 to upgrade, you get 500 if you refund it, and it fires every 10 ticks 
+fortress=towerType('fortress',150,1250,600,625,60)
 heavyGun=towerType('heavyGun',200,1500,700,750,60)
 heavyMG=towerType('heavyMG',6,500,200,250,5)
 soldier=towerType('soldier',25,250,100,125,25)
@@ -370,14 +370,13 @@ def hudElements(screen):
 
 defC=None
 ready=False
+ready2=False
 gameOver=False
 activeDefenses=[]
 
 def prep(screen,towerPos):
-    global defC
-    global money
-    global ready
-    global click
+    global defC,money,ready,ready2,click,wave
+    
     readyRect=Rect(830,120,179,69)
     upgradeRect=Rect(750,662,70,30)
     buyRects=[Rect(607,28,59,63),Rect(682,28,61,63),Rect(758,28,61,63),Rect(834,28,61,63),Rect(908,28,61,63),Rect(982,28,61,63)]
@@ -413,8 +412,13 @@ def prep(screen,towerPos):
 
     if readyRect.collidepoint(mx,my):
         draw.rect(screen,(255,255,0),readyRect,2)
-        if click:
-            ready=True
+        if click and wave=="first": #checks what wave is coming up next
+            ready=True #changes the first wave's "ready" variable
+
+    if readyRect.collidepoint(mx,my):
+        draw.rect(screen,(255,255,0),readyRect,2)
+        if click and wave=="second": #checks if the second wave is coming
+            ready2=True #changes the 2nd wave's "ready" variable
 
     for i in range(len(buyRects)):
         if buyRects[i].collidepoint(mx,my):
@@ -513,11 +517,12 @@ def prep(screen,towerPos):
 def damageEnemies(enemy,activeDefenses,towerPos):
     global money,score
     for a in activeDefenses:
+        flashList=list(towerPos[a[3]][2])
         for e in enemy:
             if towerPos[a[3]][6].collidepoint(e[0],e[1]) and e[5]==False:
                 if a[6]==0:
                     mixer.Sound.play(a[8])
-                    screen.blit(muzzleFlash,(towerPos[a[3]][2]))
+                    screen.blit(muzzleFlash,(flashList[0]-25,flashList[1]+13))
                     e[4]-=a[4]
                     a[6]=a[7]
                 if a[6]>0:
@@ -676,7 +681,7 @@ def prev5():
         display.flip()
 
 def lev1():
-    global defC,ready,activeDefenses,money,score,click,gameOver
+    global defC,ready,ready2,activeDefenses,money,score,click,gameOver,wave
 
     money=4500
     pause=False
@@ -696,20 +701,26 @@ def lev1():
                [Rect(598,503,50,50),False,(598,503),False,8,None,Rect(507,412,212,212)],[Rect(778,503,50,50),False,(778,503),False,9,None,Rect(688,412,212,212)]]
             #x,y,frame,enemy type,health,death status, prize, delay
     
-    enemy=[[-100,190,0,motorcycle,motorcycle.health,False,motorcycle.prize,30],[-100,190,0,motorcycle,motorcycle.health,False,motorcycle.prize,90],[-100,190,0,motorcycle,motorcycle.health,False,motorcycle.prize,150],
+    enemy=[[-100,190,0,motorcycle,motorcycle.health,False,motorcycle.prize,30],[-100,190,0,motorcycle,motorcycle.health,False,motorcycle.prize,90],[-100,190,0,motorcycle,motorcycle.health,False,motorcycle.prize,150]]
+           #[-100,190,0,motorcycle,motorcycle.health,False,motorcycle.prize,210],[-100,190,0,motorcycle,motorcycle.health,False,motorcycle.prize,270],[-100,190,0,motorcycle,motorcycle.health,False,motorcycle.prize,330],
+           #[-100,190,0,motorcycle,motorcycle.health,False,motorcycle.prize,390],[-100,190,0,transport,transport.health,False,transport.prize,450],[-100,190,0,transport,transport.health,False,transport.prize,530],
+           #[-100,190,0,transport,transport.health,False,transport.prize,610],[-100,190,0,transport,transport.health,False,transport.prize,700],[-100,190,0,transport,transport.health,False,transport.prize,780],
+           #[-100,190,0,infantry,infantry.health,False,infantry.prize,820],[-100,190,0,infantry,infantry.health,False,infantry.prize,880],[-100,190,0,infantry,infantry.health,False,infantry.prize,940],[-100,190,0,infantry,infantry.health,False,infantry.prize,1000],
+           #[-100,190,0,infantry,infantry.health,False,infantry.prize,1060],[-100,190,0,infantry,infantry.health,False,infantry.prize,1120],[-100,190,0,lightTank,lightTank.health,False,lightTank.prize,1200],
+           #[-100,190,0,lightTank,lightTank.health,False,lightTank.prize,1320],[-100,190,0,lightTank,lightTank.health,False,lightTank.prize,1440],[-100,190,0,lightTank,lightTank.health,False,lightTank.prize,1560],
+           #[-100,190,0,lightTank,lightTank.health,False,lightTank.prize,1680]] #1st wave
+    
+    enemy2=[[-100,190,0,motorcycle,motorcycle.health,False,motorcycle.prize,30],[-100,190,0,motorcycle,motorcycle.health,False,motorcycle.prize,90],[-100,190,0,motorcycle,motorcycle.health,False,motorcycle.prize,150],
            [-100,190,0,motorcycle,motorcycle.health,False,motorcycle.prize,210],[-100,190,0,motorcycle,motorcycle.health,False,motorcycle.prize,270],[-100,190,0,motorcycle,motorcycle.health,False,motorcycle.prize,330],
            [-100,190,0,motorcycle,motorcycle.health,False,motorcycle.prize,390],[-100,190,0,transport,transport.health,False,transport.prize,450],[-100,190,0,transport,transport.health,False,transport.prize,530],
            [-100,190,0,transport,transport.health,False,transport.prize,610],[-100,190,0,transport,transport.health,False,transport.prize,700],[-100,190,0,transport,transport.health,False,transport.prize,780],
            [-100,190,0,infantry,infantry.health,False,infantry.prize,820],[-100,190,0,infantry,infantry.health,False,infantry.prize,880],[-100,190,0,infantry,infantry.health,False,infantry.prize,940],[-100,190,0,infantry,infantry.health,False,infantry.prize,1000],
            [-100,190,0,infantry,infantry.health,False,infantry.prize,1060],[-100,190,0,infantry,infantry.health,False,infantry.prize,1120],[-100,190,0,lightTank,lightTank.health,False,lightTank.prize,1200],
-           [-100,190,0,lightTank,lightTank.health,False,lightTank.prize,1320],[-100,190,0,lightTank,lightTank.health,False,lightTank.prize,1440],[-100,190,0,lightTank,lightTank.health,False,lightTank.prize,1560]]
-
-    '''
-    enemy2=[[0,190,0,transport,transport.health,False],[100,190,0,transport,transport.health,False],[-100,190,0,heavyTank,heavyTank.health,False],
-           [-250,190,0,heavyTank,heavyTank.health,False],[-400,190,0,heavyTank,heavyTank.health,False],[-650,190,0,heavyTank,heavyTank.health,False],[-800,190,0,heavyTank,heavyTank.health,False]]
-    '''
-
+           [-100,190,0,lightTank,lightTank.health,False,lightTank.prize,1320],[-100,190,0,lightTank,lightTank.health,False,lightTank.prize,1440],[-100,190,0,lightTank,lightTank.health,False,lightTank.prize,1560],
+           [-100,190,0,lightTank,lightTank.health,False,lightTank.prize,1680]] #2nd wave
+    
     click=False
+    wave="first"
     while running:
         myclock.tick(60)
         drawScene1(screen)
@@ -757,28 +768,39 @@ def lev1():
                     activeDefenses=[]
                     running=False
                     ready=False
+                    ready2=False
                     gameOver=False
-                    money=2000
                     score=0
                     return "levelSelect"
 
-        if ready==False and pause==False:
+        if ready==False and pause==False and wave=="first": #checks if either ready variable is false, so it calls the prep functions
             prep(screen,towerPos1)
+        if ready2==False and pause==False and wave=="second":
+            prep(screen,towerPos1)
+            
 
-        if ready==True and gameOver==False and pause==False:
-            genEnemies(enemy)
-            moveEnemy(screen,enemy)
-            baseHealth(enemy)
-            healthBars(enemy)
-            damageEnemies(enemy,activeDefenses,towerPos1)
+        if ready==True and gameOver==False and pause==False: #if the first ready variable is true, it will call the functions for the first enemy list
+            genEnemies(enemy) #generating enemies
+            moveEnemy(screen,enemy) #move
+            baseHealth(enemy) #base health
+            healthBars(enemy)  #health bars
+            damageEnemies(enemy,activeDefenses,towerPos1) #damage
+
+        if ready2==True and gameOver==False and pause==False: #if the 2nd ready variable becomes true, it will call the game functions for the second enemy list
+            genEnemies(enemy2)
+            moveEnemy(screen,enemy2)
+            baseHealth(enemy2)
+            healthBars(enemy2)
+            damageEnemies(enemy2,activeDefenses,towerPos1)
+                
 
         if gameOver:
             endScreen=Surface((width,height),SRCALPHA)
             endScreen.fill((220,220,220,127))
             screen.blit(endScreen,(0,0))
             screen.blit(loseRect,(335,235))
-            retryRect=Rect(350,405,128,50)
-            mainRect=Rect(510,405,187,50)
+            retryRect=Rect(365,415,128,50)
+            mainRect=Rect(525,415,187,50)
             draw.rect(screen,RED,(945,375,100,10),0)
 
             if retryRect.collidepoint(mx,my):
@@ -789,6 +811,7 @@ def lev1():
                     activeDefenses=[]
                     running=False
                     ready=False
+                    ready2=False
                     gameOver=False
                     money=2000
                     score=0
@@ -801,22 +824,26 @@ def lev1():
                     activeDefenses=[]
                     running=False
                     ready=False
+                    ready2=False
                     gameOver=False
                     money=2000
                     score=0
-        '''
-        count=0
-        for i in enemy:
-            if i[5]==True:
+        
+        count=0 #counter for the first enemy list
+        for i in enemy: 
+            if i[5]==True: #for each "dead" or enemy that passed through the base, the count will go up
                 count+=1
-            if count==len(enemy):
-                prep(screen,towerPos1)
-        '''
-        count=0
-        for i in enemy:
+            if count==len(enemy): #if the counter is the same as the length of the enemy list, it means all the enemies have either died
+            #or passed over the base, signalling the end of the wave
+                wave="second"  #changes the wave variable to the second wave
+                ready=False #makes the first ready variable false
+
+        #there are only 2 waves per level, so this is the final wave
+        count2=0
+        for i in enemy2:
             if i[5]==True:
-                count+=1
-            if count==len(enemy):
+                count2+=1
+            if count2==len(enemy2): #signals the end of the game (all 2 waves cleared)
                 endScreen=Surface((width,height),SRCALPHA)
                 endScreen.fill((220,220,220,127))
                 screen.blit(endScreen,(0,0))
@@ -830,6 +857,7 @@ def lev1():
                         editCond=False
                         activeDefenses=[]
                         ready=False
+                        ready2=False
                         running=False
                         return "prev1"
                 if nextRect.collidepoint(mx,my):
@@ -839,6 +867,7 @@ def lev1():
                         editCond=False
                         activeDefenses=[]
                         ready=False
+                        ready2=False
                         running=False
                         return "prev2"
 
@@ -932,8 +961,8 @@ def lev2():
             endScreen.fill((220,220,220,127))
             screen.blit(endScreen,(0,0))
             screen.blit(loseRect,(320,225))
-            retryRect=Rect(350,405,128,50)
-            mainRect=Rect(510,405,187,50)
+            retryRect=Rect(365,415,128,50)
+            mainRect=Rect(525,415,187,50)
             draw.rect(screen,RED,(945,375,100,10),0)
             if retryRect.collidepoint(mx,my):
                 draw.rect(screen,RED,retryRect,3)
@@ -1079,8 +1108,8 @@ def lev3():
             endScreen.fill((220,220,220,127))
             screen.blit(endScreen,(0,0))
             screen.blit(loseRect,(320,225))
-            retryRect=Rect(350,405,128,50)
-            mainRect=Rect(510,405,187,50)
+            retryRect=Rect(365,415,128,50)
+            mainRect=Rect(525,415,187,50)
             draw.rect(screen,RED,(945,375,100,10),0)
             if retryRect.collidepoint(mx,my):
                 draw.rect(screen,RED,retryRect,3)
@@ -1224,8 +1253,8 @@ def lev4():
             endScreen.fill((220,220,220,127))
             screen.blit(endScreen,(0,0))
             screen.blit(loseRect,(320,225))
-            retryRect=Rect(350,405,128,50)
-            mainRect=Rect(510,405,187,50)
+            retryRect=Rect(365,415,128,50)
+            mainRect=Rect(525,415,187,50)
             draw.rect(screen,RED,(945,375,100,10),0)
             if retryRect.collidepoint(mx,my):
                 draw.rect(screen,RED,retryRect,3)
@@ -1372,8 +1401,8 @@ def lev5():
             endScreen.fill((220,220,220,127))
             screen.blit(endScreen,(0,0))
             screen.blit(loseRect,(320,225))
-            retryRect=Rect(350,405,128,50)
-            mainRect=Rect(510,405,187,50)
+            retryRect=Rect(365,415,128,50)
+            mainRect=Rect(525,415,187,50)
             draw.rect(screen,RED,(945,375,100,10),0)
             if retryRect.collidepoint(mx,my):
                 draw.rect(screen,RED,retryRect,3)

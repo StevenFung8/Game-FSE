@@ -99,26 +99,20 @@ def moveEnemy(screen,enemy):
 def bombAnimation(screen,bombs):
 
     for bomb in bombs[:]:
-        #print("99",bomb)
-
         screen.blit(boomPics[bomb[3]],bomb[:2])
         
 
 def advanceBombs(bombs):
+    global aa
     for bomb in bombs:
         bomb[2]+=1
         if bomb[2]>5 and bomb[2]%5==0:
             bomb[3]+=1
 
-##            if bomb[3]==28:
-##                del(bomb)
-
             if bomb[3]==27:
                 bombs.remove(bomb)
-                #bombs=[]
+                aa=True
                 print("delete")
-
-    #print(bombs)
 
 def baseHealth(enemy):
     global aa
