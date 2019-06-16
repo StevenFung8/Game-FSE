@@ -2,7 +2,7 @@
 from pygame import *
 from math import *
 from random import *
-from datetime import datetime
+
 #basic colours
 RED=(255,0,0)
 GREEN=(0,255,0)
@@ -71,6 +71,8 @@ mixer.init()
 place_sound = mixer.Sound("FSE-Assets/sound/placeSound.wav")
 gun_sound = mixer.Sound("FSE-Assets/sound/gunShot.wav")
 cannon_sound = mixer.Sound("FSE-Assets/sound/gunShotCannon.wav")
+remove_sound = mixer.Sound(("FSE-Assets/sound/removeSound.wav"))
+explosion_sound = mixer.Sound(("FSE-Assets/sound/explosion.wav"))
 
 money=0 #the starting amount of money you have 
 score=0 #your starting score 
@@ -106,7 +108,7 @@ class towerType: #this is the class that defines all the properties for the towe
         self.filename="FSE-Assets/Defenses/"+name+".png" #the file path to load the picture into the game 
  
 antiTank=towerType('antiTank',80,800,350,400,50) #so these are all the properties for the towers 
-bunker=towerType('bunker',30,1000,450,500,10) #for example the 'bunker' would deal 100 damage to troops, cost 1000 dollars, cost 450 to upgrade, you get 500 if you refund it, and it fires every 10 ticks 
+bunker=towerType('bunker',30,1000,450,500,10) #for example the 'bunker' would deal 30 damage to troops, cost 1000 dollars, cost 450 to upgrade, you get 500 if you refund it, and it fires every 10 ticks 
 fortress=towerType('fortress',150,1250,600,625,60)
 heavyGun=towerType('heavyGun',200,1500,700,750,60)
 heavyMG=towerType('heavyMG',6,500,200,250,5)
@@ -125,10 +127,6 @@ def genEnemies(enemy): #this function loads all the images for the enemy troops 
         img.append(transform.rotate(image.load(i[3].filename),-180))#the picture but rotated 180 for when its going left of the path 
         pics.append(img) #append the list into the pics list to make a 2D list
         #this makes it so that the first index of img is the image facing the right, second is down, third is up, and fourth is left
-    
-
-        
-
     for i in enemy:
         img=[]
         if i[3]==infantry:
@@ -175,6 +173,7 @@ def baseHealth(enemy):
             if i[5]==True and i[0]>=1100: #makes sure if the enemy is off the screen and becomes "dead" in-game, the damage done to the base is still applied
                 bars-=i[3].damage
             if bars<=0: #if it goes negative, set it back to zero
+                mixer.Sound.play(explosion_sound)
                 bars=0
         if i[0]>=1100: #if the enemy passes through the base, its job is done, so it becomes "dead", though it was never killed by a tower
             i[5]=True
@@ -227,38 +226,20 @@ def music(state): #this function is used to toggle the music (mute and unmute)
 def moveEnemy(screen,enemy): #for each level, when a enemy troop reaches the end of a path, it needs to know to turn, and this is what the function is used for 
     count=-1 #counter for number of enemies in the list
     for i in enemy:
-
-        if i[0]<220: #for the first section of the path, if it doesn't hit the end of the path, the enemy troop will move at a constant speed defined in the enemyType class
-            i[0]+=i[3].speed
-            i[2]=0 # i[2] is the 'frame' part of the 2D list, and it defines the frame that is needed for this section of the path. I this case, the frame needed is the troop facing right
-        if i[0]>=220 and i[1]<420: #this is the second section of the path, the path that goes down, and it will move at a constant speed 
-            i[1]+=i[3].speed
-            i[2]=1 #the frame needed here is the one that faces down, so i[2] changes to 1 
-        if i[1]>=410: #third section of the path, and it will travel at a constant speed
-            i[0]+=i[3].speed
-            i[2]=0 #the frame changes back to the troop facing to the right 
-        count+=1 #counter for each enemy in the enemy list, and adds one for each enemy
-        if i[5]==False: #if troops are not dead
-            screen.blit(pics[count][i[2]],i[:2]) #blits all the pictures needed, pics[count][i[2]] is the image and what rotation is needed, and i[:2] is the point at where you shoudl blit it
-        
-        if i[5]==True:
-            screen.blit(deadPics[count][i[2]],i[:2])
-
         i[7]-=1
         if i[5]==False and i[7]<=0:
-            if i[0]<220:
+            if i[0]<220: #for the first section of the path, if it doesn't hit the end of the path, the enemy troop will move at a constant speed defined in the enemyType class
                 i[0]+=i[3].speed
-                i[2]=0
-            if i[0]>=220 and i[1]<420:
+                i[2]=0 # i[2] is the 'frame' part of the 2D list, and it defines the frame that is needed for this section of the path. I this case, the frame needed is the troop facing right
+            if i[0]>=220 and i[1]<420: #this is the second section of the path, the path that goes down, and it will move at a constant speed 
                 i[1]+=i[3].speed
-                i[2]=1
-            if i[1]>=410:
+                i[2]=1 #the frame needed here is the one that faces down, so i[2] changes to 1 
+            if i[1]>=410: #third section of the path, and it will travel at a constant speed
                 i[0]+=i[3].speed
-                i[2]=0
-
-        count+=1
-        if i[5]==False and i[7]<=0:
-            screen.blit(pics[count][i[2]],i[:2])
+                i[2]=0 #the frame changes back to the troop facing to the right 
+        count+=1 #counter for each enemy in the enemy list, and adds one for each enemy
+        if i[5]==False and i[7]<=0: #if troops are not dead and their delay is less than zero
+            screen.blit(pics[count][i[2]],i[:2]) #blits all the pictures needed, pics[count][i[2]] is the image and what rotation is needed, and i[:2] is the point at where you shoudl blit it
         if i[5]==True and i[0]<=1100:
             screen.blit(deadPics[count][i[2]],(i[0],i[1]+15))
 
@@ -271,22 +252,6 @@ def moveEnemy2(screen,enemy): #this is for the second level, because the path is
     check3=Rect(665,210,65,230)
     check4=Rect(665,440,900,65)
 
-##        #if i[5]==False:
-##        if i[0]<300: #while 
-##            i[0]+=i[3].speed
-##            i[2]=0
-##        if check1.collidepoint(i[0],i[1]):
-##            i[1]-=i[3].speed
-##            i[2]=2
-##        if check2.collidepoint(i[0],i[1]):
-##            i[0]+=i[3].speed
-##            i[2]=0
-##        if check3.collidepoint(i[0],i[1]):
-##            i[1]+=i[3].speed
-##            i[2]=1
-##        if check4.collidepoint(i[0],i[1]):
-##            i[0]+=i[3].speed
-##            i[2]=
     for i in enemy:
         if i[5]==False and i[7]<=0:
             if i[0]<300:
@@ -304,7 +269,6 @@ def moveEnemy2(screen,enemy): #this is for the second level, because the path is
             if check4.collidepoint(i[0],i[1]):
                 i[0]+=i[3].speed
                 i[2]=0
-
 
         count+=1
         if i[5]==False and i[7]<=0:
@@ -520,6 +484,7 @@ def prep(screen,towerPos):
                             if type(a[5])==int:
                                 draw.rect(screen,GREEN,upgradeRect,2)
                                 if click:
+                                    mixer.Sound.play(place_sound)
                                     a[4]+=10*(i[5]+1)
                                     a[5]=None
                                     if money-defenses[i[5]].uCost>=0:
@@ -540,6 +505,7 @@ def prep(screen,towerPos):
                 if deleteRect.collidepoint(mx,my):
                     draw.rect(screen,RED,deleteRect,2)
                     if click:
+                        mixer.Sound.play(remove_sound)
                         i[3]=False
                         i[1]=False
                         for a in activeDefenses:
@@ -738,16 +704,16 @@ def lev1():
                [Rect(388,342,50,50),False,(388,342),False,4,None,Rect(297,251,212,212)],[Rect(570,342,50,50),False,(570,342),False,5,None,Rect(479,251,212,212)],
                [Rect(750,342,50,50),False,(750,342),False,6,None,Rect(659,251,212,212)],[Rect(418,503,50,50),False,(418,503),False,7,None,Rect(327,412,212,212)],
                [Rect(598,503,50,50),False,(598,503),False,8,None,Rect(507,412,212,212)],[Rect(778,503,50,50),False,(778,503),False,9,None,Rect(688,412,212,212)]]
-            #x,y,frame,enemy type,health,death status, prize, delay
     
-    enemy=[[-100,190,0,motorcycle,motorcycle.health,False,motorcycle.prize,30],[-100,190,0,motorcycle,motorcycle.health,False,motorcycle.prize,90],[-100,190,0,motorcycle,motorcycle.health,False,motorcycle.prize,150]]
-           #[-100,190,0,motorcycle,motorcycle.health,False,motorcycle.prize,210],[-100,190,0,motorcycle,motorcycle.health,False,motorcycle.prize,270],[-100,190,0,motorcycle,motorcycle.health,False,motorcycle.prize,330],
-           #[-100,190,0,motorcycle,motorcycle.health,False,motorcycle.prize,390],[-100,190,0,transport,transport.health,False,transport.prize,450],[-100,190,0,transport,transport.health,False,transport.prize,530],
-           #[-100,190,0,transport,transport.health,False,transport.prize,610],[-100,190,0,transport,transport.health,False,transport.prize,700],[-100,190,0,transport,transport.health,False,transport.prize,780],
-           #[-100,190,0,infantry,infantry.health,False,infantry.prize,820],[-100,190,0,infantry,infantry.health,False,infantry.prize,880],[-100,190,0,infantry,infantry.health,False,infantry.prize,940],[-100,190,0,infantry,infantry.health,False,infantry.prize,1000],
-           #[-100,190,0,infantry,infantry.health,False,infantry.prize,1060],[-100,190,0,infantry,infantry.health,False,infantry.prize,1120],[-100,190,0,lightTank,lightTank.health,False,lightTank.prize,1200],
-           #[-100,190,0,lightTank,lightTank.health,False,lightTank.prize,1320],[-100,190,0,lightTank,lightTank.health,False,lightTank.prize,1440],[-100,190,0,lightTank,lightTank.health,False,lightTank.prize,1560],
-           #[-100,190,0,lightTank,lightTank.health,False,lightTank.prize,1680]] #1st wave
+            #x,y,frame,enemy type,health,death status, prize, delay
+    enemy=[[-100,190,0,motorcycle,motorcycle.health,False,motorcycle.prize,30],[-100,190,0,motorcycle,motorcycle.health,False,motorcycle.prize,90],[-100,190,0,motorcycle,motorcycle.health,False,motorcycle.prize,150],
+           [-100,190,0,motorcycle,motorcycle.health,False,motorcycle.prize,210],[-100,190,0,motorcycle,motorcycle.health,False,motorcycle.prize,270],[-100,190,0,motorcycle,motorcycle.health,False,motorcycle.prize,330],
+           [-100,190,0,motorcycle,motorcycle.health,False,motorcycle.prize,390],[-100,190,0,transport,transport.health,False,transport.prize,450],[-100,190,0,transport,transport.health,False,transport.prize,530],
+           [-100,190,0,transport,transport.health,False,transport.prize,610],[-100,190,0,transport,transport.health,False,transport.prize,700],[-100,190,0,transport,transport.health,False,transport.prize,780],
+           [-100,190,0,infantry,infantry.health,False,infantry.prize,820],[-100,190,0,infantry,infantry.health,False,infantry.prize,880],[-100,190,0,infantry,infantry.health,False,infantry.prize,940],[-100,190,0,infantry,infantry.health,False,infantry.prize,1000],
+           [-100,190,0,infantry,infantry.health,False,infantry.prize,1060],[-100,190,0,infantry,infantry.health,False,infantry.prize,1120],[-100,190,0,lightTank,lightTank.health,False,lightTank.prize,1200],
+           [-100,190,0,lightTank,lightTank.health,False,lightTank.prize,1320],[-100,190,0,lightTank,lightTank.health,False,lightTank.prize,1440],[-100,190,0,lightTank,lightTank.health,False,lightTank.prize,1560],
+           [-100,190,0,lightTank,lightTank.health,False,lightTank.prize,1680]] #1st wave
     
     enemy2=[[-100,190,0,motorcycle,motorcycle.health,False,motorcycle.prize,30],[-100,190,0,motorcycle,motorcycle.health,False,motorcycle.prize,90],[-100,190,0,motorcycle,motorcycle.health,False,motorcycle.prize,150],
            [-100,190,0,motorcycle,motorcycle.health,False,motorcycle.prize,210],[-100,190,0,motorcycle,motorcycle.health,False,motorcycle.prize,270],[-100,190,0,motorcycle,motorcycle.health,False,motorcycle.prize,330],
