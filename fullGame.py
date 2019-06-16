@@ -738,7 +738,9 @@ def lev1():
             [-100,190,0,transport,transport.health,False,transport.prize,640],[-100,190,0,transport,transport.health,False,transport.prize,720],[-100,190,0,transport,transport.health,False,transport.prize,800],
             [-100,190,0,motorcycle,motorcycle.health,False,motorcycle.prize,850],[-100,190,0,motorcycle,motorcycle.health,False,motorcycle.prize,910],[-100,190,0,motorcycle,motorcycle.health,False,motorcycle.prize,970],
             [-100,190,0,infantry,infantry.health,False,infantry.prize,1010],[-100,190,0,infantry,infantry.health,False,infantry.prize,1070],[-100,190,0,infantry,infantry.health,False,infantry.prize,1130],[-100,190,0,infantry,infantry.health,False,infantry.prize,1190],
-            [-100,190,0,infantry,infantry.health,False,infantry.prize,1250],[-100,190,0,infantry,infantry.health,False,infantry.prize,1310],[-100,190,0,infantry,infantry.health,False,infantry.prize,1370],[-100,190,0,infantry,infantry.health,False,infantry.prize,1430]]#2nd wave
+            [-100,190,0,infantry,infantry.health,False,infantry.prize,1250],[-100,190,0,infantry,infantry.health,False,infantry.prize,1310],[-100,190,0,infantry,infantry.health,False,infantry.prize,1370],[-100,190,0,infantry,infantry.health,False,infantry.prize,1430],
+            [-100,190,0,heavyTank,heavyTank.health,False,heavyTank.prize,1510],[-100,190,0,heavyTank,heavyTank.health,False,heavyTank.prize,1630],[-100,190,0,heavyTank,heavyTank.health,False,heavyTank.prize,1750],
+            [-100,190,0,heavyTank,heavyTank.health,False,heavyTank.prize,1870],[-100,190,0,heavyTank,heavyTank.health,False,heavyTank.prize,1990]]#2nd wave
     
     click=False
     wave="first"
