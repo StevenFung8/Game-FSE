@@ -474,20 +474,17 @@ def prep(screen,towerPos):
     #This is the tower edit program - selecting, upgrade, delete
 
     select=False #select checks if a tower is already selected. If a tower is selected already, select prohibits the player from choosing another tower
-    if defC==None: #no tower is selected
-        select=True #the played can select a tower while true
+    if defC==None: #no tower is being bought
         for i in towerPos:
-            if i[0].collidepoint(mx,my) and i[1]==True and select==True: #if the player hovers over a tower space,there is a tower, and the player has not
-                print(i[1],select)
+            if i[0].collidepoint(mx,my) and i[1]==True and select==False: #if the player hovers over a tower space,there is a tower, and the player has not
                 draw.rect(screen,YELLOW,i[0],3)                          #selected a tower yet, the space will be highlighted
                 if click:   
                     i[3]=True   #the tower can be edited if the player clicks on it.
                     
             if i[3]:
-                select=False  #while a tower is selected, the player cannot select another until they choose cancel
+                select=True #while a tower is selected, the player cannot select another until they choose cancel
                 draw.rect(screen,GREEN,buyRects[i[5]],2) #highlights the tower
                 screen.blit(towerStats[i[5]],(620,630)) #this will blit the individual tower's damage
-                draw.rect(screen,RED,i[6],2) #displays the tower's attack range
                 txtUpgrade=txtFont2.render("UPGRADE?",True,BLACK)
                 draw.rect(screen,BLACK,upgradeRect,2)
                 for a in activeDefenses: #checks all active towers
@@ -497,7 +494,7 @@ def prep(screen,towerPos):
                         if type(a[5])==int: #if upgraded, a[5] will be None - not an int value
                             txtuCost=txtFont2.render("$%i"%(a[5]),True,BLACK) #price of upgrade
                         else:
-                            txtuCost=txtFont2.render(a[5],True,BLACK) #will blit nothing
+                            txtuCost=txtFont2.render(a[5],True,BLACK) #will blit nothing, signalling the tower cannot be upgraded further
 
                         if upgradeRect.collidepoint(mx,my): 
                             if type(a[5])==int:
@@ -531,13 +528,14 @@ def prep(screen,towerPos):
                             if a[3]==i[4]: #checks which active tower was on the selected tower space
                                 activeDefenses.remove(a) #deletes the tower from the active list
                                 money+=a[2].refund #give back money 
-                        #select=True #player can select a tower again
+                                select=False
                         
                 if cancelRect.collidepoint(mx,my):
                     draw.rect(screen,RED,cancelRect,2)
                     if click:
                         i[3]=False #tower edit status reverts
-                        #select=True #player can select a tower again
+                        select=False #player can select a tower again
+    print(select)
 
 def damageEnemies(enemy,activeDefenses,towerPos):
     global money,score
@@ -735,14 +733,12 @@ def lev1():
            [-100,190,0,lightTank,lightTank.health,False,lightTank.prize,1320],[-100,190,0,lightTank,lightTank.health,False,lightTank.prize,1440],[-100,190,0,lightTank,lightTank.health,False,lightTank.prize,1560],
            [-100,190,0,lightTank,lightTank.health,False,lightTank.prize,1680]] #1st wave
     
-    enemy2=[[-100,190,0,motorcycle,motorcycle.health,False,motorcycle.prize,30],[-100,190,0,motorcycle,motorcycle.health,False,motorcycle.prize,90],[-100,190,0,motorcycle,motorcycle.health,False,motorcycle.prize,150],
-           [-100,190,0,motorcycle,motorcycle.health,False,motorcycle.prize,210],[-100,190,0,motorcycle,motorcycle.health,False,motorcycle.prize,270],[-100,190,0,motorcycle,motorcycle.health,False,motorcycle.prize,330],
-           [-100,190,0,motorcycle,motorcycle.health,False,motorcycle.prize,390],[-100,190,0,transport,transport.health,False,transport.prize,450],[-100,190,0,transport,transport.health,False,transport.prize,530],
-           [-100,190,0,transport,transport.health,False,transport.prize,610],[-100,190,0,transport,transport.health,False,transport.prize,700],[-100,190,0,transport,transport.health,False,transport.prize,780],
-           [-100,190,0,infantry,infantry.health,False,infantry.prize,820],[-100,190,0,infantry,infantry.health,False,infantry.prize,880],[-100,190,0,infantry,infantry.health,False,infantry.prize,940],[-100,190,0,infantry,infantry.health,False,infantry.prize,1000],
-           [-100,190,0,infantry,infantry.health,False,infantry.prize,1060],[-100,190,0,infantry,infantry.health,False,infantry.prize,1120],[-100,190,0,lightTank,lightTank.health,False,lightTank.prize,1200],
-           [-100,190,0,lightTank,lightTank.health,False,lightTank.prize,1320],[-100,190,0,lightTank,lightTank.health,False,lightTank.prize,1440],[-100,190,0,lightTank,lightTank.health,False,lightTank.prize,1560],
-           [-100,190,0,lightTank,lightTank.health,False,lightTank.prize,1680]] #2nd wave
+    enemy2=[[-100,190,0,lightTank,lightTank.health,False,lightTank.prize,0],[-100,190,0,lightTank,lightTank.health,False,lightTank.prize,120],[-100,190,0,lightTank,lightTank.health,False,lightTank.prize,240],
+            [-100,190,0,lightTank,lightTank.health,False,lightTank.prize,360],[-100,190,0,lightTank,lightTank.health,False,lightTank.prize,480],[-100,190,0,transport,transport.health,False,transport.prize,560],
+            [-100,190,0,transport,transport.health,False,transport.prize,640],[-100,190,0,transport,transport.health,False,transport.prize,720],[-100,190,0,transport,transport.health,False,transport.prize,800],
+            [-100,190,0,motorcycle,motorcycle.health,False,motorcycle.prize,850],[-100,190,0,motorcycle,motorcycle.health,False,motorcycle.prize,910],[-100,190,0,motorcycle,motorcycle.health,False,motorcycle.prize,970],
+            [-100,190,0,infantry,infantry.health,False,infantry.prize,1010],[-100,190,0,infantry,infantry.health,False,infantry.prize,1070],[-100,190,0,infantry,infantry.health,False,infantry.prize,1130],[-100,190,0,infantry,infantry.health,False,infantry.prize,1190],
+            [-100,190,0,infantry,infantry.health,False,infantry.prize,1250],[-100,190,0,infantry,infantry.health,False,infantry.prize,1310],[-100,190,0,infantry,infantry.health,False,infantry.prize,1370],[-100,190,0,infantry,infantry.health,False,infantry.prize,1430]]#2nd wave
     
     click=False
     wave="first"
