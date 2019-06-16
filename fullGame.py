@@ -265,24 +265,27 @@ def moveEnemy2(screen,enemy):
         if i[5]==False:
             screen.blit(pics[count][i[2]],i[:2])
         if i[5]==True:
-            screen.blit(deadPics[count][i[2]],i[:2])
+            screen.blit(deadPics[count][i[2]],(i[0],i[1]+15))
 
 def moveEnemy3(screen,enemy):
     count=-1
     for i in enemy:
-        if i[0]<370:
-            i[0]+=i[3].speed
-            i[2]=0
-        if i[0]>=370 and i[1]>=220:
-            i[1]-=i[3].speed
-            i[2]=2
-        if i[1]<=220:
-            i[0]+=i[3].speed
-            i[2]=0
+        if i[5]==False:
+            if i[0]<370:
+                i[0]+=i[3].speed
+                i[2]=0
+            if i[0]>=370 and i[1]>=220:
+                i[1]-=i[3].speed
+                i[2]=2
+            if i[1]<=220:
+                i[0]+=i[3].speed
+                i[2]=0
 
         count+=1
         if i[5]==False:
             screen.blit(pics[count][i[2]],i[:2])
+        if i[5]==True:
+            screen.blit(deadPics[count][i[2]],(i[0],i[1]+15))
 
 def moveEnemy4(screen,enemy):
     count=-1
@@ -293,25 +296,28 @@ def moveEnemy4(screen,enemy):
     check4=Rect(590,270,900,60)
 
     for i in enemy:
-        if i[0]<230:
-            i[0]+=i[3].speed
-            i[2]=0
-        if check1.collidepoint(i[0],i[1]):
-            i[1]+=i[3].speed
-            i[2]=1
-        if check2.collidepoint(i[0],i[1]):
-            i[0]+=i[3].speed
-            i[2]=0
-        if check3.collidepoint(i[0],i[1]):
-            i[1]-=i[3].speed
-            i[2]=2
-        if check4.collidepoint(i[0],i[1]):
-            i[0]+=i[3].speed
-            i[2]=0
+        if i[5]==False:
+            if i[0]<230:
+                i[0]+=i[3].speed
+                i[2]=0
+            if check1.collidepoint(i[0],i[1]):
+                i[1]+=i[3].speed
+                i[2]=1
+            if check2.collidepoint(i[0],i[1]):
+                i[0]+=i[3].speed
+                i[2]=0
+            if check3.collidepoint(i[0],i[1]):
+                i[1]-=i[3].speed
+                i[2]=2
+            if check4.collidepoint(i[0],i[1]):
+                i[0]+=i[3].speed
+                i[2]=0
 
         count+=1
         if i[5]==False:
             screen.blit(pics[count][i[2]],i[:2])
+        if i[5]==True:
+            screen.blit(deadPics[count][i[2]],(i[0],i[1]+15))
 
 def moveEnemy5(screen,enemy):
     count=-1
@@ -320,22 +326,25 @@ def moveEnemy5(screen,enemy):
     check3=Rect(427,495,900,50)
 
     for i in enemy:
-        if i[1]<260:
-            i[1]+=i[3].speed
-            i[2]=1
-        if check1.collidepoint(i[0],i[1]):
-            i[0]+=i[3].speed
-            i[2]=0
-        if check2.collidepoint(i[0],i[1]):
-            i[1]+=i[3].speed
-            i[2]=1
-        if check3.collidepoint(i[0],i[1]):
-            i[0]+=i[3].speed
-            i[2]=0
+        if i[5]==False:
+            if i[1]<260:
+                i[1]+=i[3].speed
+                i[2]=1
+            if check1.collidepoint(i[0],i[1]):
+                i[0]+=i[3].speed
+                i[2]=0
+            if check2.collidepoint(i[0],i[1]):
+                i[1]+=i[3].speed
+                i[2]=1
+            if check3.collidepoint(i[0],i[1]):
+                i[0]+=i[3].speed
+                i[2]=0
 
         count+=1
         if i[5]==False:
             screen.blit(pics[count][i[2]],i[:2])
+        if i[5]==True:
+            screen.blit(deadPics[count][i[2]],(i[0],i[1]+15))
 
 def drawScene1(screen):
     screen.blit(map1,(0,0))
@@ -435,7 +444,7 @@ def prep(screen,towerPos):
             if click:
                 defC=None
 
-
+    select=False
     if defC==None:
         select=True
         for i in towerPos:
@@ -514,12 +523,12 @@ def victory(score):
     running=True
     mixer.music.load("FSE-Assets/sound/sovietTheme.mp3")
     mixer.music.play(-1)
-    mainMenuRect=Rect(560,603,400,50)
+    mainMenuRect=Rect(573,620,400,50)
     click=False
     while running:
         mx,my=mouse.get_pos()
         mb=mouse.get_pressed()
-        screen.blit(finalLevel,(0,0))
+        screen.blit(finalLevel,(13,17))
         for evt in event.get():
             if evt.type==QUIT:
                 running=False
@@ -1075,6 +1084,36 @@ def lev3():
                     money=7000
                     score=0
 
+        count=0
+        for i in enemy:
+            if i[5]==True:
+                count+=1
+            if count==len(enemy):
+                endScreen=Surface((width,height),SRCALPHA)
+                endScreen.fill((220,220,220,127))
+                screen.blit(endScreen,(0,0))
+                screen.blit(victoryRect,(320,225))
+                redoRect=Rect(445,353,150,40)
+                nextRect=Rect(410,404,217,40)
+                if redoRect.collidepoint(mx,my):
+                    draw.rect(screen,RED,redoRect,3)
+                    if mb[0]==1 and click==False:
+                        defC=None
+                        editCond=False
+                        activeDefenses=[]
+                        ready=False
+                        running=False
+                        return "prev3"
+                if nextRect.collidepoint(mx,my):
+                    draw.rect(screen,RED,nextRect,3)
+                    if mb[0]==1 and click==False:
+                        defC=None
+                        editCond=False
+                        activeDefenses=[]
+                        ready=False
+                        running=False
+                        return "prev4"
+
         display.flip()
     return "levelSelect"
 
@@ -1189,6 +1228,37 @@ def lev4():
                     gameOver=False
                     money=8500
                     score=0
+
+        count=0
+        for i in enemy:
+            if i[5]==True:
+                count+=1
+            if count==len(enemy):
+                endScreen=Surface((width,height),SRCALPHA)
+                endScreen.fill((220,220,220,127))
+                screen.blit(endScreen,(0,0))
+                screen.blit(victoryRect,(320,225))
+                redoRect=Rect(445,353,150,40)
+                nextRect=Rect(410,404,217,40)
+                if redoRect.collidepoint(mx,my):
+                    draw.rect(screen,RED,redoRect,3)
+                    if mb[0]==1 and click==False:
+                        defC=None
+                        editCond=False
+                        activeDefenses=[]
+                        ready=False
+                        running=False
+                        return "prev4"
+                if nextRect.collidepoint(mx,my):
+                    draw.rect(screen,RED,nextRect,3)
+                    if mb[0]==1 and click==False:
+                        defC=None
+                        editCond=False
+                        activeDefenses=[]
+                        ready=False
+                        running=False
+                        return "prev5"
+                    
         display.flip()
     return "levelSelect"
 
@@ -1209,7 +1279,7 @@ def lev5():
                [Rect(525,262,50,50),False,(525,262),False,6,None],[Rect(525,409,50,50),False,(525,409),False,7,None],
                [Rect(645,409,50,50),False,(645,409),False,8,None],[Rect(459,589,50,50),False,(459,589),False,9,None],
                [Rect(815,409,50,50),False,(815,409),False,10,None]]
-    enemy=[[130,-100,0,heavyTank,heavyTank.health,False],[130,-250,0,heavyTank,heavyTank.health,False],[130,-400,0,heavyTank,heavyTank.health,False],[130,-650,0,heavyTank,heavyTank.health,False],[130,-800,0,heavyTank,heavyTank.health,False]]
+    enemy=[[130,-100,0,heavyTank,heavyTank.health,False]]#[130,-250,0,heavyTank,heavyTank.health,False],[130,-400,0,heavyTank,heavyTank.health,False],[130,-650,0,heavyTank,heavyTank.health,False],[130,-800,0,heavyTank,heavyTank.health,False]]
     while running:
         myclock.tick(60)
         drawScene5(screen)
@@ -1306,6 +1376,37 @@ def lev5():
                     gameOver=False
                     money=10000
                     score=0
+
+        count=0
+        for i in enemy:
+            if i[5]==True:
+                count+=1
+            if count==len(enemy):
+                endScreen=Surface((width,height),SRCALPHA)
+                endScreen.fill((220,220,220,127))
+                screen.blit(endScreen,(0,0))
+                screen.blit(victoryRect,(320,225))
+                redoRect=Rect(445,353,150,40)
+                nextRect=Rect(410,404,217,40)
+                if redoRect.collidepoint(mx,my):
+                    draw.rect(screen,RED,redoRect,3)
+                    if mb[0]==1 and click==False:
+                        defC=None
+                        editCond=False
+                        activeDefenses=[]
+                        ready=False
+                        running=False
+                        return "prev5"
+                if nextRect.collidepoint(mx,my):
+                    draw.rect(screen,RED,nextRect,3)
+                    if mb[0]==1 and click==False:
+                        defC=None
+                        editCond=False
+                        activeDefenses=[]
+                        ready=False
+                        running=False
+                        return "victory"
+                    
         display.flip()
     return "levelSelect"
 
