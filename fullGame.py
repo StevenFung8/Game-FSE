@@ -96,33 +96,33 @@ tankDestroyer=enemyType('tankDestroyer',0.8,1100,25,300)
 class towerType: #this is the class that defines all the properties for the towers 
 
     def __init__(self,name,damage,price,uCost,refund,delay):
-        self.name=name
-        self.damage=damage
-        self.price=price
-        self.uCost=uCost
-        self.refund=refund
-        self.delay=delay
-        self.filename="FSE-Assets/Defenses/"+name+".png"
-
-antiTank=towerType('antiTank',80,800,350,400,60)
-bunker=towerType('bunker',100,1000,450,500,10)
+        self.name=name #this is the name of the tower 
+        self.damage=damage #this is the amount of damage the tower would do to the enemy troop 
+        self.price=price #how much it costs to get this tower
+        self.uCost=uCost #how much money it takes to upgrade the towers 
+        self.refund=refund #how much money you get if you refund the tower 
+        self.delay=delay #the rate of fire of the tower (ie. the heaveMG would attack faster than the antitank)
+        self.filename="FSE-Assets/Defenses/"+name+".png" #the file path to load the picture into the game 
+ 
+antiTank=towerType('antiTank',80,800,350,400,60) #so these are all the properties for the towers 
+bunker=towerType('bunker',100,1000,450,500,10) #for example the 'bunker' would deal 100 damage to troops, cost 1000 dollars, cost 450 to upgrade, you get 500 if you refund it, and it fires every 10 ticks 
 fortress=towerType('fortress',150,1250,600,625,50)
 heavyGun=towerType('heavyGun',200,1500,700,750,60)
 heavyMG=towerType('heavyMG',5,500,200,250,5)
 soldier=towerType('soldier',25,250,100,125,25)
 
-def genEnemies(enemy):
-    global pics
-    global deadPics
+def genEnemies(enemy): #this function loads all the images for the enemy troops for each level 
+    global pics #list that contains the pictures of the troops for each level
+    global deadPics #list that contains the pictures of the troops when they die for each level 
     pics=[]
     deadPics=[]
-    for i in enemy:
+    for i in enemy: #for every enemy in each level 
         img=[]
-        img.append(image.load(i[3].filename))
-        img.append(transform.rotate(image.load(i[3].filename),-90))
-        img.append(transform.rotate(image.load(i[3].filename),-270))
-        img.append(transform.rotate(image.load(i[3].filename),-180))
-        pics.append(img)
+        img.append(image.load(i[3].filename)) #the original picture (i[3] is the name of the troop )
+        img.append(transform.rotate(image.load(i[3].filename),-90)) #the picture but rotated 90 degress for when its going down the path
+        img.append(transform.rotate(image.load(i[3].filename),-270)) #the picture but rotated 270 for when its going up the path 
+        img.append(transform.rotate(image.load(i[3].filename),-180))#the picture but rotated 180 for when its going left of the path 
+        pics.append(img) #append the list into the pics list to make a 2D list 
     '''
     for i in enemy:
         img=[]
@@ -139,50 +139,51 @@ def genEnemies(enemy):
             img.append(transform.rotate(wreck,-180))
             deadPics.append(img)
     '''
-    return pics
+    return pics #outputs the pics list 
 
 def healthBars(enemy):
-    for i in enemy:
-        if i[5]==False:
-            draw.rect(screen,BLACK,(i[0]+14,i[1]-11,i[3].health/10+2,9),0)
-            draw.rect(screen,GREEN,(i[0]+15,i[1]-10,i[4]/10,7),0)
+    for i in enemy: #for all enemy troops in the level
+        if i[5]==False: #if the troop is not dead 
+            draw.rect(screen,BLACK,(i[0]+14,i[1]-11,i[3].health/10+2,9),0) #the outline of the healthbar, the length of the black bar is determined by starting health of the troop
+            draw.rect(screen,GREEN,(i[0]+15,i[1]-10,i[4]/10,7),0) #the actual health of the troop, starts full, and the length decreases as the health goes down by taking the current
+            #health of the troop and dividing it by 10 
 
-def moneyScore(screen):
-    global money
-    global activeDefenses
+def moneyScore(screen): #function to blit the amoount of money you have and the score you currently have 
+    global money #global variable of money
+    global activeDefenses 
     global score
-    txtMoney=txtFont.render("$"+str(money),True,RED)
-    txtScore=txtFont.render(str(score),True,RED)
+    txtMoney=txtFont.render("$"+str(money),True,RED) #renders the amount of money you have 
+    txtScore=txtFont.render(str(score),True,RED) #renders the score 
     screen.blit(txtMoney,(100,30))
     screen.blit(txtScore,(110,84))
 
 def baseHealth(enemy):
-    global gameOver
+    global gameOver #if health goes to zero
     screen.blit(blackHeart,(940,350))
-    bars=100
+    bars=100 #starting health of the base 
     count=0
-    draw.rect(screen,BLACK,(944,374,102,12),0)
-    for i in enemy:
-        if i[0]>=900:
-            if i[5]==False:
-                bars-=i[3].damage
-            if bars<=0:
+    draw.rect(screen,BLACK,(944,374,102,12),0) #draws the outline of the health bar 
+    for i in enemy: #for every enemy in the level
+        if i[0]>=900: #if the enemy reaches the base
+            if i[5]==False: #If they are not dead
+                bars-=i[3].damage #subtract the health of the base by the damage that they deal (defined in the enemyType class)
+            if bars<=0: #if it goes negative, set it back to zero
                 bars=0
 
-    baseHealth=txtFont3.render(str(bars),True,BLACK)
+    baseHealth=txtFont3.render(str(bars),True,BLACK) #renders the health beside the black heart
     screen.blit(baseHealth,(965,353))
-    draw.rect(screen,RED,(1044,375,bars-100,10),0)
-    draw.rect(screen,GREEN,(945,375,bars,10),0)
+    draw.rect(screen,RED,(1044,375,bars-100,10),0) #blits a red rectangle, and the length will be start at 0, because bars starts a 100, and as bars goes up, negative number is the length
+    draw.rect(screen,GREEN,(945,375,bars,10),0) #the green rect, starts with a length of 100 and decreases as the health goes down (length is dependant to health)
 
-    if bars==0:
+    if bars==0: #when bars is zero (no health), starts the gameOver function 
         gameOver=True
 
 
-def music(state):
+def music(state): #this function is used to toggle the music (mute and unmute)
 
-    global pause
-    global current
-    if current=="main":
+    global pause #the variable to control the toggle
+    global current #to determine what screen is on right now 
+    if current=="main": #if its the main menu 
         muteRect=Rect(870,650,50,50)
         screen.blit(eigthNote, (875,655))
     else:
