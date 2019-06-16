@@ -107,12 +107,12 @@ class towerType: #this is the class that defines all the properties for the towe
         self.delay=delay #the rate of fire of the tower (ie. the heaveMG would attack faster than the antitank)
         self.filename="FSE-Assets/Defenses/"+name+".png" #the file path to load the picture into the game 
  
-antiTank=towerType('antiTank',80,800,350,400,50) #so these are all the properties for the towers 
-bunker=towerType('bunker',30,1000,450,500,10) #for example the 'bunker' would deal 30 damage to troops, cost 1000 dollars, cost 450 to upgrade, you get 500 if you refund it, and it fires every 10 ticks 
-fortress=towerType('fortress',150,1250,600,625,60)
-heavyGun=towerType('heavyGun',200,1500,700,750,60)
-heavyMG=towerType('heavyMG',6,500,200,250,5)
-soldier=towerType('soldier',25,250,100,125,25)
+antiTank=towerType('antiTank',80,800,350,400,40) #so these are all the properties for the towers 
+bunker=towerType('bunker',25,1000,450,500,10) #for example the 'bunker' would deal 30 damage to troops, cost 1000 dollars, cost 450 to upgrade, you get 500 if you refund it, and it fires every 10 ticks 
+fortress=towerType('fortress',100,1250,600,625,50)
+heavyGun=towerType('heavyGun',150,1500,700,750,50)
+heavyMG=towerType('heavyMG',6.3,500,200,250,5)
+soldier=towerType('soldier',25,250,100,125,20)
 
 def genEnemies(enemy): #this function loads all the images for the enemy troops for each level 
     global pics #list that contains the pictures of the troops for each level
@@ -159,8 +159,9 @@ def moneyScore(screen): #function to blit the amoount of money you have and the 
     screen.blit(txtMoney,(100,30))
     screen.blit(txtScore,(110,84))
 
-def baseHealth(enemy):
+def baseHealth(enemy,enemy2):
     global gameOver #if health goes to zero
+    global ready,ready2
     screen.blit(blackHeart,(940,350))
     bars=100 #starting health of the base 
     count=0
@@ -177,11 +178,22 @@ def baseHealth(enemy):
         if i[0]>=1100: #if the enemy passes through the base, its job is done, so it becomes "dead", though it was never killed by a tower
             i[5]=True
 
+    for i in enemy2:  #same thing but with the second wave of enemies
+        if i[0]>=900: 
+            if i[5]==False: 
+                bars-=i[3].damage 
+            if i[5]==True and i[0]>=1100: 
+                bars-=i[3].damage
+            if bars<=0: 
+                mixer.Sound.play(explosion_sound)
+                bars=0
+        if i[0]>=1100: 
+            i[5]=True
+            
     baseHealth=txtFont3.render(str(bars),True,BLACK) #renders the health beside the black heart
     screen.blit(baseHealth,(965,353))
     draw.rect(screen,RED,(1044,375,bars-100,10),0) #blits a red rectangle, and the length will be start at 0, because bars starts a 100, and as bars goes up, negative number is the length
     draw.rect(screen,GREEN,(945,375,bars,10),0) #the green rect, starts with a length of 100 and decreases as the health goes down (length is dependant to health)
-
     if bars==0: #when bars is zero (no health), starts the gameOver function 
         gameOver=True
 
@@ -251,6 +263,7 @@ def moveEnemy2(screen,enemy): #this is for the second level, because the path is
     check4=Rect(665,440,900,65)
 
     for i in enemy:
+        i[7]-=1
         if i[5]==False and i[7]<=0:
             if i[0]<300:
                 i[0]+=i[3].speed
@@ -277,6 +290,7 @@ def moveEnemy2(screen,enemy): #this is for the second level, because the path is
 def moveEnemy3(screen,enemy):
     count=-1
     for i in enemy:
+        i[7]-=1
         if i[5]==False and i[7]<=0:
             if i[0]<370:
                 i[0]+=i[3].speed
@@ -303,6 +317,7 @@ def moveEnemy4(screen,enemy):
     check4=Rect(590,270,900,60)
 
     for i in enemy:
+        i[7]-=1
         if i[5]==False and i[7]<=0:
             if i[0]<230:
                 i[0]+=i[3].speed
@@ -333,6 +348,7 @@ def moveEnemy5(screen,enemy):
     check3=Rect(427,495,900,50)
 
     for i in enemy:
+        i[7]-=1
         if i[5]==False and i[7]<=0:
             if i[1]<260:
                 i[1]+=i[3].speed
@@ -735,12 +751,13 @@ def lev1():
         drawScene1(screen)
         hudElements(screen)
         moneyScore(screen)
+        baseHealth(enemy,enemy2)
         screen.blit(quitPic,(260,25))
         draw.rect(screen,BLACK,quitRect,2)
 
         mx,my=mouse.get_pos()
         mb=mouse.get_pressed()
-        print(mx,my)
+
         for evt in event.get():
             if evt.type==QUIT:
                 running=False
@@ -793,14 +810,12 @@ def lev1():
         if ready==True and gameOver==False and pause==False: #if the first ready variable is true, it will call the functions for the first enemy list
             genEnemies(enemy) #generating enemies
             moveEnemy(screen,enemy) #move
-            baseHealth(enemy) #base health
             healthBars(enemy)  #health bars
             damageEnemies(enemy,activeDefenses,towerPos1) #damage
 
         if ready2==True and gameOver==False and pause==False: #if the 2nd ready variable becomes true, it will call the game functions for the second enemy list
             genEnemies(enemy2)
             moveEnemy(screen,enemy2)
-            baseHealth(enemy2)
             healthBars(enemy2)
             damageEnemies(enemy2,activeDefenses,towerPos1)    
 
@@ -901,23 +916,8 @@ def lev2():
                [Rect(425,300,50,50),False,(425,300),False,6,None,Rect(334,209,212,212)],[Rect(560,300,50,50),False,(560,300),False,7,None,Rect(469,209,212,212)],
                [Rect(750,275,50,50),False,(750,275),False,8,None,Rect(659,184,212,212)],[Rect(825,375,50,50),False,(825,375),False,9,None,Rect(734,284,212,212)]]
 
-    enemy=[[-100,190,0,motorcycle,motorcycle.health,False,motorcycle.prize,30],[-100,190,0,motorcycle,motorcycle.health,False,motorcycle.prize,90],[-100,190,0,motorcycle,motorcycle.health,False,motorcycle.prize,150],
-           [-100,190,0,motorcycle,motorcycle.health,False,motorcycle.prize,210],[-100,190,0,motorcycle,motorcycle.health,False,motorcycle.prize,270],[-100,190,0,motorcycle,motorcycle.health,False,motorcycle.prize,330],
-           [-100,190,0,motorcycle,motorcycle.health,False,motorcycle.prize,390],[-100,190,0,transport,transport.health,False,transport.prize,450],[-100,190,0,transport,transport.health,False,transport.prize,530],
-           [-100,190,0,transport,transport.health,False,transport.prize,610],[-100,190,0,transport,transport.health,False,transport.prize,700],[-100,190,0,transport,transport.health,False,transport.prize,780],
-           [-100,190,0,infantry,infantry.health,False,infantry.prize,820],[-100,190,0,infantry,infantry.health,False,infantry.prize,880],[-100,190,0,infantry,infantry.health,False,infantry.prize,940],[-100,190,0,infantry,infantry.health,False,infantry.prize,1000],
-           [-100,190,0,infantry,infantry.health,False,infantry.prize,1060],[-100,190,0,infantry,infantry.health,False,infantry.prize,1120],[-100,190,0,lightTank,lightTank.health,False,lightTank.prize,1200],
-           [-100,190,0,lightTank,lightTank.health,False,lightTank.prize,1320],[-100,190,0,lightTank,lightTank.health,False,lightTank.prize,1440],[-100,190,0,lightTank,lightTank.health,False,lightTank.prize,1560],
-           [-100,190,0,lightTank,lightTank.health,False,lightTank.prize,1680]] #1st wave
-    
-    enemy2=[[-100,190,0,motorcycle,motorcycle.health,False,motorcycle.prize,30],[-100,190,0,motorcycle,motorcycle.health,False,motorcycle.prize,90],[-100,190,0,motorcycle,motorcycle.health,False,motorcycle.prize,150],
-           [-100,190,0,motorcycle,motorcycle.health,False,motorcycle.prize,210],[-100,190,0,motorcycle,motorcycle.health,False,motorcycle.prize,270],[-100,190,0,motorcycle,motorcycle.health,False,motorcycle.prize,330],
-           [-100,190,0,motorcycle,motorcycle.health,False,motorcycle.prize,390],[-100,190,0,transport,transport.health,False,transport.prize,450],[-100,190,0,transport,transport.health,False,transport.prize,530],
-           [-100,190,0,transport,transport.health,False,transport.prize,610],[-100,190,0,transport,transport.health,False,transport.prize,700],[-100,190,0,transport,transport.health,False,transport.prize,780],
-           [-100,190,0,infantry,infantry.health,False,infantry.prize,820],[-100,190,0,infantry,infantry.health,False,infantry.prize,880],[-100,190,0,infantry,infantry.health,False,infantry.prize,940],[-100,190,0,infantry,infantry.health,False,infantry.prize,1000],
-           [-100,190,0,infantry,infantry.health,False,infantry.prize,1060],[-100,190,0,infantry,infantry.health,False,infantry.prize,1120],[-100,190,0,lightTank,lightTank.health,False,lightTank.prize,1200],
-           [-100,190,0,lightTank,lightTank.health,False,lightTank.prize,1320],[-100,190,0,lightTank,lightTank.health,False,lightTank.prize,1440],[-100,190,0,lightTank,lightTank.health,False,lightTank.prize,1560],
-           [-100,190,0,lightTank,lightTank.health,False,lightTank.prize,1680]] #2nd wave
+    enemy=[[-100,510,0,motorcycle,motorcycle.health,False,motorcycle.prize,30]] #1st wave
+    enemy2=[[-100,510,0,motorcycle,motorcycle.health,False,motorcycle.prize,30]]#2nd wave
     
     wave="first"
     click=False
@@ -926,10 +926,9 @@ def lev2():
         drawScene2(screen)
         hudElements(screen)
         moneyScore(screen)
+        baseHealth(enemy,enemy2)
         screen.blit(quitPic,(260,25))
         draw.rect(screen,BLACK,quitRect,2)
-        for i in towerPos2:
-            draw.rect(screen,RED,i[6],2)
         for evt in event.get():
             if evt.type==QUIT:
                 running=False
@@ -985,14 +984,12 @@ def lev2():
         if ready==True and gameOver==False and pause==False: #if the first ready variable is true, it will call the functions for the first enemy list
             genEnemies(enemy) #generating enemies
             moveEnemy2(screen,enemy) #move
-            baseHealth(enemy) #base health
             healthBars(enemy)  #health bars
             damageEnemies(enemy,activeDefenses,towerPos2) #damage
 
         if ready2==True and gameOver==False and pause==False: #if the 2nd ready variable becomes true, it will call the game functions for the second enemy list
             genEnemies(enemy2)
             moveEnemy2(screen,enemy2)
-            baseHealth(enemy2)
             healthBars(enemy2)
             damageEnemies(enemy2,activeDefenses,towerPos2)    
 
@@ -1094,23 +1091,9 @@ def lev3():
                [Rect(630,305,50,50),False,(630,305),False,8,None,Rect(539,214,212,212)],[Rect(700,136,50,50),False,(700,136),False,9,None,Rect(609,45,212,212)],
                [Rect(755,305,50,50),False,(630,305),False,8,None,Rect(664,214,212,212)]]
 
-    enemy=[[-100,190,0,motorcycle,motorcycle.health,False,motorcycle.prize,30],[-100,190,0,motorcycle,motorcycle.health,False,motorcycle.prize,90],[-100,190,0,motorcycle,motorcycle.health,False,motorcycle.prize,150],
-           [-100,190,0,motorcycle,motorcycle.health,False,motorcycle.prize,210],[-100,190,0,motorcycle,motorcycle.health,False,motorcycle.prize,270],[-100,190,0,motorcycle,motorcycle.health,False,motorcycle.prize,330],
-           [-100,190,0,motorcycle,motorcycle.health,False,motorcycle.prize,390],[-100,190,0,transport,transport.health,False,transport.prize,450],[-100,190,0,transport,transport.health,False,transport.prize,530],
-           [-100,190,0,transport,transport.health,False,transport.prize,610],[-100,190,0,transport,transport.health,False,transport.prize,700],[-100,190,0,transport,transport.health,False,transport.prize,780],
-           [-100,190,0,infantry,infantry.health,False,infantry.prize,820],[-100,190,0,infantry,infantry.health,False,infantry.prize,880],[-100,190,0,infantry,infantry.health,False,infantry.prize,940],[-100,190,0,infantry,infantry.health,False,infantry.prize,1000],
-           [-100,190,0,infantry,infantry.health,False,infantry.prize,1060],[-100,190,0,infantry,infantry.health,False,infantry.prize,1120],[-100,190,0,lightTank,lightTank.health,False,lightTank.prize,1200],
-           [-100,190,0,lightTank,lightTank.health,False,lightTank.prize,1320],[-100,190,0,lightTank,lightTank.health,False,lightTank.prize,1440],[-100,190,0,lightTank,lightTank.health,False,lightTank.prize,1560],
-           [-100,190,0,lightTank,lightTank.health,False,lightTank.prize,1680]] #1st wave
+    enemy=[[-100,480,0,motorcycle,motorcycle.health,False,motorcycle.prize,30]]
+    enemy2=[[-100,480,0,motorcycle,motorcycle.health,False,motorcycle.prize,30]] #2nd wave
     
-    enemy2=[[-100,190,0,motorcycle,motorcycle.health,False,motorcycle.prize,30],[-100,190,0,motorcycle,motorcycle.health,False,motorcycle.prize,90],[-100,190,0,motorcycle,motorcycle.health,False,motorcycle.prize,150],
-           [-100,190,0,motorcycle,motorcycle.health,False,motorcycle.prize,210],[-100,190,0,motorcycle,motorcycle.health,False,motorcycle.prize,270],[-100,190,0,motorcycle,motorcycle.health,False,motorcycle.prize,330],
-           [-100,190,0,motorcycle,motorcycle.health,False,motorcycle.prize,390],[-100,190,0,transport,transport.health,False,transport.prize,450],[-100,190,0,transport,transport.health,False,transport.prize,530],
-           [-100,190,0,transport,transport.health,False,transport.prize,610],[-100,190,0,transport,transport.health,False,transport.prize,700],[-100,190,0,transport,transport.health,False,transport.prize,780],
-           [-100,190,0,infantry,infantry.health,False,infantry.prize,820],[-100,190,0,infantry,infantry.health,False,infantry.prize,880],[-100,190,0,infantry,infantry.health,False,infantry.prize,940],[-100,190,0,infantry,infantry.health,False,infantry.prize,1000],
-           [-100,190,0,infantry,infantry.health,False,infantry.prize,1060],[-100,190,0,infantry,infantry.health,False,infantry.prize,1120],[-100,190,0,lightTank,lightTank.health,False,lightTank.prize,1200],
-           [-100,190,0,lightTank,lightTank.health,False,lightTank.prize,1320],[-100,190,0,lightTank,lightTank.health,False,lightTank.prize,1440],[-100,190,0,lightTank,lightTank.health,False,lightTank.prize,1560],
-           [-100,190,0,lightTank,lightTank.health,False,lightTank.prize,1680]] #2nd wave
     wave="first"
     click=False
     while running:
@@ -1118,6 +1101,7 @@ def lev3():
         drawScene3(screen)
         hudElements(screen)
         moneyScore(screen)
+        baseHealth(enemy,enemy2)
         screen.blit(quitPic,(260,25))
         draw.rect(screen,BLACK,quitRect,2)
         for evt in event.get():
@@ -1175,17 +1159,14 @@ def lev3():
         if ready==True and gameOver==False and pause==False: #if the first ready variable is true, it will call the functions for the first enemy list
             genEnemies(enemy) #generating enemies
             moveEnemy3(screen,enemy) #move
-            baseHealth(enemy) #base health
             healthBars(enemy)  #health bars
             damageEnemies(enemy,activeDefenses,towerPos3) #damage
 
         if ready2==True and gameOver==False and pause==False: #if the 2nd ready variable becomes true, it will call the game functions for the second enemy list
             genEnemies(enemy2)
             moveEnemy3(screen,enemy2)
-            baseHealth(enemy2)
             healthBars(enemy2)
             damageEnemies(enemy2,activeDefenses,towerPos3)    
-
 
         if gameOver:
             endScreen=Surface((width,height),SRCALPHA)
@@ -1285,29 +1266,16 @@ def lev4():
                [Rect(689,429,50,50),False,(689,429),False,6,None,Rect(598,338,212,212)],[Rect(495,260,50,50),False,(495,260),False,7,None,Rect(404,169,212,212)],
                [Rect(686,240,50,50),False,(686,240),False,8,None,Rect(595,149,212,212)],[Rect(820,409,50,50),False,(820,409),False,9,None,Rect(781,318,212,212)]]
 
-    enemy=[[-100,190,0,motorcycle,motorcycle.health,False,motorcycle.prize,30],[-100,190,0,motorcycle,motorcycle.health,False,motorcycle.prize,90],[-100,190,0,motorcycle,motorcycle.health,False,motorcycle.prize,150],
-           [-100,190,0,motorcycle,motorcycle.health,False,motorcycle.prize,210],[-100,190,0,motorcycle,motorcycle.health,False,motorcycle.prize,270],[-100,190,0,motorcycle,motorcycle.health,False,motorcycle.prize,330],
-           [-100,190,0,motorcycle,motorcycle.health,False,motorcycle.prize,390],[-100,190,0,transport,transport.health,False,transport.prize,450],[-100,190,0,transport,transport.health,False,transport.prize,530],
-           [-100,190,0,transport,transport.health,False,transport.prize,610],[-100,190,0,transport,transport.health,False,transport.prize,700],[-100,190,0,transport,transport.health,False,transport.prize,780],
-           [-100,190,0,infantry,infantry.health,False,infantry.prize,820],[-100,190,0,infantry,infantry.health,False,infantry.prize,880],[-100,190,0,infantry,infantry.health,False,infantry.prize,940],[-100,190,0,infantry,infantry.health,False,infantry.prize,1000],
-           [-100,190,0,infantry,infantry.health,False,infantry.prize,1060],[-100,190,0,infantry,infantry.health,False,infantry.prize,1120],[-100,190,0,lightTank,lightTank.health,False,lightTank.prize,1200],
-           [-100,190,0,lightTank,lightTank.health,False,lightTank.prize,1320],[-100,190,0,lightTank,lightTank.health,False,lightTank.prize,1440],[-100,190,0,lightTank,lightTank.health,False,lightTank.prize,1560],
-           [-100,190,0,lightTank,lightTank.health,False,lightTank.prize,1680]] #1st wave
+    enemy=[[-100,280,0,motorcycle,motorcycle.health,False,motorcycle.prize,30]]#1st wave
+    enemy2=[[-100,280,0,motorcycle,motorcycle.health,False,motorcycle.prize,30]] #2nd wave
     
-    enemy2=[[-100,190,0,motorcycle,motorcycle.health,False,motorcycle.prize,30],[-100,190,0,motorcycle,motorcycle.health,False,motorcycle.prize,90],[-100,190,0,motorcycle,motorcycle.health,False,motorcycle.prize,150],
-           [-100,190,0,motorcycle,motorcycle.health,False,motorcycle.prize,210],[-100,190,0,motorcycle,motorcycle.health,False,motorcycle.prize,270],[-100,190,0,motorcycle,motorcycle.health,False,motorcycle.prize,330],
-           [-100,190,0,motorcycle,motorcycle.health,False,motorcycle.prize,390],[-100,190,0,transport,transport.health,False,transport.prize,450],[-100,190,0,transport,transport.health,False,transport.prize,530],
-           [-100,190,0,transport,transport.health,False,transport.prize,610],[-100,190,0,transport,transport.health,False,transport.prize,700],[-100,190,0,transport,transport.health,False,transport.prize,780],
-           [-100,190,0,infantry,infantry.health,False,infantry.prize,820],[-100,190,0,infantry,infantry.health,False,infantry.prize,880],[-100,190,0,infantry,infantry.health,False,infantry.prize,940],[-100,190,0,infantry,infantry.health,False,infantry.prize,1000],
-           [-100,190,0,infantry,infantry.health,False,infantry.prize,1060],[-100,190,0,infantry,infantry.health,False,infantry.prize,1120],[-100,190,0,lightTank,lightTank.health,False,lightTank.prize,1200],
-           [-100,190,0,lightTank,lightTank.health,False,lightTank.prize,1320],[-100,190,0,lightTank,lightTank.health,False,lightTank.prize,1440],[-100,190,0,lightTank,lightTank.health,False,lightTank.prize,1560],
-           [-100,190,0,lightTank,lightTank.health,False,lightTank.prize,1680]] #2nd wave
     wave="first"
     while running:
         myclock.tick(60)
         drawScene4(screen)
         hudElements(screen)
         moneyScore(screen)
+        baseHealth(enemy,enemy2)
         screen.blit(quitPic,(260,25))
         draw.rect(screen,BLACK,quitRect,2)
         click=False
@@ -1365,14 +1333,12 @@ def lev4():
         if ready==True and gameOver==False and pause==False: #if the first ready variable is true, it will call the functions for the first enemy list
             genEnemies(enemy) #generating enemies
             moveEnemy4(screen,enemy) #move
-            baseHealth(enemy) #base health
             healthBars(enemy)  #health bars
             damageEnemies(enemy,activeDefenses,towerPos4) #damage
 
         if ready2==True and gameOver==False and pause==False: #if the 2nd ready variable becomes true, it will call the game functions for the second enemy list
             genEnemies(enemy2)
             moveEnemy4(screen,enemy2)
-            baseHealth(enemy2)
             healthBars(enemy2)
             damageEnemies(enemy2,activeDefenses,towerPos4)    
 
@@ -1473,29 +1439,17 @@ def lev5():
                [Rect(525,262,50,50),False,(525,262),False,6,None,Rect(434,171,212,212)],[Rect(525,409,50,50),False,(525,409),False,7,None,Rect(434,418,212,212)],
                [Rect(645,409,50,50),False,(645,409),False,8,None,Rect(554,418,212,212)],[Rect(459,589,50,50),False,(459,589),False,9,None,Rect(368,498,212,212)],
                [Rect(815,409,50,50),False,(815,409),False,10,None,Rect(724,418,212,212)]]
-    enemy=[[-100,190,0,motorcycle,motorcycle.health,False,motorcycle.prize,30],[-100,190,0,motorcycle,motorcycle.health,False,motorcycle.prize,90],[-100,190,0,motorcycle,motorcycle.health,False,motorcycle.prize,150],
-           [-100,190,0,motorcycle,motorcycle.health,False,motorcycle.prize,210],[-100,190,0,motorcycle,motorcycle.health,False,motorcycle.prize,270],[-100,190,0,motorcycle,motorcycle.health,False,motorcycle.prize,330],
-           [-100,190,0,motorcycle,motorcycle.health,False,motorcycle.prize,390],[-100,190,0,transport,transport.health,False,transport.prize,450],[-100,190,0,transport,transport.health,False,transport.prize,530],
-           [-100,190,0,transport,transport.health,False,transport.prize,610],[-100,190,0,transport,transport.health,False,transport.prize,700],[-100,190,0,transport,transport.health,False,transport.prize,780],
-           [-100,190,0,infantry,infantry.health,False,infantry.prize,820],[-100,190,0,infantry,infantry.health,False,infantry.prize,880],[-100,190,0,infantry,infantry.health,False,infantry.prize,940],[-100,190,0,infantry,infantry.health,False,infantry.prize,1000],
-           [-100,190,0,infantry,infantry.health,False,infantry.prize,1060],[-100,190,0,infantry,infantry.health,False,infantry.prize,1120],[-100,190,0,lightTank,lightTank.health,False,lightTank.prize,1200],
-           [-100,190,0,lightTank,lightTank.health,False,lightTank.prize,1320],[-100,190,0,lightTank,lightTank.health,False,lightTank.prize,1440],[-100,190,0,lightTank,lightTank.health,False,lightTank.prize,1560],
-           [-100,190,0,lightTank,lightTank.health,False,lightTank.prize,1680]] #1st wave
-    
-    enemy2=[[-100,190,0,motorcycle,motorcycle.health,False,motorcycle.prize,30],[-100,190,0,motorcycle,motorcycle.health,False,motorcycle.prize,90],[-100,190,0,motorcycle,motorcycle.health,False,motorcycle.prize,150],
-           [-100,190,0,motorcycle,motorcycle.health,False,motorcycle.prize,210],[-100,190,0,motorcycle,motorcycle.health,False,motorcycle.prize,270],[-100,190,0,motorcycle,motorcycle.health,False,motorcycle.prize,330],
-           [-100,190,0,motorcycle,motorcycle.health,False,motorcycle.prize,390],[-100,190,0,transport,transport.health,False,transport.prize,450],[-100,190,0,transport,transport.health,False,transport.prize,530],
-           [-100,190,0,transport,transport.health,False,transport.prize,610],[-100,190,0,transport,transport.health,False,transport.prize,700],[-100,190,0,transport,transport.health,False,transport.prize,780],
-           [-100,190,0,infantry,infantry.health,False,infantry.prize,820],[-100,190,0,infantry,infantry.health,False,infantry.prize,880],[-100,190,0,infantry,infantry.health,False,infantry.prize,940],[-100,190,0,infantry,infantry.health,False,infantry.prize,1000],
-           [-100,190,0,infantry,infantry.health,False,infantry.prize,1060],[-100,190,0,infantry,infantry.health,False,infantry.prize,1120],[-100,190,0,lightTank,lightTank.health,False,lightTank.prize,1200],
-           [-100,190,0,lightTank,lightTank.health,False,lightTank.prize,1320],[-100,190,0,lightTank,lightTank.health,False,lightTank.prize,1440],[-100,190,0,lightTank,lightTank.health,False,lightTank.prize,1560],
-           [-100,190,0,lightTank,lightTank.health,False,lightTank.prize,1680]] #2nd wave
+    enemy=[[130,-100,0,motorcycle,motorcycle.health,False,motorcycle.prize,30]]
+    enemy2=[[130,-100,0,motorcycle,motorcycle.health,False,motorcycle.prize,30]]
+
     wave="first"
+    
     while running:
         myclock.tick(60)
         drawScene5(screen)
         hudElements(screen)
         moneyScore(screen)
+        baseHealth(enemy,enemy2)
         screen.blit(quitPic,(260,25))
         draw.rect(screen,BLACK,quitRect,2)
         click=False
@@ -1553,16 +1507,18 @@ def lev5():
         if ready==True and gameOver==False and pause==False: #if the first ready variable is true, it will call the functions for the first enemy list
             genEnemies(enemy) #generating enemies
             moveEnemy5(screen,enemy) #move
-            baseHealth(enemy) #base health
             healthBars(enemy)  #health bars
             damageEnemies(enemy,activeDefenses,towerPos5) #damage
+            hudElements(screen)
+            moneyScore(screen)
 
         if ready2==True and gameOver==False and pause==False: #if the 2nd ready variable becomes true, it will call the game functions for the second enemy list
             genEnemies(enemy2)
             moveEnemy5(screen,enemy2)
-            baseHealth(enemy2)
             healthBars(enemy2)
-            damageEnemies(enemy2,activeDefenses,towerPos5)    
+            damageEnemies(enemy2,activeDefenses,towerPos5)
+            hudElements(screen)
+            moneyScore(screen)
 
         if gameOver:
             endScreen=Surface((width,height),SRCALPHA)
