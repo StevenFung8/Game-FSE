@@ -505,12 +505,11 @@ def prep(screen,towerPos): #this function is for the start of the level
                         if upgradeRect.collidepoint(mx,my): 
                             if type(a[5])==int:
                                 draw.rect(screen,GREEN,upgradeRect,2) #will highlight upgradeRect when hovered over and if the tower has not been upgraded
-                                if click:
+                                if click and money-defenses[i[5]].uCost>=0:  #will only upgrade if the player has enough money
                                     mixer.Sound.play(place_sound)
                                     a[4]+=10*(i[5]+1) #increasing the attack
                                     a[5]=None  #once upgraded, the upgrade cost will be nothing
-                                    if money-defenses[i[5]].uCost>=0: #will only upgrade if the player has enough money
-                                        money-=defenses[i[5]].uCost
+                                    money-=defenses[i[5]].uCost
 
                 cancelRect=Rect(20,125,125,30)
                 
@@ -541,7 +540,6 @@ def prep(screen,towerPos): #this function is for the start of the level
                     if click:
                         i[3]=False #tower edit status reverts
                         select=False #player can select a tower again
-    print(select)
 
 def damageEnemies(enemy,activeDefenses,towerPos): #this function is the damage dealt to the enemies by the towers 
     global money,score
@@ -818,14 +816,12 @@ def lev1(): #this is the function that you use for each level to generate all th
         if ready==True and gameOver==False and pause==False: #if the first ready variable is true, it will call the functions for the first enemy list
             genEnemies(enemy) #generating enemies
             moveEnemy(screen,enemy) #move
-            baseHealth(enemy) #base health
             healthBars(enemy)  #health bars
             damageEnemies(enemy,activeDefenses,towerPos1) #damage
 
         if ready2==True and gameOver==False and pause==False: #if the 2nd ready variable becomes true, it will call the game functions for the second enemy list
             genEnemies(enemy2)
             moveEnemy(screen,enemy2)
-            baseHealth(enemy2)
             healthBars(enemy2)
             damageEnemies(enemy2,activeDefenses,towerPos1)    
 
