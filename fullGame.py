@@ -479,16 +479,17 @@ def prep(screen,towerPos): #this function is for the start of the level
 
     #This is the tower edit program - selecting, upgrade, delete
                 
-    select=False #select checks if a tower is already selected. If a tower is selected already, select prohibits the player from choosing another tower
+    select=None #select checks if a tower is already selected. If a tower is selected already, select prohibits the player from choosing another tower
     if defC==None: #no tower is being bought
         for i in towerPos:
-            if i[0].collidepoint(mx,my) and i[1]==True and select==False: #if the player hovers over a tower space,there is a tower, and the player has not
+            if i[0].collidepoint(mx,my) and i[1]==True and select==None: #if the player hovers over a tower space,there is a tower, and the player has not
                 draw.rect(screen,YELLOW,i[0],3)                          #selected a tower yet, the space will be highlighted
                 if click:
                     i[3]=True   #the tower can be edited if the player clicks on it.
- 
-            if i[3]:
-                select=True #while a tower is selected, the player cannot select another until they choose cancel
+                    select=i[4]
+                    
+            if i[3]==True:
+                #select=True #while a tower is selected, the player cannot select another until they choose cancel
                 draw.rect(screen,GREEN,buyRects[i[5]],2) #highlights the tower
                 screen.blit(towerStats[i[5]],(620,630)) #this will blit the individual tower's damage
                 txtUpgrade=txtFont2.render("UPGRADE?",True,BLACK)
@@ -533,13 +534,13 @@ def prep(screen,towerPos): #this function is for the start of the level
                             if a[3]==i[4]: #checks which active tower was on the selected tower space
                                 activeDefenses.remove(a) #deletes the tower from the active list
                                 money+=a[2].refund #give back money 
-                                select=False
+                                select=None
                         
                 if cancelRect.collidepoint(mx,my):
                     draw.rect(screen,RED,cancelRect,2)
                     if click:
                         i[3]=False #tower edit status reverts
-                        select=False #player can select a tower again
+                        select=None #player can select a tower again
 
 def damageEnemies(enemy,activeDefenses,towerPos): #this function is the damage dealt to the enemies by the towers 
     global money,score
@@ -773,7 +774,10 @@ def lev1(): #this is the function that you use for each level to generate all th
                 music(True) #when mouse is down it checks if you've paused the music
             if evt.type==MOUSEBUTTONUP:
                 click=False
-        music(None) #anytime else music stays at whatever state it is at 
+        fps = txtFont.render("FPS: "+str(int(myclock.get_fps())), True, BLACK)
+        screen.blit(fps,(5,5))
+        music(None) #anytime else music stays at whatever state it is at
+        
         for a in activeDefenses:
             screen.blit(a[0],a[1]) #blit all defenses at location it was placed at 
 
