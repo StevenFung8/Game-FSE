@@ -773,6 +773,8 @@ def lev1(): #this is the function that you use for each level to generate all th
                 music(True) #when mouse is down it checks if you've paused the music
             if evt.type==MOUSEBUTTONUP:
                 click=False
+        fps = txtFont.render("FPS:"+str(int(myclock.get_fps())), True, BLACK) #fps counter
+        screen.blit(fps,(5,5))
         music(None) #anytime else music stays at whatever state it is at 
         for a in activeDefenses:
             screen.blit(a[0],a[1]) #blit all defenses at location it was placed at 
