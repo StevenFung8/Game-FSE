@@ -189,11 +189,12 @@ def baseHealth(enemy,enemy2):
                 bars=0
         if i[0]>=1100: 
             i[5]=True
-            
+
     baseHealth=txtFont3.render(str(bars),True,BLACK) #renders the health beside the black heart
     screen.blit(baseHealth,(965,353))
     draw.rect(screen,RED,(1044,375,bars-100,10),0) #blits a red rectangle, and the length will be start at 0, because bars starts a 100, and as bars goes up, negative number is the length
     draw.rect(screen,GREEN,(945,375,bars,10),0) #the green rect, starts with a length of 100 and decreases as the health goes down (length is dependant to health)
+
     if bars==0: #when bars is zero (no health), starts the gameOver function 
         gameOver=True
 
@@ -262,17 +263,16 @@ def moveEnemy2(screen,enemy): #this is for the second level, because the path is
     check3=Rect(665,210,65,230)
     check4=Rect(665,440,900,65)
 
-    delay=30
     for i in enemy:
-        i[7]-=1
-        if i[5]==False and i[7]<=0:
-            if i[0]<300:
+        i[7]-=1  #starting section of the path 
+        if i[5]==False and i[7]<=0: #if they are not dead 
+            if i[0]<300: #the first section of the path 
                 i[0]+=i[3].speed
                 i[2]=0
-            if check1.collidepoint(i[0],i[1]):
+            if check1.collidepoint(i[0],i[1]): #once it hits the first rect it will turn up (i[1]-=i[3].speed subtracts the y value by the speed defined in the enemyType class)
                 i[1]-=i[3].speed
-                i[2]=2
-            if check2.collidepoint(i[0],i[1]):
+                i[2]=2 #sets the enemy sprite to the one facing up 
+            if check2.collidepoint(i[0],i[1]): #same idea as check1, but in a different direction (in this case right)
                 i[0]+=i[3].speed
                 i[2]=0
             if check3.collidepoint(i[0],i[1]):
@@ -281,14 +281,15 @@ def moveEnemy2(screen,enemy): #this is for the second level, because the path is
             if check4.collidepoint(i[0],i[1]):
                 i[0]+=i[3].speed
                 i[2]=0
-
+        ## see moveEnemy() ##
         count+=1
-        if i[5]==False and i[7]<=0:
-            screen.blit(pics[count][i[2]],i[:2])
+        if i[5]==False and i[7]<=0:  
+            screen.blit(pics[count][i[2]],i[:2]) 
         if i[5]==True and i[0]<=1100:
             screen.blit(deadPics[count][i[2]],(i[0],i[1]+15))
-
-def moveEnemy3(screen,enemy):
+        ####################
+            
+def moveEnemy3(screen,enemy): #for comments about this function, see moveEnemy() (same idea and code, numbers changed for different path, different level)
     count=-1
     for i in enemy:
         i[7]-=1
@@ -309,9 +310,8 @@ def moveEnemy3(screen,enemy):
         if i[5]==True and i[0]<=1100:
             screen.blit(deadPics[count][i[2]],(i[0],i[1]+15))
 
-def moveEnemy4(screen,enemy):
+def moveEnemy4(screen,enemy): #for comments about this function, see moveEnemy2() (same idea and code, numbers changed for different path, different level)
     count=-1
-
     check1=Rect(230,280,60,280)
     check2=Rect(230,560,360,60)
     check3=Rect(590,330,60,300)
@@ -342,7 +342,7 @@ def moveEnemy4(screen,enemy):
         if i[5]==True and i[0]<=1100:
             screen.blit(deadPics[count][i[2]],(i[0],i[1]+15))
             
-def moveEnemy5(screen,enemy):
+def moveEnemy5(screen,enemy): #for comments about this function, see moveEnemy2() (same idea and code, numbers changed for different path, different level)
     count=-1
     check1=Rect(100,260,327,50)
     check2=Rect(427,260,50,235)
@@ -370,6 +370,7 @@ def moveEnemy5(screen,enemy):
         if i[5]==True and i[0]<=1100:
             screen.blit(deadPics[count][i[2]],(i[0],i[1]+15))
 
+#these drawScene functions are to just blit the map into eact level (drawScene1 would be for level 1, etc...)
 def drawScene1(screen):
     screen.blit(map1,(0,0))
 def drawScene2(screen):
@@ -381,25 +382,28 @@ def drawScene4(screen):
 def drawScene5(screen):
     screen.blit(map5,(0,0))
 
-def hudElements(screen):
+#this function is for the displaying all the things such as score, money, descriptions about the towers, etc.
+def hudElements(screen): 
     screen.blit(hud,(550,20))
     screen.blit(hudRects,(20,20))
     screen.blit(dialoguePic,(600,600))
 
-defC=None
-ready=False
-ready2=False
-gameOver=False
-activeDefenses=[]
+defC=None #variable to select what tower you want
+ready=False #variable to see if the wave is ready to start or not
+ready2=False #variable to see if the second wave is ready to start or not
+gameOver=False #f you lose, gameOver=True and procedures happen
+activeDefenses=[] #defenses that are currently on the map 
 
-def prep(screen,towerPos):
-    global defC,money,ready,ready2,click,wave
-    
+def prep(screen,towerPos): #this function is for the start of the level 
+    global defC,money,ready,ready2,click,wave 
+
+    #rects needed to start the wave, upgrade towers, buy towers and cancel buyign towers
     readyRect=Rect(830,120,179,69)
     upgradeRect=Rect(750,662,70,30)
     buyRects=[Rect(607,28,59,63),Rect(682,28,61,63),Rect(758,28,61,63),Rect(834,28,61,63),Rect(908,28,61,63),Rect(982,28,61,63)]
     cancelRect=Rect(20,125,125,30)
 
+    ## descriptions for all the towers 
     txtD1=txtFont2.render("Basic Soldier - Cost: $250, Damage: 25",True,BLACK)
     txtD2=txtFont2.render("Machine Gun - Cost: $500, Damage: 35",True,BLACK)
     txtD3=txtFont2.render("Anti-Tank Gun - Cost: $800, Damage: 80",True,BLACK)
@@ -415,6 +419,7 @@ def prep(screen,towerPos):
     txtS6=txtFont2.render("Heavy AT Gun - Damage:",True,BLACK)
     towerDescription=[txtD1,txtD2,txtD3,txtD4,txtD5,txtD6]
     towerStats=[txtS1,txtS2,txtS3,txtS4,txtS5,txtS6]
+    ####
 
     ##generating defense images/sounds
     defenses=[soldier,heavyMG,antiTank,bunker,fortress,heavyGun]
@@ -438,50 +443,50 @@ def prep(screen,towerPos):
         if click and wave=="second": #checks if the second wave is coming
             ready2=True #changes the 2nd wave's "ready" variable
 
-    for i in range(len(buyRects)):
+    for i in range(len(buyRects)): #if mouse hovers over any of the towers when you try to buy one, it will outline yellow
         if buyRects[i].collidepoint(mx,my):
             draw.rect(screen,YELLOW,buyRects[i],2)
             if click:
-                defC=int(i)
+                defC=int(i) #if you click on the rect, defC turns into a number and the number represents what tower is selected (ie 0 is solider)
 
-    if defC!=None:
-        draw.rect(screen,GREEN,buyRects[defC],2)
-        screen.blit(towerDescription[defC],(620,630))
-        cancelRect=Rect(20,125,125,30)
+    if defC!=None: #if there is a tower selected 
+        draw.rect(screen,GREEN,buyRects[defC],2) #outline the tower green
+        screen.blit(towerDescription[defC],(620,630)) #blit the description
+        cancelRect=Rect(20,125,125,30) #give player option to cancel
         screen.blit(cancelPic,(20,125))
 
         #money and stuff
-        for i in range(len(towerPos)):
-            if towerPos[i][1]==False:
-                draw.rect(screen,RED,towerPos[i][0],3)
+        for i in range(len(towerPos)): #towerPos is all the possible spots that you can place the towers
+            if towerPos[i][1]==False: #if there isnt a tower there
+                draw.rect(screen,RED,towerPos[i][0],3) #its red
                 if towerPos[i][0].collidepoint(mx,my):
                     draw.rect(screen,YELLOW,towerPos[i][0],3)
-                    if click and money-defenses[defC].price>=0:
+                    if click and money-defenses[defC].price>=0: #if you have enough moeny and you click on an avaliable space, it will take away the money and append the tower into the active defenses list 
                         mixer.Sound.play(place_sound)
                                                 #tower picture, blit position,  tower class variable, tower position index, damage, upgrade cost, delay counter, delay, sound type
                         activeDefenses.append([defensePics[defC],towerPos[i][2],defenses[defC],towerPos[i][4],int(defenses[defC].damage),defenses[defC].uCost,0,defenses[defC].delay,sounds[defC]])
                         money-=defenses[defC].price
-                        towerPos[i][1]=True
-                        towerPos[i][5]=defC
-                    if money-defenses[defC].price<0:
+                        towerPos[i][1]=True #that spot is taken, so that index is true 
+                        towerPos[i][5]=defC #it also identifies what tower is there 
+                    if money-defenses[defC].price<0: #if there is not enough money, message is displayed
                         noMoney = txtFont2.render("Not enough money for this tower.", True, RED)
                         screen.blit(noMoney,(620,660))
 
-        if cancelRect.collidepoint(mx,my):
+        if cancelRect.collidepoint(mx,my): #you can cancel to pick another thing 
             draw.rect(screen,RED,cancelRect,2)
             if click:
                 defC=None
 
     #This is the tower edit program - selecting, upgrade, delete
-
+                
     select=False #select checks if a tower is already selected. If a tower is selected already, select prohibits the player from choosing another tower
     if defC==None: #no tower is being bought
         for i in towerPos:
             if i[0].collidepoint(mx,my) and i[1]==True and select==False: #if the player hovers over a tower space,there is a tower, and the player has not
                 draw.rect(screen,YELLOW,i[0],3)                          #selected a tower yet, the space will be highlighted
-                if click:   
+                if click:
                     i[3]=True   #the tower can be edited if the player clicks on it.
-                    
+ 
             if i[3]:
                 select=True #while a tower is selected, the player cannot select another until they choose cancel
                 draw.rect(screen,GREEN,buyRects[i[5]],2) #highlights the tower
@@ -536,29 +541,31 @@ def prep(screen,towerPos):
                     if click:
                         i[3]=False #tower edit status reverts
                         select=False #player can select a tower again
+    print(select)
 
-def damageEnemies(enemy,activeDefenses,towerPos):
+def damageEnemies(enemy,activeDefenses,towerPos): #this function is the damage dealt to the enemies by the towers 
     global money,score
-    for a in activeDefenses:
-        flashList=list(towerPos[a[3]][2])
-        for e in enemy:
-            if towerPos[a[3]][6].collidepoint(e[0],e[1]) and e[5]==False:
-                if a[6]==0:
-                    mixer.Sound.play(a[8])
-                    screen.blit(muzzleFlash,(flashList[0]-25,flashList[1]+13))
-                    e[4]-=a[4]
-                    a[6]=a[7]
-                if a[6]>0:
+    for a in activeDefenses: #for all the towers on the screen right now
+        flashList=list(towerPos[a[3]][2])  #take the muzzle flash sprites out 
+        for e in enemy: #for every enemy in the level
+            if towerPos[a[3]][6].collidepoint(e[0],e[1]) and e[5]==False: #if the enemy is in the towers range (which is a rect) ad it isn't dead 
+                if a[6]==0: #if the delay is zero 
+                    mixer.Sound.play(a[8]) #muzzle flash sound is played
+                    screen.blit(muzzleFlash,(flashList[0]-25,flashList[1]+13))#muzzle flash animation is played
+                    e[4]-=a[4] #e4 s the enemy health, a[4] is the tower damage, subtract damamge from health
+                    a[6]=a[7] #set delay back to original, make sure it doesn.t fire rapidly
+                if a[6]>0: #set delay back down
                     a[6]-=1
-            if e[4]<=0:
-                e[5]=True
-            if e[5]==True:
+            if e[4]<=0: #if the health drops to zero or under
+                e[5]=True #sets the troop as dead 
+            if e[5]==True: #if its dead, you gain money and your score goes up by a number predetermined in the enemyType class
                 money+=e[6]
                 score+=e[6]
                 e[6]=0
 
+#this is the victory screen. displays after all 5 levels are won
 
-def victory(score):
+def victory(score): #this function is used when a player wins the match. It bust displays your final score and if you want to go back 
     running=True
     mixer.music.load("FSE-Assets/sound/sovietTheme.mp3")
     mixer.music.play(-1)
@@ -587,8 +594,9 @@ def victory(score):
         display.flip()
     return "levelSelect"
 
+#these are the preview screens.
 
-def prev1():
+def prev1(): #this is the preview scene that you see before you actually get into the level. Just cool pictures and a button that you press to start. Different screens for different level
     running=True
     mixer.music.load("FSE-Assets/sound/startMusic2.mp3")
     mixer.music.play(-1)
@@ -607,11 +615,11 @@ def prev1():
         if pressRect.collidepoint(mx,my):
             draw.rect(screen,RED,pressRect,3)
             if mb[0]==1:
-                return "lev1"
+                return "lev1" #calls the first level
 
         display.flip()
 
-def prev2():
+def prev2(): # refer to prev1()
     running=True
     mixer.music.load("FSE-Assets/sound/startMusic1.mp3")
     mixer.music.play(-1)
@@ -630,11 +638,11 @@ def prev2():
         if pressRect.collidepoint(mx,my):
             draw.rect(screen,RED,pressRect,3)
             if mb[0]==1:
-                return "lev2"
+                return "lev2" #calls the second level
 
         display.flip()
 
-def prev3():
+def prev3(): # refer to prev1()
     running=True
     mixer.music.load("FSE-Assets/sound/startMusic2.mp3")
     mixer.music.play(-1)
@@ -653,11 +661,11 @@ def prev3():
         if pressRect.collidepoint(mx,my):
             draw.rect(screen,RED,pressRect,3)
             if mb[0]==1:
-                return "lev3"
+                return "lev3" #calls the third level
 
         display.flip()
 
-def prev4():
+def prev4(): # refer to prev1()
     running=True
     mixer.music.load("FSE-Assets/sound/startMusic1.mp3")
     mixer.music.play(-1)
@@ -676,11 +684,11 @@ def prev4():
         if pressRect.collidepoint(mx,my):
             draw.rect(screen,RED,pressRect,3)
             if mb[0]==1:
-                return "lev4"
+                return "lev4" #calls the fourth level
 
         display.flip()
 
-def prev5():
+def prev5(): # refer to prev1()
     running=True
     mixer.music.load("FSE-Assets/sound/startMusic2.mp3")
     mixer.music.play(-1)
@@ -699,14 +707,14 @@ def prev5():
         if pressRect.collidepoint(mx,my):
             draw.rect(screen,RED,pressRect,3)
             if mb[0]==1:
-                return "lev5"
+                return "lev5" #calls the fifth level
 
         display.flip()
 
-def lev1():
-    global defC,ready,ready2,activeDefenses,money,score,click,gameOver,wave
+def lev1(): #this is the function that you use for each level to generate all the gameplay features 
+    global defC,ready,ready2,activeDefenses,money,score,click,gameOver,wave #all the variables needed
     
-    money=4500
+    money=4500 #starting about of money
     pause=False
     running=True
     myclock=time.Clock()
@@ -715,14 +723,15 @@ def lev1():
 
     quitRect=Rect(260,25,150,40)
 
-                #rect, status, blit position, edit status, rect, active tower #
+                #rect, status, blit position, edit status, rect, active tower, tower attack range
                 # subtract 91 from x,y, make 212 the length and width
     towerPos1=[[Rect(115,273,50,50),False,(115,273),False,0,None,Rect(5,162,160,100)],[Rect(264,114,50,50),False,(264,114),False,1,None,Rect(60,162,212,130)],
                [Rect(319,242,50,50),False,(319,242),False,2,None,Rect(190,131,212,230)],[Rect(217,529,50,50),False,(217,529),False,3,None,Rect(126,400,212,212)],
                [Rect(388,342,50,50),False,(388,342),False,4,None,Rect(297,251,212,212)],[Rect(570,342,50,50),False,(570,342),False,5,None,Rect(479,251,212,212)],
                [Rect(750,342,50,50),False,(750,342),False,6,None,Rect(659,251,212,212)],[Rect(418,503,50,50),False,(418,503),False,7,None,Rect(327,412,212,212)],
                [Rect(598,503,50,50),False,(598,503),False,8,None,Rect(507,412,212,212)],[Rect(778,503,50,50),False,(778,503),False,9,None,Rect(688,412,212,212)]]
-    
+
+            #first wave 
             #x,y,frame,enemy type,health,death status, prize, delay
     enemy=[[-100,190,0,motorcycle,motorcycle.health,False,motorcycle.prize,30],[-100,190,0,motorcycle,motorcycle.health,False,motorcycle.prize,90],[-100,190,0,motorcycle,motorcycle.health,False,motorcycle.prize,150],
            [-100,190,0,motorcycle,motorcycle.health,False,motorcycle.prize,210],[-100,190,0,motorcycle,motorcycle.health,False,motorcycle.prize,270],[-100,190,0,motorcycle,motorcycle.health,False,motorcycle.prize,330],
@@ -732,60 +741,61 @@ def lev1():
            [-100,190,0,infantry,infantry.health,False,infantry.prize,1060],[-100,190,0,infantry,infantry.health,False,infantry.prize,1120],[-100,190,0,lightTank,lightTank.health,False,lightTank.prize,1200],
            [-100,190,0,lightTank,lightTank.health,False,lightTank.prize,1320],[-100,190,0,lightTank,lightTank.health,False,lightTank.prize,1440],[-100,190,0,lightTank,lightTank.health,False,lightTank.prize,1560],
            [-100,190,0,lightTank,lightTank.health,False,lightTank.prize,1680]] #1st wave
-    
+
     enemy2=[[-100,190,0,lightTank,lightTank.health,False,lightTank.prize,0],[-100,190,0,lightTank,lightTank.health,False,lightTank.prize,120],[-100,190,0,lightTank,lightTank.health,False,lightTank.prize,240],
             [-100,190,0,lightTank,lightTank.health,False,lightTank.prize,360],[-100,190,0,lightTank,lightTank.health,False,lightTank.prize,480],[-100,190,0,transport,transport.health,False,transport.prize,560],
             [-100,190,0,transport,transport.health,False,transport.prize,640],[-100,190,0,transport,transport.health,False,transport.prize,720],[-100,190,0,transport,transport.health,False,transport.prize,800],
             [-100,190,0,motorcycle,motorcycle.health,False,motorcycle.prize,850],[-100,190,0,motorcycle,motorcycle.health,False,motorcycle.prize,910],[-100,190,0,motorcycle,motorcycle.health,False,motorcycle.prize,970],
             [-100,190,0,infantry,infantry.health,False,infantry.prize,1010],[-100,190,0,infantry,infantry.health,False,infantry.prize,1070],[-100,190,0,infantry,infantry.health,False,infantry.prize,1130],[-100,190,0,infantry,infantry.health,False,infantry.prize,1190],
             [-100,190,0,infantry,infantry.health,False,infantry.prize,1250],[-100,190,0,infantry,infantry.health,False,infantry.prize,1310],[-100,190,0,infantry,infantry.health,False,infantry.prize,1370],[-100,190,0,infantry,infantry.health,False,infantry.prize,1430],
-            [-100,190,0,lightTank,lightTank.health,False,lightTank.prize,1510],[-100,190,0,lightTank,lightTank.health,False,lightTank.prize,1630],[-100,190,0,lightTank,lightTank.health,False,lightTank.prize,1750],
-            [-100,190,0,lightTank,lightTank.health,False,lightTank.prize,1870],[-100,190,0,lightTank,lightTank.health,False,lightTank.prize,1990]]#2nd wave
+            [-100,190,0,heavyTank,heavyTank.health,False,heavyTank.prize,1510],[-100,190,0,heavyTank,heavyTank.health,False,heavyTank.prize,1630],[-100,190,0,heavyTank,heavyTank.health,False,heavyTank.prize,1750],
+            [-100,190,0,heavyTank,heavyTank.health,False,heavyTank.prize,1870],[-100,190,0,heavyTank,heavyTank.health,False,heavyTank.prize,1990]]#2nd wave
     
     click=False
-    wave="first"
+    wave="first" #start off with the first wave 
     while running:
-        myclock.tick(60)
-        drawScene1(screen)
-        hudElements(screen)
-        moneyScore(screen)
-        baseHealth(enemy,enemy2)
+        myclock.tick(60) 
+        drawScene1(screen) #blits the map 
+        hudElements(screen) #money, score, descriptons
+        moneyScore(screen) #counts you rscore and amount of money
+        baseHealth(enemy,enemy2) #the amount of health your base has 
+
         screen.blit(quitPic,(260,25))
         draw.rect(screen,BLACK,quitRect,2)
 
         mx,my=mouse.get_pos()
         mb=mouse.get_pressed()
-
+        
         for evt in event.get():
             if evt.type==QUIT:
                 running=False
                 return "exit"
             if evt.type==MOUSEBUTTONDOWN:
                 click=True
-                music(True)
+                music(True) #when mouse is down it checks if you've paused the music
             if evt.type==MOUSEBUTTONUP:
                 click=False
-        music(None)
+        music(None) #anytime else music stays at whatever state it is at 
         for a in activeDefenses:
-            screen.blit(a[0],a[1])
+            screen.blit(a[0],a[1]) #blit all defenses at location it was placed at 
 
-        if quitRect.collidepoint(mx,my):
+        if quitRect.collidepoint(mx,my): #if you press quit, game pauses 
             draw.rect(screen,RED,quitRect,3)
             if mb[0]==1:
-                pause=True
+                pause=True 
 
         if pause==True:
-            endScreen=Surface((width,height),SRCALPHA)
+            endScreen=Surface((width,height),SRCALPHA) #new surface that will be blitted on top to make a transparent grey screen
             endScreen.fill((220,220,220,127))
             screen.blit(endScreen,(0,0))
             screen.blit(sureRect,(335,235))
             returnRect=Rect(465,375,140,35)
             leaveRect=Rect(435,425,205,35)
-            if returnRect.collidepoint(mx,my):
+            if returnRect.collidepoint(mx,my): #if you press return, you resume the level you are at
                 draw.rect(screen,RED,returnRect,3)
                 if mb[0]==1:
                     pause=False
-            if leaveRect.collidepoint(mx,my):
+            if leaveRect.collidepoint(mx,my):# if you leave, all the variables are set on False or None so they don't save to another level, goes back to level selection screen
                 draw.rect(screen,RED,leaveRect,3)
                 if mb[0]==1:
                     pause=False
@@ -803,21 +813,24 @@ def lev1():
             prep(screen,towerPos1)
         if ready2==False and pause==False and wave=="second":
             prep(screen,towerPos1)
+            
 
         if ready==True and gameOver==False and pause==False: #if the first ready variable is true, it will call the functions for the first enemy list
             genEnemies(enemy) #generating enemies
             moveEnemy(screen,enemy) #move
+            baseHealth(enemy) #base health
             healthBars(enemy)  #health bars
             damageEnemies(enemy,activeDefenses,towerPos1) #damage
 
         if ready2==True and gameOver==False and pause==False: #if the 2nd ready variable becomes true, it will call the game functions for the second enemy list
             genEnemies(enemy2)
             moveEnemy(screen,enemy2)
+            baseHealth(enemy2)
             healthBars(enemy2)
             damageEnemies(enemy2,activeDefenses,towerPos1)    
 
-        if gameOver:
-            endScreen=Surface((width,height),SRCALPHA)
+        if gameOver: # if you lose, screen becomes a transparent screen and you have the option to retry or go to main menu
+            endScreen=Surface((width,height),SRCALPHA) 
             endScreen.fill((220,220,220,127))
             screen.blit(endScreen,(0,0))
             screen.blit(loseRect,(335,235))
@@ -896,7 +909,8 @@ def lev1():
         display.flip()
     return "levelSelect"
 
-def lev2():
+def lev2(): #each level has the same fucntions used, the only thing different is the places towers can be placed and the different enemies that appear in the waves
+    #refer to lev1() for comments
     global defC,ready,ready2,activeDefenses,money,score,click,gameOver,wave
     money=6000
 
@@ -929,8 +943,7 @@ def lev2():
             [-100,510,0,lightTank,lightTank.health,False,lightTank.prize,1120],[-100,510,0,lightTank,lightTank.health,False,lightTank.prize,1240],[-100,510,0,heavyTank,heavyTank.health,False,heavyTank.prize,1360],
             [-100,510,0,heavyTank,heavyTank.health,False,heavyTank.prize,1480],[-100,510,0,infantry,infantry.health,False,infantry.prize,1530],[-100,510,0,infantry,infantry.health,False,infantry.prize,1580],
             [-100,510,0,infantry,infantry.health,False,infantry.prize,1630],[-100,510,0,infantry,infantry.health,False,infantry.prize,1680],[-100,510,0,infantry,infantry.health,False,infantry.prize,1730],
-            [-100,510,0,infantry,infantry.health,False,infantry.prize,1780],[-100,510,0,infantry,infantry.health,False,infantry.prize,30],[-100,510,0,infantry,infantry.health,False,infantry.prize,1830]]#2nd wave
-    
+            [-100,510,0,infantry,infantry.health,False,infantry.prize,1780],[-100,510,0,infantry,infantry.health,False,infantry.prize,30],[-100,510,0,infantry,infantry.health,False,infantry.prize,1830]]#2nd wave 
     wave="first"
     click=False
     while running:
@@ -938,7 +951,6 @@ def lev2():
         drawScene2(screen)
         hudElements(screen)
         moneyScore(screen)
-        baseHealth(enemy,enemy2)
         screen.blit(quitPic,(260,25))
         draw.rect(screen,BLACK,quitRect,2)
 
@@ -954,6 +966,8 @@ def lev2():
                 music(True)
             if evt.type==MOUSEBUTTONUP:
                 click=False
+        mx,my=mouse.get_pos()
+        mb=mouse.get_pressed()
         music(None)
 
         for a in activeDefenses:
@@ -993,16 +1007,19 @@ def lev2():
             prep(screen,towerPos2)
         if ready2==False and pause==False and wave=="second":
             prep(screen,towerPos2)
+            
 
         if ready==True and gameOver==False and pause==False: #if the first ready variable is true, it will call the functions for the first enemy list
             genEnemies(enemy) #generating enemies
             moveEnemy2(screen,enemy) #move
+            baseHealth(enemy) #base health
             healthBars(enemy)  #health bars
             damageEnemies(enemy,activeDefenses,towerPos2) #damage
 
         if ready2==True and gameOver==False and pause==False: #if the 2nd ready variable becomes true, it will call the game functions for the second enemy list
             genEnemies(enemy2)
             moveEnemy2(screen,enemy2)
+            baseHealth(enemy2)
             healthBars(enemy2)
             damageEnemies(enemy2,activeDefenses,towerPos2)    
 
@@ -1045,7 +1062,8 @@ def lev2():
         for i in enemy: 
             if i[5]==True: #for each "dead" or enemy that passed through the base, the count will go up
                 count+=1
-            if count==len(enemy): #if the counter is the same as the length of the enemy list, it means all the enemies have either died or passed over the base, signalling the end of the wave
+            if count==len(enemy): #if the counter is the same as the length of the enemy list, it means all the enemies have either died
+            #or passed over the base, signalling the end of the wave
                 wave="second"  #changes the wave variable to the second wave
                 ready=False #makes the first ready variable false
 
@@ -1085,7 +1103,7 @@ def lev2():
         display.flip()
     return "levelSelect"
 
-def lev3():
+def lev3(): #refer to lev1() for comments
     global defC,ready,ready2,activeDefenses,money,score,click,gameOver,wave
 
     money=7000
@@ -1119,7 +1137,8 @@ def lev3():
             [-100,480,0,tankDestroyer,tankDestroyer.health,False,tankDestroyer.prize,870],[-100,480,0,tankDestroyer,tankDestroyer.health,False,tankDestroyer.prize,970],[-100,480,0,tankDestroyer,tankDestroyer.health,False,tankDestroyer.prize,1070],
             [-100,480,0,heavyTank,heavyTank.health,False,heavyTank.prize,1170],[-100,480,0,heavyTank,heavyTank.health,False,heavyTank.prize,1270],[-100,480,0,heavyTank,heavyTank.health,False,heavyTank.prize,1370],[-100,480,0,heavyTank,heavyTank.health,False,heavyTank.prize,1470],
             [-100,480,0,heavyTank,heavyTank.health,False,heavyTank.prize,1570],[-100,480,0,heavyTank,heavyTank.health,False,heavyTank.prize,1670]] #2nd wave
-    
+
+
     wave="first"
     click=False
     while running:
@@ -1127,13 +1146,11 @@ def lev3():
         drawScene3(screen)
         hudElements(screen)
         moneyScore(screen)
-        baseHealth(enemy,enemy2)
         screen.blit(quitPic,(260,25))
         draw.rect(screen,BLACK,quitRect,2)
 
         mx,my=mouse.get_pos()
         mb=mouse.get_pressed()
-        
         for evt in event.get():
             if evt.type==QUIT:
                 running=False
@@ -1188,14 +1205,17 @@ def lev3():
         if ready==True and gameOver==False and pause==False: #if the first ready variable is true, it will call the functions for the first enemy list
             genEnemies(enemy) #generating enemies
             moveEnemy3(screen,enemy) #move
+            baseHealth(enemy) #base health
             healthBars(enemy)  #health bars
             damageEnemies(enemy,activeDefenses,towerPos3) #damage
 
         if ready2==True and gameOver==False and pause==False: #if the 2nd ready variable becomes true, it will call the game functions for the second enemy list
             genEnemies(enemy2)
             moveEnemy3(screen,enemy2)
+            baseHealth(enemy2)
             healthBars(enemy2)
             damageEnemies(enemy2,activeDefenses,towerPos3)    
+
 
         if gameOver:
             endScreen=Surface((width,height),SRCALPHA)
@@ -1277,7 +1297,7 @@ def lev3():
         display.flip()
     return "levelSelect"
 
-def lev4():
+def lev4(): #refer to lev1() for comments
     global defC,ready,ready2,activeDefenses,money,score,click,gameOver,wave
 
     money=8500
@@ -1314,21 +1334,19 @@ def lev4():
             [-100,280,0,tankDestroyer,tankDestroyer.health,False,tankDestroyer.prize,1270],[-100,280,0,tankDestroyer,tankDestroyer.health,False,tankDestroyer.prize,1370],[-100,280,0,tankDestroyer,tankDestroyer.health,False,tankDestroyer.prize,1470],
             [-100,280,0,tankDestroyer,tankDestroyer.health,False,tankDestroyer.prize,1570],[-100,280,0,infantry,infantry.health,False,infantry.prize,1600],[-100,280,0,infantry,infantry.health,False,infantry.prize,1640],
             [-100,280,0,infantry,infantry.health,False,infantry.prize,1680],[-100,280,0,infantry,infantry.health,False,infantry.prize,1720],[-100,280,0,infantry,infantry.health,False,infantry.prize,1760]] #2nd wave
-    
+
+    click=False
     wave="first"
     while running:
         myclock.tick(60)
         drawScene4(screen)
         hudElements(screen)
         moneyScore(screen)
-        baseHealth(enemy,enemy2)
         screen.blit(quitPic,(260,25))
         draw.rect(screen,BLACK,quitRect,2)
-
         mx,my=mouse.get_pos()
         mb=mouse.get_pressed()
-
-        click=False
+        
         for evt in event.get():
             if evt.type==QUIT:
                 running=False
@@ -1382,12 +1400,14 @@ def lev4():
         if ready==True and gameOver==False and pause==False: #if the first ready variable is true, it will call the functions for the first enemy list
             genEnemies(enemy) #generating enemies
             moveEnemy4(screen,enemy) #move
+            baseHealth(enemy) #base health
             healthBars(enemy)  #health bars
             damageEnemies(enemy,activeDefenses,towerPos4) #damage
 
         if ready2==True and gameOver==False and pause==False: #if the 2nd ready variable becomes true, it will call the game functions for the second enemy list
             genEnemies(enemy2)
             moveEnemy4(screen,enemy2)
+            baseHealth(enemy2)
             healthBars(enemy2)
             damageEnemies(enemy2,activeDefenses,towerPos4)    
 
@@ -1471,7 +1491,7 @@ def lev4():
         display.flip()
     return "levelSelect"
 
-def lev5():
+def lev5(): #refer to lev1() for comments
     global defC,ready,ready2,activeDefenses,money,score,click,gameOver,wave
 
     money=10000
@@ -1514,21 +1534,17 @@ def lev5():
             [130,-100,0,infantry,infantry.health,False,infantry.prize,1970],[130,-100,0,infantry,infantry.health,False,infantry.prize,2000],[130,-100,0,infantry,infantry.health,False,infantry.prize,2030],
             [130,-100,0,infantry,infantry.health,False,infantry.prize,2060],[130,-100,0,tankDestroyer,tankDestroyer.health,False,tankDestroyer.prize,2310],[130,-100,0,tankDestroyer,tankDestroyer.health,False,tankDestroyer.prize,2400]]
 
+    click=False
     wave="first"
-    
     while running:
         myclock.tick(60)
         drawScene5(screen)
         hudElements(screen)
         moneyScore(screen)
-        baseHealth(enemy,enemy2)
         screen.blit(quitPic,(260,25))
         draw.rect(screen,BLACK,quitRect,2)
-
         mx,my=mouse.get_pos()
         mb=mouse.get_pressed()
-        
-        click=False
         for evt in event.get():
             if evt.type==QUIT:
                 running=False
@@ -1582,18 +1598,16 @@ def lev5():
         if ready==True and gameOver==False and pause==False: #if the first ready variable is true, it will call the functions for the first enemy list
             genEnemies(enemy) #generating enemies
             moveEnemy5(screen,enemy) #move
+            baseHealth(enemy) #base health
             healthBars(enemy)  #health bars
             damageEnemies(enemy,activeDefenses,towerPos5) #damage
-            hudElements(screen)
-            moneyScore(screen)
 
         if ready2==True and gameOver==False and pause==False: #if the 2nd ready variable becomes true, it will call the game functions for the second enemy list
             genEnemies(enemy2)
             moveEnemy5(screen,enemy2)
+            baseHealth(enemy2)
             healthBars(enemy2)
-            damageEnemies(enemy2,activeDefenses,towerPos5)
-            hudElements(screen)
-            moneyScore(screen)
+            damageEnemies(enemy2,activeDefenses,towerPos5)    
 
         if gameOver:
             endScreen=Surface((width,height),SRCALPHA)
@@ -1675,7 +1689,7 @@ def lev5():
         display.flip()
     return "levelSelect"
 
-def creds():
+def creds(): # in the main menu, if you press credits, this will pop up 
     global mx,my
     mixer.music.load("FSE-Assets/sound/sovietTheme.mp3")
     mixer.music.play()
@@ -1698,7 +1712,7 @@ def creds():
         display.flip()
     return "main"
 
-def instructions():
+def instructions(): # these are the instructions that will appear if you press instructions in the main menu
     mixer.music.load("FSE-Assets/sound/menuMusic2.mp3")
     mixer.music.play(-1)
     running=True
@@ -1720,7 +1734,7 @@ def instructions():
         display.flip()
     return "main"
 
-def levelSelect():
+def levelSelect(): #this is the level select menu that is used to 
     mixer.music.load("FSE-Assets/sound/menuMusic2.mp3")
     mixer.music.play(-1)
     levelRects=[Rect(122,260,240,160),Rect(407,262,250,160),Rect(696,262,250,160),Rect(257,493,240,160),Rect(564,492,240,160)]
@@ -1755,7 +1769,7 @@ def levelSelect():
         display.flip()
     return "main"
 
-def main():
+def main(): # in the main menu there are three different buttons, level select, instructions and credits.
     mixer.music.load("FSE-Assets/sound/menuMusic.mp3")
     mixer.music.play(-1)
     buttons=[Rect(57,294,210,47),Rect(57,370,270,49),Rect(57,448,170,49)]
