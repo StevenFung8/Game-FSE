@@ -463,7 +463,7 @@ def prep(screen,towerPos): #this function is for the start of the level
                     draw.rect(screen,YELLOW,towerPos[i][0],3)
                     if click and money-defenses[defC].price>=0: #if you have enough moeny and you click on an avaliable space, it will take away the money and append the tower into the active defenses list 
                         mixer.Sound.play(place_sound)
-                                                #tower picture, blit position,  tower class variable, tower position index, damage, upgrade cost, delay counter, delay, sound type
+                                           #tower picture, blit position,  tower class variable, tower position index, damage, upgrade cost, delay counter, delay, sound type
                         activeDefenses.append([defensePics[defC],towerPos[i][2],defenses[defC],towerPos[i][4],int(defenses[defC].damage),defenses[defC].uCost,0,defenses[defC].delay,sounds[defC]])
                         money-=defenses[defC].price
                         towerPos[i][1]=True #that spot is taken, so that index is true 
@@ -1391,7 +1391,6 @@ def lev4(): #refer to lev1() for comments
         if ready2==False and pause==False and wave=="second":
             prep(screen,towerPos4)
             
-
         if ready==True and gameOver==False and pause==False: #if the first ready variable is true, it will call the functions for the first enemy list
             genEnemies(enemy) #generating enemies
             moveEnemy4(screen,enemy) #move
@@ -1503,16 +1502,15 @@ def lev5(): #refer to lev1() for comments
                [Rect(815,409,50,50),False,(815,409),False,10,None,Rect(724,418,212,212)]]
     
     enemy=[[130,-100,0,lightTank,lightTank.health,False,lightTank.prize,30],[130,-100,0,lightTank,lightTank.health,False,lightTank.prize,120],[130,-100,0,lightTank,lightTank.health,False,lightTank.prize,210],
-           [130,-100,0,lightTank,lightTank.health,False,lightTank.prize,300],[130,-100,0,lightTank,lightTank.health,False,lightTank.prize,390],[130,-100,0,transport,transport.health,False,transport.prize,440],
+           [130,-100,0,lightTank,lightTank.health,False,lightTank.prize,300],[130,-100,0,lightTank,lightTank.health,False,lightTank.prize,390],
            [130,-100,0,transport,transport.health,False,transport.prize,500],[130,-100,0,transport,transport.health,False,transport.prize,560],[130,-100,0,transport,transport.health,False,transport.prize,620],
-           [130,-100,0,transport,transport.health,False,transport.prize,680],[130,-100,0,transport,transport.health,False,transport.prize,740],[130,-100,0,heavyTank,heavyTank.health,False,heavyTank.prize,800],
-           [130,-100,0,heavyTank,heavyTank.health,False,heavyTank.prize,900],[130,-100,0,heavyTank,heavyTank.health,False,heavyTank.prize,1000],[130,-100,0,heavyTank,heavyTank.health,False,heavyTank.prize,1100],
-           [130,-100,0,heavyTank,heavyTank.health,False,heavyTank.prize,1200],[130,-100,0,heavyTank,heavyTank.health,False,heavyTank.prize,1300],[130,-100,0,tankDestroyer,tankDestroyer.health,False,tankDestroyer.prize,1400],
+           [130,-100,0,heavyTank,heavyTank.health,False,heavyTank.prize,750],[130,-100,0,heavyTank,heavyTank.health,False,heavyTank.prize,900],[130,-100,0,heavyTank,heavyTank.health,False,heavyTank.prize,1000],
+           [130,-100,0,heavyTank,heavyTank.health,False,heavyTank.prize,1100],[130,-100,0,heavyTank,heavyTank.health,False,heavyTank.prize,1200],[130,-100,0,heavyTank,heavyTank.health,False,heavyTank.prize,1300],[130,-100,0,tankDestroyer,tankDestroyer.health,False,tankDestroyer.prize,1400],
            [130,-100,0,tankDestroyer,tankDestroyer.health,False,tankDestroyer.prize,1500],[130,-100,0,tankDestroyer,tankDestroyer.health,False,tankDestroyer.prize,1600],[130,-100,0,tankDestroyer,tankDestroyer.health,False,tankDestroyer.prize,1700],
            [130,-100,0,tankDestroyer,tankDestroyer.health,False,tankDestroyer.prize,1800],[130,-100,0,tankDestroyer,tankDestroyer.health,False,tankDestroyer.prize,1900],
            [130,-100,0,heavyTank,heavyTank.health,False,heavyTank.prize,1990],[130,-100,0,heavyTank,heavyTank.health,False,heavyTank.prize,2080],[130,-100,0,heavyTank,heavyTank.health,False,heavyTank.prize,2170],
            [130,-100,0,infantry,infantry.health,False,infantry.prize,2200],[130,-100,0,infantry,infantry.health,False,infantry.prize,2230],[130,-100,0,infantry,infantry.health,False,infantry.prize,2260],[130,-100,0,infantry,infantry.health,False,infantry.prize,2290],
-           [130,-100,0,infantry,infantry.health,False,infantry.prize,2320],[130,-100,0,infantry,infantry.health,False,infantry.prize,2350],[130,-100,0,infantry,infantry.health,False,infantry.prize,2380],[130,-100,0,infantry,infantry.health,False,infantry.prize,2410]]
+           [130,-100,0,infantry,infantry.health,False,infantry.prize,2320]]
            
     
     enemy2=[[130,-100,0,motorcycle,motorcycle.health,False,motorcycle.prize,30],[130,-100,0,motorcycle,motorcycle.health,False,motorcycle.prize,60],[130,-100,0,motorcycle,motorcycle.health,False,motorcycle.prize,90],
@@ -1532,8 +1530,8 @@ def lev5(): #refer to lev1() for comments
     while running:
         myclock.tick(60)
         drawScene5(screen)
-        #hudElements(screen)
-        #moneyScore(screen)
+        hudElements(screen)
+        moneyScore(screen)
         screen.blit(quitPic,(260,25))
         draw.rect(screen,BLACK,quitRect,2)
         baseHealth(enemy,enemy2)
@@ -1593,13 +1591,16 @@ def lev5(): #refer to lev1() for comments
             moveEnemy5(screen,enemy) #move
             healthBars(enemy)  #health bars
             damageEnemies(enemy,activeDefenses,towerPos5) #damage
-        moneyScore(screen)
-        hudElements(screen)
+            hudElements(screen)
+            moneyScore(screen)
+            
         if ready2==True and gameOver==False and pause==False: #if the 2nd ready variable becomes true, it will call the game functions for the second enemy list
             genEnemies(enemy2)
             moveEnemy5(screen,enemy2)
             healthBars(enemy2)
-            damageEnemies(enemy2,activeDefenses,towerPos5)    
+            damageEnemies(enemy2,activeDefenses,towerPos5)
+            hudElements(screen)
+            moneyScore(screen)
 
         if gameOver:
             endScreen=Surface((width,height),SRCALPHA)
