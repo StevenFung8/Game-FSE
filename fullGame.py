@@ -1532,8 +1532,8 @@ def lev5(): #refer to lev1() for comments
     while running:
         myclock.tick(60)
         drawScene5(screen)
-        hudElements(screen)
-        moneyScore(screen)
+        #hudElements(screen)
+        #moneyScore(screen)
         screen.blit(quitPic,(260,25))
         draw.rect(screen,BLACK,quitRect,2)
         baseHealth(enemy,enemy2)
@@ -1593,7 +1593,8 @@ def lev5(): #refer to lev1() for comments
             moveEnemy5(screen,enemy) #move
             healthBars(enemy)  #health bars
             damageEnemies(enemy,activeDefenses,towerPos5) #damage
-
+        moneyScore(screen)
+        hudElements(screen)
         if ready2==True and gameOver==False and pause==False: #if the 2nd ready variable becomes true, it will call the game functions for the second enemy list
             genEnemies(enemy2)
             moveEnemy5(screen,enemy2)
