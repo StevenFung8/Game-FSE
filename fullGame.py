@@ -89,12 +89,12 @@ class enemyType:
         self.prize=prize #the amount of money you get when you kill a enemy troop 
         self.filename="FSE-Assets/Enemies/"+name+".png" #the name to load the picture into the game 
 
-infantry=enemyType('infantry',2,200,5,40) #so these are all the properties of the troops 
-transport=enemyType('transport',2.5,400,10,50) #for example, 'transport' has a speed of 1.7, 400 health, does 10 damage to the base, and you get 175 dollars if you kill it 
-motorcycle=enemyType('motorcycle',3,250,10,75)
-lightTank=enemyType('lightTank',1.7,700,15,100)
-heavyTank=enemyType('heavyTank',1.5,1000,20,200)
-tankDestroyer=enemyType('tankDestroyer',1.3,1100,25,300)
+infantry=enemyType('infantry',2.7,200,5,40) #so these are all the properties of the troops 
+transport=enemyType('transport',3.3,400,10,50) #for example, 'transport' has a speed of 1.7, 400 health, does 10 damage to the base, and you get 175 dollars if you kill it 
+motorcycle=enemyType('motorcycle',4,250,10,75)
+lightTank=enemyType('lightTank',3,600,15,100)
+heavyTank=enemyType('heavyTank',2.5,900,20,200)
+tankDestroyer=enemyType('tankDestroyer',2.3,900,25,300)
 
 class towerType: #this is the class that defines all the properties for the towers 
 
@@ -108,7 +108,7 @@ class towerType: #this is the class that defines all the properties for the towe
         self.filename="FSE-Assets/Defenses/"+name+".png" #the file path to load the picture into the game 
  
 antiTank=towerType('antiTank',80,800,350,400,40) #so these are all the properties for the towers 
-bunker=towerType('bunker',25,1000,450,500,10) #for example the 'bunker' would deal 30 damage to troops, cost 1000 dollars, cost 450 to upgrade, you get 500 if you refund it, and it fires every 10 ticks 
+bunker=towerType('bunker',20,1000,450,500,10) #for example the 'bunker' would deal 30 damage to troops, cost 1000 dollars, cost 450 to upgrade, you get 500 if you refund it, and it fires every 10 ticks 
 fortress=towerType('fortress',100,1250,600,625,50)
 heavyGun=towerType('heavyGun',150,1500,700,750,50)
 heavyMG=towerType('heavyMG',6.3,500,200,250,5)
@@ -145,7 +145,7 @@ def genEnemies(enemy): #this function loads all the images for the enemy troops 
 
 def healthBars(enemy):
     for i in enemy: #for all enemy troops in the level
-        if i[5]==False: #if the troop is not dead 
+        if i[5]==False and i[0]>=0: #if the troop is not dead 
             draw.rect(screen,BLACK,(i[0]+14,i[1]-11,i[3].health/10+2,9),0) #the outline of the healthbar, the length of the black bar is determined by starting health of the troop
             draw.rect(screen,GREEN,(i[0]+15,i[1]-10,i[4]/10,7),0) #the actual health of the troop, starts full, and the length decreases as the health goes down by taking the current
             #health of the troop and dividing it by 10 
@@ -262,6 +262,7 @@ def moveEnemy2(screen,enemy): #this is for the second level, because the path is
     check3=Rect(665,210,65,230)
     check4=Rect(665,440,900,65)
 
+    delay=30
     for i in enemy:
         i[7]-=1
         if i[5]==False and i[7]<=0:
@@ -535,7 +536,6 @@ def prep(screen,towerPos):
                     if click:
                         i[3]=False #tower edit status reverts
                         select=False #player can select a tower again
-    print(select)
 
 def damageEnemies(enemy,activeDefenses,towerPos):
     global money,score
@@ -724,23 +724,23 @@ def lev1():
                [Rect(598,503,50,50),False,(598,503),False,8,None,Rect(507,412,212,212)],[Rect(778,503,50,50),False,(778,503),False,9,None,Rect(688,412,212,212)]]
     
             #x,y,frame,enemy type,health,death status, prize, delay
-    enemy=[[-100,190,0,motorcycle,motorcycle.health,False,motorcycle.prize,30],[-100,190,0,motorcycle,motorcycle.health,False,motorcycle.prize,90],[-100,190,0,motorcycle,motorcycle.health,False,motorcycle.prize,150],
-           [-100,190,0,motorcycle,motorcycle.health,False,motorcycle.prize,210],[-100,190,0,motorcycle,motorcycle.health,False,motorcycle.prize,270],[-100,190,0,motorcycle,motorcycle.health,False,motorcycle.prize,330],
-           [-100,190,0,motorcycle,motorcycle.health,False,motorcycle.prize,390],[-100,190,0,transport,transport.health,False,transport.prize,450],[-100,190,0,transport,transport.health,False,transport.prize,530],
-           [-100,190,0,transport,transport.health,False,transport.prize,610],[-100,190,0,transport,transport.health,False,transport.prize,700],[-100,190,0,transport,transport.health,False,transport.prize,780],
-           [-100,190,0,infantry,infantry.health,False,infantry.prize,820],[-100,190,0,infantry,infantry.health,False,infantry.prize,880],[-100,190,0,infantry,infantry.health,False,infantry.prize,940],[-100,190,0,infantry,infantry.health,False,infantry.prize,1000],
-           [-100,190,0,infantry,infantry.health,False,infantry.prize,1060],[-100,190,0,infantry,infantry.health,False,infantry.prize,1120],[-100,190,0,lightTank,lightTank.health,False,lightTank.prize,1200],
-           [-100,190,0,lightTank,lightTank.health,False,lightTank.prize,1320],[-100,190,0,lightTank,lightTank.health,False,lightTank.prize,1440],[-100,190,0,lightTank,lightTank.health,False,lightTank.prize,1560],
-           [-100,190,0,lightTank,lightTank.health,False,lightTank.prize,1680]] #1st wave
+    enemy=[[-100,190,0,motorcycle,motorcycle.health,False,motorcycle.prize,30],[-100,190,0,motorcycle,motorcycle.health,False,motorcycle.prize,90],[-100,190,0,motorcycle,motorcycle.health,False,motorcycle.prize,150]]
+           #[-100,190,0,motorcycle,motorcycle.health,False,motorcycle.prize,210],[-100,190,0,motorcycle,motorcycle.health,False,motorcycle.prize,270],[-100,190,0,motorcycle,motorcycle.health,False,motorcycle.prize,330],
+           #[-100,190,0,motorcycle,motorcycle.health,False,motorcycle.prize,390],[-100,190,0,transport,transport.health,False,transport.prize,450],[-100,190,0,transport,transport.health,False,transport.prize,530],
+           #[-100,190,0,transport,transport.health,False,transport.prize,610],[-100,190,0,transport,transport.health,False,transport.prize,700],[-100,190,0,transport,transport.health,False,transport.prize,780],
+           #[-100,190,0,infantry,infantry.health,False,infantry.prize,820],[-100,190,0,infantry,infantry.health,False,infantry.prize,880],[-100,190,0,infantry,infantry.health,False,infantry.prize,940],[-100,190,0,infantry,infantry.health,False,infantry.prize,1000],
+           #[-100,190,0,infantry,infantry.health,False,infantry.prize,1060],[-100,190,0,infantry,infantry.health,False,infantry.prize,1120],[-100,190,0,lightTank,lightTank.health,False,lightTank.prize,1200],
+           #[-100,190,0,lightTank,lightTank.health,False,lightTank.prize,1320],[-100,190,0,lightTank,lightTank.health,False,lightTank.prize,1440],[-100,190,0,lightTank,lightTank.health,False,lightTank.prize,1560],
+           #[-100,190,0,lightTank,lightTank.health,False,lightTank.prize,1680]] #1st wave
     
-    enemy2=[[-100,190,0,lightTank,lightTank.health,False,lightTank.prize,0],[-100,190,0,lightTank,lightTank.health,False,lightTank.prize,120],[-100,190,0,lightTank,lightTank.health,False,lightTank.prize,240],
-            [-100,190,0,lightTank,lightTank.health,False,lightTank.prize,360],[-100,190,0,lightTank,lightTank.health,False,lightTank.prize,480],[-100,190,0,transport,transport.health,False,transport.prize,560],
-            [-100,190,0,transport,transport.health,False,transport.prize,640],[-100,190,0,transport,transport.health,False,transport.prize,720],[-100,190,0,transport,transport.health,False,transport.prize,800],
-            [-100,190,0,motorcycle,motorcycle.health,False,motorcycle.prize,850],[-100,190,0,motorcycle,motorcycle.health,False,motorcycle.prize,910],[-100,190,0,motorcycle,motorcycle.health,False,motorcycle.prize,970],
-            [-100,190,0,infantry,infantry.health,False,infantry.prize,1010],[-100,190,0,infantry,infantry.health,False,infantry.prize,1070],[-100,190,0,infantry,infantry.health,False,infantry.prize,1130],[-100,190,0,infantry,infantry.health,False,infantry.prize,1190],
-            [-100,190,0,infantry,infantry.health,False,infantry.prize,1250],[-100,190,0,infantry,infantry.health,False,infantry.prize,1310],[-100,190,0,infantry,infantry.health,False,infantry.prize,1370],[-100,190,0,infantry,infantry.health,False,infantry.prize,1430],
-            [-100,190,0,heavyTank,heavyTank.health,False,heavyTank.prize,1510],[-100,190,0,heavyTank,heavyTank.health,False,heavyTank.prize,1630],[-100,190,0,heavyTank,heavyTank.health,False,heavyTank.prize,1750],
-            [-100,190,0,heavyTank,heavyTank.health,False,heavyTank.prize,1870],[-100,190,0,heavyTank,heavyTank.health,False,heavyTank.prize,1990]]#2nd wave
+    enemy2=[[-100,190,0,lightTank,lightTank.health,False,lightTank.prize,0],[-100,190,0,lightTank,lightTank.health,False,lightTank.prize,120],[-100,190,0,lightTank,lightTank.health,False,lightTank.prize,240]]
+            #[-100,190,0,lightTank,lightTank.health,False,lightTank.prize,360],[-100,190,0,lightTank,lightTank.health,False,lightTank.prize,480],[-100,190,0,transport,transport.health,False,transport.prize,560],
+            #[-100,190,0,transport,transport.health,False,transport.prize,640],[-100,190,0,transport,transport.health,False,transport.prize,720],[-100,190,0,transport,transport.health,False,transport.prize,800],
+            #[-100,190,0,motorcycle,motorcycle.health,False,motorcycle.prize,850],[-100,190,0,motorcycle,motorcycle.health,False,motorcycle.prize,910],[-100,190,0,motorcycle,motorcycle.health,False,motorcycle.prize,970],
+            #[-100,190,0,infantry,infantry.health,False,infantry.prize,1010],[-100,190,0,infantry,infantry.health,False,infantry.prize,1070],[-100,190,0,infantry,infantry.health,False,infantry.prize,1130],[-100,190,0,infantry,infantry.health,False,infantry.prize,1190],
+            #[-100,190,0,infantry,infantry.health,False,infantry.prize,1250],[-100,190,0,infantry,infantry.health,False,infantry.prize,1310],[-100,190,0,infantry,infantry.health,False,infantry.prize,1370],[-100,190,0,infantry,infantry.health,False,infantry.prize,1430],
+            #[-100,190,0,lightTank,lightTank.health,False,lightTank.prize,1510],[-100,190,0,lightTank,lightTank.health,False,lightTank.prize,1630],[-100,190,0,lightTank,lightTank.health,False,lightTank.prize,1750],
+            #[-100,190,0,lightTank,lightTank.health,False,lightTank.prize,1870],[-100,190,0,lightTank,lightTank.health,False,lightTank.prize,1990]]#2nd wave
     
     click=False
     wave="first"
@@ -803,7 +803,6 @@ def lev1():
             prep(screen,towerPos1)
         if ready2==False and pause==False and wave=="second":
             prep(screen,towerPos1)
-            
 
         if ready==True and gameOver==False and pause==False: #if the first ready variable is true, it will call the functions for the first enemy list
             genEnemies(enemy) #generating enemies
@@ -914,8 +913,23 @@ def lev2():
                [Rect(425,300,50,50),False,(425,300),False,6,None,Rect(334,209,212,212)],[Rect(560,300,50,50),False,(560,300),False,7,None,Rect(469,209,212,212)],
                [Rect(750,275,50,50),False,(750,275),False,8,None,Rect(659,184,212,212)],[Rect(825,375,50,50),False,(825,375),False,9,None,Rect(734,284,212,212)]]
 
-    enemy=[[-100,510,0,motorcycle,motorcycle.health,False,motorcycle.prize,30]] #1st wave
-    enemy2=[[-100,510,0,motorcycle,motorcycle.health,False,motorcycle.prize,30]]#2nd wave
+    enemy=[[-100,510,0,infantry,infantry.health,False,infantry.prize,30],[-100,510,0,infantry,infantry.health,False,infantry.prize,80],[-100,510,0,infantry,infantry.health,False,infantry.prize,130]]
+           #[-100,510,0,infantry,infantry.health,False,infantry.prize,180],[-100,510,0,infantry,infantry.health,False,infantry.prize,230],[-100,510,0,infantry,infantry.health,False,infantry.prize,280],
+           #[-100,510,0,infantry,infantry.health,False,infantry.prize,330],[-100,510,0,infantry,infantry.health,False,infantry.prize,380],[-100,510,0,infantry,infantry.health,False,infantry.prize,430],
+           #[-100,510,0,infantry,infantry.health,False,infantry.prize,480],[-100,510,0,infantry,infantry.health,False,infantry.prize,530],[-100,510,0,infantry,infantry.health,False,infantry.prize,580],
+           #[-100,510,0,transport,transport.health,False,transport.prize,650],[-100,510,0,transport,transport.health,False,transport.prize,750],[-100,510,0,transport,transport.health,False,transport.prize,850],
+           #[-100,510,0,transport,transport.health,False,transport.prize,950],[-100,510,0,transport,transport.health,False,transport.prize,1050],[-100,510,0,transport,transport.health,False,transport.prize,1150],
+           #[-100,510,0,lightTank,lightTank.health,False,lightTank.prize,1200],[-100,510,0,lightTank,lightTank.health,False,lightTank.prize,1320],[-100,510,0,lightTank,lightTank.health,False,lightTank.prize,1440],
+           #[-100,510,0,lightTank,lightTank.health,False,lightTank.prize,1560],[-100,510,0,lightTank,lightTank.health,False,lightTank.prize,1680],[-100,510,0,lightTank,lightTank.health,False,lightTank.prize,1800]]#1st wave
+    
+    enemy2=[[-100,510,0,motorcycle,motorcycle.health,False,motorcycle.prize,30],[-100,510,0,motorcycle,motorcycle.health,False,motorcycle.prize,80],[-100,510,0,motorcycle,motorcycle.health,False,motorcycle.prize,130]]
+            #[-100,510,0,motorcycle,motorcycle.health,False,motorcycle.prize,180],[-100,510,0,motorcycle,motorcycle.health,False,motorcycle.prize,230],[-100,510,0,heavyTank,heavyTank.health,False,heavyTank.prize,280],
+            #[-100,510,0,heavyTank,heavyTank.health,False,heavyTank.prize,400],[-100,510,0,heavyTank,heavyTank.health,False,heavyTank.prize,520],[-100,510,0,heavyTank,heavyTank.health,False,heavyTank.prize,640],
+            #[-100,510,0,lightTank,lightTank.health,False,lightTank.prize,760],[-100,510,0,lightTank,lightTank.health,False,lightTank.prize,880],[-100,510,0,lightTank,lightTank.health,False,lightTank.prize,1000],
+            #[-100,510,0,lightTank,lightTank.health,False,lightTank.prize,1120],[-100,510,0,lightTank,lightTank.health,False,lightTank.prize,1240],[-100,510,0,heavyTank,heavyTank.health,False,heavyTank.prize,1360],
+            #[-100,510,0,heavyTank,heavyTank.health,False,heavyTank.prize,1480],[-100,510,0,infantry,infantry.health,False,infantry.prize,1530],[-100,510,0,infantry,infantry.health,False,infantry.prize,1580],
+            #[-100,510,0,infantry,infantry.health,False,infantry.prize,1630],[-100,510,0,infantry,infantry.health,False,infantry.prize,1680],[-100,510,0,infantry,infantry.health,False,infantry.prize,1730],
+            #[-100,510,0,infantry,infantry.health,False,infantry.prize,1780],[-100,510,0,infantry,infantry.health,False,infantry.prize,30],[-100,510,0,infantry,infantry.health,False,infantry.prize,1830]]#2nd wave
     
     wave="first"
     click=False
@@ -927,6 +941,10 @@ def lev2():
         baseHealth(enemy,enemy2)
         screen.blit(quitPic,(260,25))
         draw.rect(screen,BLACK,quitRect,2)
+
+        mx,my=mouse.get_pos()
+        mb=mouse.get_pressed()
+        
         for evt in event.get():
             if evt.type==QUIT:
                 running=False
@@ -936,8 +954,6 @@ def lev2():
                 music(True)
             if evt.type==MOUSEBUTTONUP:
                 click=False
-        mx,my=mouse.get_pos()
-        mb=mouse.get_pressed()
         music(None)
 
         for a in activeDefenses:
@@ -977,7 +993,6 @@ def lev2():
             prep(screen,towerPos2)
         if ready2==False and pause==False and wave=="second":
             prep(screen,towerPos2)
-            
 
         if ready==True and gameOver==False and pause==False: #if the first ready variable is true, it will call the functions for the first enemy list
             genEnemies(enemy) #generating enemies
@@ -1030,8 +1045,7 @@ def lev2():
         for i in enemy: 
             if i[5]==True: #for each "dead" or enemy that passed through the base, the count will go up
                 count+=1
-            if count==len(enemy): #if the counter is the same as the length of the enemy list, it means all the enemies have either died
-            #or passed over the base, signalling the end of the wave
+            if count==len(enemy): #if the counter is the same as the length of the enemy list, it means all the enemies have either died or passed over the base, signalling the end of the wave
                 wave="second"  #changes the wave variable to the second wave
                 ready=False #makes the first ready variable false
 
@@ -1089,8 +1103,22 @@ def lev3():
                [Rect(630,305,50,50),False,(630,305),False,8,None,Rect(539,214,212,212)],[Rect(700,136,50,50),False,(700,136),False,9,None,Rect(609,45,212,212)],
                [Rect(755,305,50,50),False,(630,305),False,8,None,Rect(664,214,212,212)]]
 
-    enemy=[[-100,480,0,motorcycle,motorcycle.health,False,motorcycle.prize,30]]
-    enemy2=[[-100,480,0,motorcycle,motorcycle.health,False,motorcycle.prize,30]] #2nd wave
+    enemy=[[-100,480,0,lightTank,lightTank.health,False,lightTank.prize,30],[-100,480,0,lightTank,lightTank.health,False,lightTank.prize,130],[-100,480,0,lightTank,lightTank.health,False,lightTank.prize,230]]
+           #[-100,480,0,lightTank,lightTank.health,False,lightTank.prize,330],[-100,480,0,infantry,infantry.health,False,infantry.prize,370],[-100,480,0,infantry,infantry.health,False,infantry.prize,410],
+           #[-100,480,0,infantry,infantry.health,False,infantry.prize,450],[-100,480,0,infantry,infantry.health,False,infantry.prize,490],[-100,480,0,heavyTank,heavyTank.health,False,heavyTank.prize,560],
+           ##[-100,480,0,heavyTank,heavyTank.health,False,heavyTank.prize,660],[-100,480,0,heavyTank,heavyTank.health,False,heavyTank.prize,760],[-100,480,0,heavyTank,heavyTank.health,False,heavyTank.prize,860],
+           #[-100,480,0,heavyTank,heavyTank.health,False,heavyTank.prize,960],[-100,480,0,transport,transport.health,False,transport.prize,1020],[-100,480,0,transport,transport.health,False,transport.prize,1100],
+           #[-100,480,0,transport,transport.health,False,transport.prize,1180],[-100,480,0,transport,transport.health,False,transport.prize,1260],[-100,480,0,transport,transport.health,False,transport.prize,1340],
+           #[-100,480,0,tankDestroyer,tankDestroyer.health,False,tankDestroyer.prize,1420],[-100,480,0,tankDestroyer,tankDestroyer.health,False,tankDestroyer.prize,1520],[-100,480,0,tankDestroyer,tankDestroyer.health,False,tankDestroyer.prize,1620]]
+    
+    enemy2=[[-100,480,0,motorcycle,motorcycle.health,False,motorcycle.prize,30],[-100,480,0,motorcycle,motorcycle.health,False,motorcycle.prize,60],[-100,480,0,motorcycle,motorcycle.health,False,motorcycle.prize,90]]
+            #[-100,480,0,motorcycle,motorcycle.health,False,motorcycle.prize,120],[-100,480,0,motorcycle,motorcycle.health,False,motorcycle.prize,150],[-100,480,0,lightTank,lightTank.health,False,lightTank.prize,200],
+            #[-100,480,0,lightTank,lightTank.health,False,lightTank.prize,300],[-100,480,0,lightTank,lightTank.health,False,lightTank.prize,400],[-100,480,0,infantry,infantry.health,False,infantry.prize,430],
+            #[-100,480,0,infantry,infantry.health,False,infantry.prize,470],[-100,480,0,infantry,infantry.health,False,infantry.prize,510],[-100,480,0,infantry,infantry.health,False,infantry.prize,550],[-100,480,0,infantry,infantry.health,False,infantry.prize,590],
+            #[-100,480,0,infantry,infantry.health,False,infantry.prize,630],[-100,480,0,tankDestroyer,tankDestroyer.health,False,tankDestroyer.prize,670],[-100,480,0,tankDestroyer,tankDestroyer.health,False,tankDestroyer.prize,770],
+            #[-100,480,0,tankDestroyer,tankDestroyer.health,False,tankDestroyer.prize,870],[-100,480,0,tankDestroyer,tankDestroyer.health,False,tankDestroyer.prize,970],[-100,480,0,tankDestroyer,tankDestroyer.health,False,tankDestroyer.prize,1070],
+            #[-100,480,0,heavyTank,heavyTank.health,False,heavyTank.prize,1170],[-100,480,0,heavyTank,heavyTank.health,False,heavyTank.prize,1270],[-100,480,0,heavyTank,heavyTank.health,False,heavyTank.prize,1370],[-100,480,0,heavyTank,heavyTank.health,False,heavyTank.prize,1470],
+            #[-100,480,0,heavyTank,heavyTank.health,False,heavyTank.prize,1570],[-100,480,0,heavyTank,heavyTank.health,False,heavyTank.prize,1670]] #2nd wave
     
     wave="first"
     click=False
@@ -1264,8 +1292,25 @@ def lev4():
                [Rect(689,429,50,50),False,(689,429),False,6,None,Rect(598,338,212,212)],[Rect(495,260,50,50),False,(495,260),False,7,None,Rect(404,169,212,212)],
                [Rect(686,240,50,50),False,(686,240),False,8,None,Rect(595,149,212,212)],[Rect(820,409,50,50),False,(820,409),False,9,None,Rect(781,318,212,212)]]
 
-    enemy=[[-100,280,0,motorcycle,motorcycle.health,False,motorcycle.prize,30]]#1st wave
-    enemy2=[[-100,280,0,motorcycle,motorcycle.health,False,motorcycle.prize,30]] #2nd wave
+    enemy=[[-100,280,0,transport,transport.health,False,transport.prize,30],[-100,280,0,transport,transport.health,False,transport.prize,30],[-100,280,0,transport,transport.health,False,transport.prize,30],
+           [-100,280,0,transport,transport.health,False,transport.prize,30],[-100,280,0,transport,transport.health,False,transport.prize,30],[-100,280,0,infantry,infantry.health,False,infantry.prize,30],
+           [-100,280,0,infantry,infantry.health,False,infantry.prize,30],[-100,280,0,infantry,infantry.health,False,infantry.prize,30],[-100,280,0,infantry,infantry.health,False,infantry.prize,30],
+           [-100,280,0,infantry,infantry.health,False,infantry.prize,30],[-100,280,0,infantry,infantry.health,False,infantry.prize,30],[-100,280,0,infantry,infantry.health,False,infantry.prize,30],
+            [-100,280,0,heavyTank,heavyTank.health,False,heavyTank.prize,30],[-100,280,0,heavyTank,heavyTank.health,False,heavyTank.prize,30],[-100,280,0,heavyTank,heavyTank.health,False,heavyTank.prize,30],
+           [-100,280,0,heavyTank,heavyTank.health,False,heavyTank.prize,30],[-100,280,0,heavyTank,heavyTank.health,False,heavyTank.prize,30],[-100,280,0,heavyTank,heavyTank.health,False,heavyTank.prize,30],
+           [-100,280,0,tankDestroyer,tankDestroyer.health,False,tankDestroyer.prize,30],[-100,280,0,tankDestroyer,tankDestroyer.health,False,tankDestroyer.prize,30],[-100,280,0,tankDestroyer,tankDestroyer.health,False,tankDestroyer.prize,30],
+           [-100,280,0,tankDestroyer,tankDestroyer.health,False,tankDestroyer.prize,30],[-100,280,0,tankDestroyer,tankDestroyer.health,False,tankDestroyer.prize,30],[-100,280,0,heavyTank,heavyTank.health,False,heavyTank.prize,30],
+           [-100,280,0,heavyTank,heavyTank.health,False,heavyTank.prize,30],[-100,280,0,heavyTank,heavyTank.health,False,heavyTank.prize,30]]#1st wave
+    
+    enemy2=[[-100,280,0,motorcycle,motorcycle.health,False,motorcycle.prize,30],[-100,280,0,motorcycle,motorcycle.health,False,motorcycle.prize,30],[-100,280,0,motorcycle,motorcycle.health,False,motorcycle.prize,30],
+            [-100,280,0,motorcycle,motorcycle.health,False,motorcycle.prize,30],[-100,280,0,motorcycle,motorcycle.health,False,motorcycle.prize,30],[-100,280,0,lightTank,lightTank.health,False,lightTank.prize,30],
+            [-100,280,0,lightTank,lightTank.health,False,lightTank.prize,30],[-100,280,0,lightTank,lightTank.health,False,lightTank.prize,30],[-100,280,0,lightTank,lightTank.health,False,lightTank.prize,30],
+            [-100,280,0,lightTank,lightTank.health,False,lightTank.prize,30],[-100,280,0,lightTank,lightTank.health,False,lightTank.prize,30],[-100,280,0,heavyTank,heavyTank.health,False,heavyTank.prize,30],
+            [-100,280,0,heavyTank,heavyTank.health,False,heavyTank.prize,30],[-100,280,0,heavyTank,heavyTank.health,False,heavyTank.prize,30],[-100,280,0,transport,transport.health,False,transport.prize,30],
+            [-100,280,0,transport,transport.health,False,transport.prize,30],[-100,280,0,transport,transport.health,False,transport.prize,30],[-100,280,0,transport,transport.health,False,transport.prize,30],
+            [-100,280,0,tankDestroyer,tankDestroyer.health,False,tankDestroyer.prize,30],[-100,280,0,tankDestroyer,tankDestroyer.health,False,tankDestroyer.prize,30],[-100,280,0,tankDestroyer,tankDestroyer.health,False,tankDestroyer.prize,30],
+            [-100,280,0,tankDestroyer,tankDestroyer.health,False,tankDestroyer.prize,30],[-100,280,0,infantry,infantry.health,False,infantry.prize,30],[-100,280,0,infantry,infantry.health,False,infantry.prize,30],
+            [-100,280,0,infantry,infantry.health,False,infantry.prize,30],[-100,280,0,infantry,infantry.health,False,infantry.prize,30],[-100,280,0,infantry,infantry.health,False,infantry.prize,30]] #2nd wave
     
     wave="first"
     while running:
@@ -1437,8 +1482,32 @@ def lev5():
                [Rect(525,262,50,50),False,(525,262),False,6,None,Rect(434,171,212,212)],[Rect(525,409,50,50),False,(525,409),False,7,None,Rect(434,418,212,212)],
                [Rect(645,409,50,50),False,(645,409),False,8,None,Rect(554,418,212,212)],[Rect(459,589,50,50),False,(459,589),False,9,None,Rect(368,498,212,212)],
                [Rect(815,409,50,50),False,(815,409),False,10,None,Rect(724,418,212,212)]]
-    enemy=[[130,-100,0,motorcycle,motorcycle.health,False,motorcycle.prize,30]]
-    enemy2=[[130,-100,0,motorcycle,motorcycle.health,False,motorcycle.prize,30]]
+    
+    enemy=[[130,-100,0,lightTank,lightTank.health,False,lightTank.prize,30],[130,-100,0,lightTank,lightTank.health,False,lightTank.prize,30],[130,-100,0,lightTank,lightTank.health,False,lightTank.prize,30],
+           [130,-100,0,lightTank,lightTank.health,False,lightTank.prize,30],[130,-100,0,lightTank,lightTank.health,False,lightTank.prize,30],[130,-100,0,transport,transport.health,False,transport.prize,30],
+           [130,-100,0,transport,transport.health,False,transport.prize,30],[130,-100,0,transport,transport.health,False,transport.prize,30],[130,-100,0,transport,transport.health,False,transport.prize,30],
+           [130,-100,0,transport,transport.health,False,transport.prize,30],[130,-100,0,transport,transport.health,False,transport.prize,30],[130,-100,0,heavyTank,heavyTank.health,False,heavyTank.prize,30],
+           [130,-100,0,heavyTank,heavyTank.health,False,heavyTank.prize,30],[130,-100,0,heavyTank,heavyTank.health,False,heavyTank.prize,30],[130,-100,0,heavyTank,heavyTank.health,False,heavyTank.prize,30],
+           [130,-100,0,heavyTank,heavyTank.health,False,heavyTank.prize,30],[130,-100,0,heavyTank,heavyTank.health,False,heavyTank.prize,30],[130,-100,0,tankDestroyer,tankDestroyer.health,False,tankDestroyer.prize,30],
+           [130,-100,0,tankDestroyer,tankDestroyer.health,False,tankDestroyer.prize,30],[130,-100,0,tankDestroyer,tankDestroyer.health,False,tankDestroyer.prize,30],[130,-100,0,tankDestroyer,tankDestroyer.health,False,tankDestroyer.prize,30],
+           [130,-100,0,tankDestroyer,tankDestroyer.health,False,tankDestroyer.prize,30],[130,-100,0,tankDestroyer,tankDestroyer.health,False,tankDestroyer.prize,30],[130,-100,0,tankDestroyer,tankDestroyer.health,False,tankDestroyer.prize,30],
+           [130,-100,0,heavyTank,heavyTank.health,False,heavyTank.prize,30],[130,-100,0,heavyTank,heavyTank.health,False,heavyTank.prize,30],[130,-100,0,heavyTank,heavyTank.health,False,heavyTank.prize,30],
+           [130,-100,0,infantry,infantry.health,False,infantry.prize,30],[130,-100,0,infantry,infantry.health,False,infantry.prize,30],[130,-100,0,infantry,infantry.health,False,infantry.prize,30],[130,-100,0,infantry,infantry.health,False,infantry.prize,30],
+           [130,-100,0,infantry,infantry.health,False,infantry.prize,30],[130,-100,0,infantry,infantry.health,False,infantry.prize,30],[130,-100,0,infantry,infantry.health,False,infantry.prize,30],[130,-100,0,infantry,infantry.health,False,infantry.prize,30],
+           [130,-100,0,infantry,infantry.health,False,infantry.prize,30],[130,-100,0,infantry,infantry.health,False,infantry.prize,30]]
+    
+    enemy2=[[130,-100,0,motorcycle,motorcycle.health,False,motorcycle.prize,30],[130,-100,0,motorcycle,motorcycle.health,False,motorcycle.prize,30],[130,-100,0,motorcycle,motorcycle.health,False,motorcycle.prize,30],
+            [130,-100,0,motorcycle,motorcycle.health,False,motorcycle.prize,30],[130,-100,0,motorcycle,motorcycle.health,False,motorcycle.prize,30],[130,-100,0,heavyTank,heavyTank.health,False,heavyTank.prize,30],
+            [130,-100,0,heavyTank,heavyTank.health,False,heavyTank.prize,30],[130,-100,0,heavyTank,heavyTank.health,False,heavyTank.prize,30],[130,-100,0,heavyTank,heavyTank.health,False,heavyTank.prize,30],
+            [130,-100,0,heavyTank,heavyTank.health,False,heavyTank.prize,30],[130,-100,0,tankDestroyer,tankDestroyer.health,False,tankDestroyer.prize,30],[130,-100,0,tankDestroyer,tankDestroyer.health,False,tankDestroyer.prize,30],
+            [130,-100,0,tankDestroyer,tankDestroyer.health,False,tankDestroyer.prize,30],[130,-100,0,tankDestroyer,tankDestroyer.health,False,tankDestroyer.prize,30],[130,-100,0,lightTank,lightTank.health,False,lightTank.prize,30],
+            [130,-100,0,lightTank,lightTank.health,False,lightTank.prize,30],[130,-100,0,lightTank,lightTank.health,False,lightTank.prize,30],[130,-100,0,lightTank,lightTank.health,False,lightTank.prize,30],[130,-100,0,transport,transport.health,False,transport.prize,30],
+            [130,-100,0,transport,transport.health,False,transport.prize,30],[130,-100,0,transport,transport.health,False,transport.prize,30],[130,-100,0,transport,transport.health,False,transport.prize,30],
+            [130,-100,0,transport,transport.health,False,transport.prize,30],[130,-100,0,transport,transport.health,False,transport.prize,30],[130,-100,0,heavyTank,heavyTank.health,False,heavyTank.prize,30],
+            [130,-100,0,heavyTank,heavyTank.health,False,heavyTank.prize,30],[130,-100,0,heavyTank,heavyTank.health,False,heavyTank.prize,30],[130,-100,0,heavyTank,heavyTank.health,False,heavyTank.prize,30],
+            [130,-100,0,heavyTank,heavyTank.health,False,heavyTank.prize,30],[130,-100,0,infantry,infantry.health,False,infantry.prize,30],[130,-100,0,infantry,infantry.health,False,infantry.prize,30],
+            [130,-100,0,infantry,infantry.health,False,infantry.prize,30],[130,-100,0,infantry,infantry.health,False,infantry.prize,30],[130,-100,0,infantry,infantry.health,False,infantry.prize,30],
+            [130,-100,0,infantry,infantry.health,False,infantry.prize,30],[130,-100,0,tankDestroyer,tankDestroyer.health,False,tankDestroyer.prize,30],[130,-100,0,tankDestroyer,tankDestroyer.health,False,tankDestroyer.prize,30]]
 
     wave="first"
     
