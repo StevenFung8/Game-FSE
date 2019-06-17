@@ -953,6 +953,7 @@ def lev2(): #each level has the same fucntions used, the only thing different is
         moneyScore(screen)
         screen.blit(quitPic,(260,25))
         draw.rect(screen,BLACK,quitRect,2)
+        baseHealth(enemy,enemy2)
 
         mx,my=mouse.get_pos()
         mb=mouse.get_pressed()
@@ -1012,14 +1013,12 @@ def lev2(): #each level has the same fucntions used, the only thing different is
         if ready==True and gameOver==False and pause==False: #if the first ready variable is true, it will call the functions for the first enemy list
             genEnemies(enemy) #generating enemies
             moveEnemy2(screen,enemy) #move
-            baseHealth(enemy) #base health
             healthBars(enemy)  #health bars
             damageEnemies(enemy,activeDefenses,towerPos2) #damage
 
         if ready2==True and gameOver==False and pause==False: #if the 2nd ready variable becomes true, it will call the game functions for the second enemy list
             genEnemies(enemy2)
             moveEnemy2(screen,enemy2)
-            baseHealth(enemy2)
             healthBars(enemy2)
             damageEnemies(enemy2,activeDefenses,towerPos2)    
 
@@ -1148,6 +1147,7 @@ def lev3(): #refer to lev1() for comments
         moneyScore(screen)
         screen.blit(quitPic,(260,25))
         draw.rect(screen,BLACK,quitRect,2)
+        baseHealth(enemy,enemy2)
 
         mx,my=mouse.get_pos()
         mb=mouse.get_pressed()
@@ -1205,14 +1205,12 @@ def lev3(): #refer to lev1() for comments
         if ready==True and gameOver==False and pause==False: #if the first ready variable is true, it will call the functions for the first enemy list
             genEnemies(enemy) #generating enemies
             moveEnemy3(screen,enemy) #move
-            baseHealth(enemy) #base health
             healthBars(enemy)  #health bars
             damageEnemies(enemy,activeDefenses,towerPos3) #damage
 
         if ready2==True and gameOver==False and pause==False: #if the 2nd ready variable becomes true, it will call the game functions for the second enemy list
             genEnemies(enemy2)
             moveEnemy3(screen,enemy2)
-            baseHealth(enemy2)
             healthBars(enemy2)
             damageEnemies(enemy2,activeDefenses,towerPos3)    
 
@@ -1344,6 +1342,7 @@ def lev4(): #refer to lev1() for comments
         moneyScore(screen)
         screen.blit(quitPic,(260,25))
         draw.rect(screen,BLACK,quitRect,2)
+        baseHealth(enemy,enemy2)
         mx,my=mouse.get_pos()
         mb=mouse.get_pressed()
         
@@ -1400,14 +1399,12 @@ def lev4(): #refer to lev1() for comments
         if ready==True and gameOver==False and pause==False: #if the first ready variable is true, it will call the functions for the first enemy list
             genEnemies(enemy) #generating enemies
             moveEnemy4(screen,enemy) #move
-            baseHealth(enemy) #base health
             healthBars(enemy)  #health bars
             damageEnemies(enemy,activeDefenses,towerPos4) #damage
 
         if ready2==True and gameOver==False and pause==False: #if the 2nd ready variable becomes true, it will call the game functions for the second enemy list
             genEnemies(enemy2)
             moveEnemy4(screen,enemy2)
-            baseHealth(enemy2)
             healthBars(enemy2)
             damageEnemies(enemy2,activeDefenses,towerPos4)    
 
@@ -1543,6 +1540,7 @@ def lev5(): #refer to lev1() for comments
         moneyScore(screen)
         screen.blit(quitPic,(260,25))
         draw.rect(screen,BLACK,quitRect,2)
+        baseHealth(enemy,enemy2)
         mx,my=mouse.get_pos()
         mb=mouse.get_pressed()
         for evt in event.get():
@@ -1593,19 +1591,16 @@ def lev5(): #refer to lev1() for comments
             prep(screen,towerPos5)
         if ready2==False and pause==False and wave=="second":
             prep(screen,towerPos5)
-            
 
         if ready==True and gameOver==False and pause==False: #if the first ready variable is true, it will call the functions for the first enemy list
             genEnemies(enemy) #generating enemies
             moveEnemy5(screen,enemy) #move
-            baseHealth(enemy) #base health
             healthBars(enemy)  #health bars
             damageEnemies(enemy,activeDefenses,towerPos5) #damage
 
         if ready2==True and gameOver==False and pause==False: #if the 2nd ready variable becomes true, it will call the game functions for the second enemy list
             genEnemies(enemy2)
             moveEnemy5(screen,enemy2)
-            baseHealth(enemy2)
             healthBars(enemy2)
             damageEnemies(enemy2,activeDefenses,towerPos5)    
 
