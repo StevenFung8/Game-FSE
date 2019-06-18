@@ -1490,7 +1490,7 @@ def lev4(): #refer to lev1() for comments
 def lev5(): #refer to lev1() for comments
     global defC,ready,ready2,activeDefenses,money,score,click,gameOver,wave
 
-    money=10000
+    money=5000
     running=True
     pause=False
     myclock=time.Clock()
@@ -1505,30 +1505,37 @@ def lev5(): #refer to lev1() for comments
                [Rect(645,409,50,50),False,(645,409),False,8,None,Rect(554,418,212,212)],[Rect(459,589,50,50),False,(459,589),False,9,None,Rect(368,498,212,212)],
                [Rect(815,409,50,50),False,(815,409),False,10,None,Rect(724,418,212,212)]]
     
-    enemy=[[130,-100,0,lightTank,lightTank.health,False,lightTank.prize,30],[130,-100,0,lightTank,lightTank.health,False,lightTank.prize,120],[130,-100,0,lightTank,lightTank.health,False,lightTank.prize,210],
-           [130,-100,0,lightTank,lightTank.health,False,lightTank.prize,300],[130,-100,0,lightTank,lightTank.health,False,lightTank.prize,390],
-           [130,-100,0,transport,transport.health,False,transport.prize,500],[130,-100,0,transport,transport.health,False,transport.prize,560],[130,-100,0,transport,transport.health,False,transport.prize,620],
-           [130,-100,0,heavyTank,heavyTank.health,False,heavyTank.prize,750],[130,-100,0,heavyTank,heavyTank.health,False,heavyTank.prize,900],[130,-100,0,heavyTank,heavyTank.health,False,heavyTank.prize,1000],
-           [130,-100,0,heavyTank,heavyTank.health,False,heavyTank.prize,1100],[130,-100,0,heavyTank,heavyTank.health,False,heavyTank.prize,1200],[130,-100,0,heavyTank,heavyTank.health,False,heavyTank.prize,1300],[130,-100,0,tankDestroyer,tankDestroyer.health,False,tankDestroyer.prize,1400],
-           [130,-100,0,tankDestroyer,tankDestroyer.health,False,tankDestroyer.prize,1500],[130,-100,0,tankDestroyer,tankDestroyer.health,False,tankDestroyer.prize,1600],[130,-100,0,tankDestroyer,tankDestroyer.health,False,tankDestroyer.prize,1700],
-           [130,-100,0,tankDestroyer,tankDestroyer.health,False,tankDestroyer.prize,1800],[130,-100,0,tankDestroyer,tankDestroyer.health,False,tankDestroyer.prize,1900],
-           [130,-100,0,heavyTank,heavyTank.health,False,heavyTank.prize,1990],[130,-100,0,heavyTank,heavyTank.health,False,heavyTank.prize,2080],[130,-100,0,heavyTank,heavyTank.health,False,heavyTank.prize,2170],
-           [130,-100,0,infantry,infantry.health,False,infantry.prize,2200],[130,-100,0,infantry,infantry.health,False,infantry.prize,2230],[130,-100,0,infantry,infantry.health,False,infantry.prize,2260],[130,-100,0,infantry,infantry.health,False,infantry.prize,2290],
-           [130,-100,0,infantry,infantry.health,False,infantry.prize,2320]]
+    enemy=[[130,-100,0,lightTank,lightTank.health,False,lightTank.prize,10],[130,-100,0,lightTank,lightTank.health,False,lightTank.prize,20],[130,-100,0,lightTank,lightTank.health,False,lightTank.prize,30],
+           [130,-100,0,lightTank,lightTank.health,False,lightTank.prize,40],[130,-100,0,lightTank,lightTank.health,False,lightTank.prize,50],
+           [130,-100,0,transport,transport.health,False,transport.prize,60],[130,-100,0,transport,transport.health,False,transport.prize,70],[130,-100,0,transport,transport.health,False,transport.prize,80],
+           [130,-100,0,heavyTank,heavyTank.health,False,heavyTank.prize,90],[130,-100,0,heavyTank,heavyTank.health,False,heavyTank.prize,100],[130,-100,0,heavyTank,heavyTank.health,False,heavyTank.prize,150],
+           [130,-100,0,heavyTank,heavyTank.health,False,heavyTank.prize,160],[130,-100,0,heavyTank,heavyTank.health,False,heavyTank.prize,170],[130,-100,0,heavyTank,heavyTank.health,False,heavyTank.prize,180],[130,-100,0,tankDestroyer,tankDestroyer.health,False,tankDestroyer.prize,180],
+           [130,-100,0,tankDestroyer,tankDestroyer.health,False,tankDestroyer.prize,190],[130,-100,0,tankDestroyer,tankDestroyer.health,False,tankDestroyer.prize,200],[130,-100,0,tankDestroyer,tankDestroyer.health,False,tankDestroyer.prize,250],
+           [130,-100,0,tankDestroyer,tankDestroyer.health,False,tankDestroyer.prize,260],[130,-100,0,tankDestroyer,tankDestroyer.health,False,tankDestroyer.prize,270],
+           [130,-100,0,heavyTank,heavyTank.health,False,heavyTank.prize,280],[130,-100,0,heavyTank,heavyTank.health,False,heavyTank.prize,290],[130,-100,0,heavyTank,heavyTank.health,False,heavyTank.prize,300],
+           [130,-100,0,infantry,infantry.health,False,infantry.prize,350],[130,-100,0,infantry,infantry.health,False,infantry.prize,360],[130,-100,0,infantry,infantry.health,False,infantry.prize,370],[130,-100,0,infantry,infantry.health,False,infantry.prize,380],
+           [130,-100,0,infantry,infantry.health,False,infantry.prize,390]]
            
     
-    enemy2=[[130,-100,0,motorcycle,motorcycle.health,False,motorcycle.prize,30],[130,-100,0,motorcycle,motorcycle.health,False,motorcycle.prize,60],[130,-100,0,motorcycle,motorcycle.health,False,motorcycle.prize,90],
-            [130,-100,0,motorcycle,motorcycle.health,False,motorcycle.prize,120],[130,-100,0,motorcycle,motorcycle.health,False,motorcycle.prize,150],[130,-100,0,heavyTank,heavyTank.health,False,heavyTank.prize,200],
-            [130,-100,0,heavyTank,heavyTank.health,False,heavyTank.prize,300],[130,-100,0,heavyTank,heavyTank.health,False,heavyTank.prize,400],[130,-100,0,heavyTank,heavyTank.health,False,heavyTank.prize,500],
-            [130,-100,0,tankDestroyer,tankDestroyer.health,False,tankDestroyer.prize,600],[130,-100,0,tankDestroyer,tankDestroyer.health,False,tankDestroyer.prize,700],[130,-100,0,lightTank,lightTank.health,False,lightTank.prize,800],
-            [130,-100,0,lightTank,lightTank.health,False,lightTank.prize,880],[130,-100,0,lightTank,lightTank.health,False,lightTank.prize,960],[130,-100,0,lightTank,lightTank.health,False,lightTank.prize,1040],[130,-100,0,transport,transport.health,False,transport.prize,1090],
-            [130,-100,0,transport,transport.health,False,transport.prize,1150],[130,-100,0,transport,transport.health,False,transport.prize,1210],[130,-100,0,transport,transport.health,False,transport.prize,1270],
-            [130,-100,0,transport,transport.health,False,transport.prize,1330],[130,-100,0,transport,transport.health,False,transport.prize,1400],[130,-100,0,heavyTank,heavyTank.health,False,heavyTank.prize,1480],
-            [130,-100,0,heavyTank,heavyTank.health,False,heavyTank.prize,1560],[130,-100,0,heavyTank,heavyTank.health,False,heavyTank.prize,1660],[130,-100,0,heavyTank,heavyTank.health,False,heavyTank.prize,1780],
-            [130,-100,0,heavyTank,heavyTank.health,False,heavyTank.prize,1880],[130,-100,0,infantry,infantry.health,False,infantry.prize,1910],[130,-100,0,infantry,infantry.health,False,infantry.prize,1940],
-            [130,-100,0,infantry,infantry.health,False,infantry.prize,1970],[130,-100,0,infantry,infantry.health,False,infantry.prize,2000],[130,-100,0,infantry,infantry.health,False,infantry.prize,2030],
-            [130,-100,0,infantry,infantry.health,False,infantry.prize,2060],[130,-100,0,tankDestroyer,tankDestroyer.health,False,tankDestroyer.prize,2310],[130,-100,0,tankDestroyer,tankDestroyer.health,False,tankDestroyer.prize,2400]]
-
+    enemy2=[[130,-100,0,motorcycle,motorcycle.health,False,motorcycle.prize,5],[130,-100,0,motorcycle,motorcycle.health,False,motorcycle.prize,10],[130,-100,0,motorcycle,motorcycle.health,False,motorcycle.prize,10],
+            [130,-100,0,motorcycle,motorcycle.health,False,motorcycle.prize,15],[130,-100,0,motorcycle,motorcycle.health,False,motorcycle.prize,15],[130,-100,0,heavyTank,heavyTank.health,False,heavyTank.prize,20],
+            [130,-100,0,heavyTank,heavyTank.health,False,heavyTank.prize,20],[130,-100,0,heavyTank,heavyTank.health,False,heavyTank.prize,25],[130,-100,0,heavyTank,heavyTank.health,False,heavyTank.prize,25],
+            [130,-100,0,tankDestroyer,tankDestroyer.health,False,tankDestroyer.prize,30],[130,-100,0,tankDestroyer,tankDestroyer.health,False,tankDestroyer.prize,30],[130,-100,0,lightTank,lightTank.health,False,lightTank.prize,30],
+            [130,-100,0,lightTank,lightTank.health,False,lightTank.prize,35],[130,-100,0,lightTank,lightTank.health,False,lightTank.prize,35],[130,-100,0,lightTank,lightTank.health,False,lightTank.prize,35],[130,-100,0,transport,transport.health,False,transport.prize,40],
+            [130,-100,0,transport,transport.health,False,transport.prize,40],[130,-100,0,transport,transport.health,False,transport.prize,40],[130,-100,0,transport,transport.health,False,transport.prize,40],
+            [130,-100,0,transport,transport.health,False,transport.prize,45],[130,-100,0,transport,transport.health,False,transport.prize,45],[130,-100,0,heavyTank,heavyTank.health,False,heavyTank.prize,45],
+            [130,-100,0,heavyTank,heavyTank.health,False,heavyTank.prize,50],[130,-100,0,heavyTank,heavyTank.health,False,heavyTank.prize,50],[130,-100,0,heavyTank,heavyTank.health,False,heavyTank.prize,50],
+            [130,-100,0,heavyTank,heavyTank.health,False,heavyTank.prize,55],[130,-100,0,infantry,infantry.health,False,infantry.prize,55],[130,-100,0,infantry,infantry.health,False,infantry.prize,55],
+            [130,-100,0,infantry,infantry.health,False,infantry.prize,60],[130,-100,0,infantry,infantry.health,False,infantry.prize,60],[130,-100,0,infantry,infantry.health,False,infantry.prize,60],
+            [130,-100,0,infantry,infantry.health,False,infantry.prize,65],[130,-100,0,tankDestroyer,tankDestroyer.health,False,tankDestroyer.prize,65],[130,-100,0,tankDestroyer,tankDestroyer.health,False,tankDestroyer.prize,65],[130,-100,0,lightTank,lightTank.health,False,lightTank.prize,10],[130,-100,0,lightTank,lightTank.health,False,lightTank.prize,20],[130,-100,0,lightTank,lightTank.health,False,lightTank.prize,30],
+            [130,-100,0,lightTank,lightTank.health,False,lightTank.prize,40],[130,-100,0,lightTank,lightTank.health,False,lightTank.prize,50],[130,-100,0,transport,transport.health,False,transport.prize,60],[130,-100,0,transport,transport.health,False,transport.prize,70],[130,-100,0,transport,transport.health,False,transport.prize,80],
+        [130,-100,0,heavyTank,heavyTank.health,False,heavyTank.prize,90],[130,-100,0,heavyTank,heavyTank.health,False,heavyTank.prize,100],[130,-100,0,heavyTank,heavyTank.health,False,heavyTank.prize,150],
+        [130,-100,0,heavyTank,heavyTank.health,False,heavyTank.prize,160],[130,-100,0,heavyTank,heavyTank.health,False,heavyTank.prize,170],[130,-100,0,heavyTank,heavyTank.health,False,heavyTank.prize,180],[130,-100,0,tankDestroyer,tankDestroyer.health,False,tankDestroyer.prize,180],
+        [130,-100,0,tankDestroyer,tankDestroyer.health,False,tankDestroyer.prize,190],[130,-100,0,tankDestroyer,tankDestroyer.health,False,tankDestroyer.prize,200],[130,-100,0,tankDestroyer,tankDestroyer.health,False,tankDestroyer.prize,250],
+        [130,-100,0,tankDestroyer,tankDestroyer.health,False,tankDestroyer.prize,260],[130,-100,0,tankDestroyer,tankDestroyer.health,False,tankDestroyer.prize,270],
+        [130,-100,0,heavyTank,heavyTank.health,False,heavyTank.prize,280],[130,-100,0,heavyTank,heavyTank.health,False,heavyTank.prize,290],[130,-100,0,heavyTank,heavyTank.health,False,heavyTank.prize,300],
+        [130,-100,0,infantry,infantry.health,False,infantry.prize,350],[130,-100,0,infantry,infantry.health,False,infantry.prize,360],[130,-100,0,infantry,infantry.health,False,infantry.prize,370],[130,-100,0,infantry,infantry.health,False,infantry.prize,380],
+        [130,-100,0,infantry,infantry.health,False,infantry.prize,390]]
     click=False
     wave="first"
     while running:
